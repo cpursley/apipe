@@ -125,8 +125,75 @@ defmodule Apipe.Providers.GitHub do
     end
   end
 
-  @doc false
-  defp build_params(query) do
+  @doc """
+  Builds a GitHub search query string from the query filters.
+
+  This function converts Apipe query filters into GitHub's search syntax.
+  Special handling is provided for user searches and numeric comparisons.
+
+  ## Examples
+
+      iex> query = %Apipe.Query{
+      ...>   from: "search/repositories",
+      ...>   filters: [{:eq, "language", "elixir"}, {:eq, "stars", ">1000"}]
+      ...> }
+      iex> Apipe.Providers.GitHub.build_search_query(query)
+      "language:elixir stars:>1000"
+
+      iex> query = %Apipe.Query{
+      ...>   from: "search/users",
+      ...>   filters: [{:eq, "bio", "elixir"}]
+      ...> }
+      iex> Apipe.Providers.GitHub.build_search_query(query)
+      "elixir in:bio"
+  """
+  def build_search_query(query) do
+    filters = Enum.map(query.filters, fn
+      # Special cases for user search
+      {:eq, "bio", value} when query.from == "search/users" -> "#{value} in:bio"
+      {:eq, "location", value} when query.from == "search/users" -> "#{value} in:location"
+      {:eq, "name", value} when query.from == "search/users" -> "#{value} in:name"
+      {:eq, "email", value} when query.from == "search/users" -> "#{value} in:email"
+      {:eq, "company", value} when query.from == "search/users" -> "#{value} in:company"
+
+      # Numeric comparisons
+      {:eq, field, ">" <> value} -> "#{field}:>#{value}"
+      {:eq, field, ">=" <> value} -> "#{field}:>=#{value}"
+      {:eq, field, "<" <> value} -> "#{field}:<#{value}"
+      {:eq, field, "<=" <> value} -> "#{field}:<=#{value}"
+
+      # Standard cases
+      {:eq, field, value} -> "#{field}:#{value}"
+      {:gt, field, value} -> "#{field}:>#{value}"
+      {:gte, field, value} -> "#{field}:>=#{value}"
+      {:lt, field, value} -> "#{field}:<#{value}"
+      {:lte, field, value} -> "#{field}:<=#{value}"
+      {:in, field, values} when is_list(values) -> "#{field}:#{Enum.join(values, ",")}"
+      {:like, field, value} -> "#{field}:*#{value}*"
+    end)
+
+    Enum.join(filters, " ")
+  end
+
+  @doc """
+  Builds the request parameters for a GitHub API request.
+
+  This function converts an Apipe query into GitHub API parameters,
+  handling search queries, pagination, and sorting.
+
+  ## Examples
+
+      iex> query = %Apipe.Query{
+      ...>   from: "search/repositories",
+      ...>   filters: [{:eq, "language", "elixir"}],
+      ...>   limit: 10,
+      ...>   order_by: "stars",
+      ...>   order_direction: :desc
+      ...> }
+      iex> Apipe.Providers.GitHub.build_params(query)
+      %{q: "language:elixir", per_page: 10, sort: "stars", order: :desc}
+  """
+  def build_params(query) do
     base_params = %{}
 
     # Handle search queries
@@ -145,30 +212,29 @@ defmodule Apipe.Providers.GitHub do
     |> maybe_add_param(:order, query.order_direction)
   end
 
-  @doc false
-  defp build_search_query(query) do
-    filters = Enum.map(query.filters, fn
-      {:eq, field, value} -> "#{field}:#{value}"
-      {:gt, field, value} -> "#{field}:>#{value}"
-      {:gte, field, value} -> "#{field}:>=#{value}"
-      {:lt, field, value} -> "#{field}:<#{value}"
-      {:lte, field, value} -> "#{field}:<=#{value}"
-      {:in, field, values} when is_list(values) -> "#{field}:#{Enum.join(values, ",")}"
-      {:like, field, value} -> "#{field}:*#{value}*"
-    end)
+  @doc """
+  Processes a GitHub API response.
 
-    Enum.join(filters, "+")
-  end
+  This function handles both successful and error responses from the GitHub API,
+  converting them into the appropriate Apipe response format.
 
-  @doc false
-  defp maybe_add_param(params, _key, nil), do: params
-  defp maybe_add_param(params, key, value), do: Map.put(params, key, value)
+  ## Examples
 
-  @doc false
-  defp process_response(%{status: status} = response, _query) when status in 200..299 do
+      iex> response = %{status: 200, body: %{"items" => []}}
+      iex> query = %Apipe.Query{from: "search/repositories"}
+      iex> Apipe.Providers.GitHub.process_response(response, query)
+      {:ok, %{"items" => []}}
+
+      iex> response = %{status: 422, body: %{"message" => "Validation Failed"}}
+      iex> query = %Apipe.Query{from: "search/repositories"}
+      iex> {:error, error} = Apipe.Providers.GitHub.process_response(response, query)
+      iex> error.type
+      :provider_error
+  """
+  def process_response(%{status: status} = response, _query) when status in 200..299 do
     {:ok, response.body}
   end
-  defp process_response(response, query) do
+  def process_response(response, query) do
     {:error, %Apipe.Error{
       type: :provider_error,
       message: "GitHub API error",
@@ -182,6 +248,9 @@ defmodule Apipe.Providers.GitHub do
       }
     }}
   end
+
+  defp maybe_add_param(params, _key, nil), do: params
+  defp maybe_add_param(params, key, value), do: Map.put(params, key, value)
 
   defp wrap_response({:ok, data}, response, query) do
     rate_limit = extract_rate_limit(response)

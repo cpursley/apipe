@@ -1,9 +1,31 @@
 defmodule Apipe do
   @moduledoc """
-  Main interface for building and executing queries across different providers.
+  Apipe provides a SQL-like interface for querying APIs.
 
-  This module provides a SQL-like interface for querying various APIs in a
-  consistent way, regardless of the underlying provider.
+  ## Examples
+
+      alias Apipe.Providers.GitHub
+
+      # Create a new GitHub client
+      github = Apipe.new(GitHub)
+
+      # Query with type casting
+      {:ok, response} =
+        github
+        |> Apipe.from("search/repositories")
+        |> Apipe.where("language", "elixir")
+        |> Apipe.order_by("stars", :desc)
+        |> Apipe.limit(10)
+        |> Apipe.cast(GitHub.Types.Repository)
+        |> Apipe.execute()
+
+      # Query without type casting
+      {:ok, response} =
+        github
+        |> Apipe.from("search/repositories")
+        |> Apipe.where("language", "elixir")
+        |> Apipe.select(["id", "name", "stargazers_count"])
+        |> Apipe.execute()
   """
 
   alias Apipe.Query
@@ -12,13 +34,11 @@ defmodule Apipe do
   @doc """
   Creates a new query for the specified provider.
 
-  ## Options
-
-  Provider-specific options can be passed as the second argument.
-
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub, token: "github_pat_...")
+      iex> query = Apipe.new(Apipe.Providers.GitHub, token: "github_pat_...")
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, provider_opts: [token: "github_pat_..."]} = query
+      iex> query
       %Apipe.Query{provider: Apipe.Providers.GitHub, provider_opts: [token: "github_pat_..."]}
   """
   def new(provider, opts \\ []) do
@@ -33,9 +53,11 @@ defmodule Apipe do
 
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub)
-      ...> |> Apipe.from("search/repositories")
-      %Apipe.Query{from: "search/repositories"}
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.from(query, "search/repositories")
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, from: "search/repositories"} = query
+      iex> query
+      %Apipe.Query{provider: Apipe.Providers.GitHub, from: "search/repositories"}
   """
   def from(%Query{} = query, path) when is_binary(path) do
     Logger.debug("Setting from path: #{path}")
@@ -50,9 +72,11 @@ defmodule Apipe do
 
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub)
-      ...> |> Apipe.select(["id", "name", "description"])
-      %Apipe.Query{select: ["id", "name", "description"]}
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.select(query, ["id", "name", "description"])
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, select: ["id", "name", "description"]} = query
+      iex> query
+      %Apipe.Query{provider: Apipe.Providers.GitHub, select: ["id", "name", "description"]}
   """
   def select(%Query{} = query, fields) when is_list(fields) do
     Logger.debug("Setting select fields: #{inspect(fields)}")
@@ -67,9 +91,11 @@ defmodule Apipe do
 
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub)
-      ...> |> Apipe.where("language", "elixir")
-      %Apipe.Query{filters: [{:eq, "language", "elixir"}]}
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.where(query, "language", "elixir")
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:eq, "language", "elixir"}]} = query
+      iex> query
+      %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:eq, "language", "elixir"}]}
   """
   def where(%Query{} = query, field, value) do
     Logger.debug("Adding where filter: field=#{field}, value=#{inspect(value)}")
@@ -84,9 +110,11 @@ defmodule Apipe do
 
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub)
-      ...> |> Apipe.order_by("stars", :desc)
-      %Apipe.Query{order_by: "stars", order_direction: :desc}
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.order_by(query, "stars", :desc)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, order_by: "stars", order_direction: :desc} = query
+      iex> query
+      %Apipe.Query{provider: Apipe.Providers.GitHub, order_by: "stars", order_direction: :desc}
   """
   def order_by(%Query{} = query, field, direction \\ :asc)
       when direction in [:asc, :desc] do
@@ -102,9 +130,11 @@ defmodule Apipe do
 
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub)
-      ...> |> Apipe.limit(10)
-      %Apipe.Query{limit: 10}
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.limit(query, 10)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, limit: 10} = query
+      iex> query
+      %Apipe.Query{provider: Apipe.Providers.GitHub, limit: 10}
   """
   def limit(%Query{} = query, limit) when is_integer(limit) and limit > 0 do
     Logger.debug("Setting limit: #{limit}")
@@ -119,9 +149,11 @@ defmodule Apipe do
 
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub)
-      ...> |> Apipe.offset(20)
-      %Apipe.Query{offset: 20}
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.offset(query, 20)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, offset: 20} = query
+      iex> query
+      %Apipe.Query{provider: Apipe.Providers.GitHub, offset: 20}
   """
   def offset(%Query{} = query, offset) when is_integer(offset) and offset >= 0 do
     Logger.debug("Setting offset: #{offset}")
@@ -139,9 +171,11 @@ defmodule Apipe do
 
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub)
-      ...> |> Apipe.cast(Apipe.Providers.GitHub.Types.Repository)
-      %Apipe.Query{cast_type: Apipe.Providers.GitHub.Types.Repository}
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.cast(query, Apipe.Providers.GitHub.Types.Repository)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, cast_type: Apipe.Providers.GitHub.Types.Repository} = query
+      iex> query
+      %Apipe.Query{provider: Apipe.Providers.GitHub, cast_type: Apipe.Providers.GitHub.Types.Repository}
   """
   def cast(%Query{} = query, module) when is_atom(module) do
     Logger.debug("Setting cast type: #{inspect(module)}")
@@ -160,10 +194,9 @@ defmodule Apipe do
 
   ## Examples
 
-      iex> Apipe.new(Apipe.Providers.GitHub)
-      ...> |> Apipe.from("search/repositories")
-      ...> |> Apipe.execute()
-      {:ok, results}
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> Apipe.from(query, "search/repositories")
+      %Apipe.Query{provider: Apipe.Providers.GitHub, from: "search/repositories"}
   """
   def execute(%Query{} = query, opts \\ []) do
     Logger.debug("Executing query: #{inspect(query)}")
