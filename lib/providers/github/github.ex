@@ -45,8 +45,6 @@ defmodule Apipe.Providers.GitHub do
 
   require Logger
   alias Apipe.PostProcess
-  alias Apipe.Providers.GitHub.Types
-  alias Types.{Response, SearchResponse}
 
   @impl true
   @doc """
@@ -135,10 +133,10 @@ defmodule Apipe.Providers.GitHub do
 
       iex> query = %Apipe.Query{
       ...>   from: "search/repositories",
-      ...>   filters: [{:eq, "language", "elixir"}, {:eq, "stars", ">1000"}]
+      ...>   filters: [{:eq, "language", "elixir"}, {:gt, "stars", 100}]
       ...> }
       iex> Apipe.Providers.GitHub.build_search_query(query)
-      "language:elixir stars:>1000"
+      "language:elixir stars:>100"
 
       iex> query = %Apipe.Query{
       ...>   from: "search/users",
@@ -148,31 +146,30 @@ defmodule Apipe.Providers.GitHub do
       "elixir in:bio"
   """
   def build_search_query(query) do
-    filters = Enum.map(query.filters, fn
-      # Special cases for user search
-      {:eq, "bio", value} when query.from == "search/users" -> "#{value} in:bio"
-      {:eq, "location", value} when query.from == "search/users" -> "#{value} in:location"
-      {:eq, "name", value} when query.from == "search/users" -> "#{value} in:name"
-      {:eq, "email", value} when query.from == "search/users" -> "#{value} in:email"
-      {:eq, "company", value} when query.from == "search/users" -> "#{value} in:company"
-
-      # Numeric comparisons
-      {:eq, field, ">" <> value} -> "#{field}:>#{value}"
-      {:eq, field, ">=" <> value} -> "#{field}:>=#{value}"
-      {:eq, field, "<" <> value} -> "#{field}:<#{value}"
-      {:eq, field, "<=" <> value} -> "#{field}:<=#{value}"
-
-      # Standard cases
-      {:eq, field, value} -> "#{field}:#{value}"
-      {:gt, field, value} -> "#{field}:>#{value}"
-      {:gte, field, value} -> "#{field}:>=#{value}"
-      {:lt, field, value} -> "#{field}:<#{value}"
-      {:lte, field, value} -> "#{field}:<=#{value}"
-      {:in, field, values} when is_list(values) -> "#{field}:#{Enum.join(values, ",")}"
-      {:like, field, value} -> "#{field}:*#{value}*"
-    end)
-
+    filters = Enum.map(query.filters, &build_filter_expression(&1, query.from))
     Enum.join(filters, " ")
+  end
+
+  # Build a filter expression based on the operator and whether it's a user search
+  defp build_filter_expression({operator, field, value}, from) do
+    cond do
+      String.starts_with?(from, "search/users") and field in ["bio", "location", "name", "email", "company"] ->
+        "#{value} in:#{field}"
+      true ->
+        case operator do
+          :eq -> "#{field}:#{value}"
+          :neq -> "-#{field}:#{value}"
+          :gt -> "#{field}:>#{value}"
+          :gte -> "#{field}:>=#{value}"
+          :lt -> "#{field}:<#{value}"
+          :lte -> "#{field}:<=#{value}"
+          :in -> "#{field}:#{Enum.join(value, ",")}"
+          :nin -> "-#{field}:#{Enum.join(value, ",")}"
+          :like -> "#{field}:*#{String.trim(value, "%")}*"
+          :ilike -> "#{field}:*#{String.trim(value, "%")}*"
+          :nlike -> "-#{field}:*#{String.trim(value, "%")}*"
+        end
+    end
   end
 
   @doc """
@@ -252,35 +249,56 @@ defmodule Apipe.Providers.GitHub do
   defp maybe_add_param(params, _key, nil), do: params
   defp maybe_add_param(params, key, value), do: Map.put(params, key, value)
 
-  defp wrap_response({:ok, data}, response, query) do
-    rate_limit = extract_rate_limit(response)
-    etag = get_in(response.headers, ["etag"])
+  defp wrap_response({:ok, %{status: status, body: body} = response}, query, _opts) when status in 200..299 do
+    response_data =
+      case query.cast_type do
+        nil -> body
+        cast_type -> cast_type.cast(body)
+      end
 
-    result = if String.starts_with?(query.from, "search/") do
-      {:ok, search_response} = SearchResponse.cast(data, query.cast_type)
-      search_response
-    else
-      data
-    end
-
-    {:ok, response} = Response.cast(result, rate_limit, etag)
-    {:ok, response}
+    {:ok, %Apipe.Response{
+      data: response_data,
+      meta: %{
+        rate_limit: get_rate_limit_info(response),
+        pagination: get_pagination_info(response)
+      }
+    }}
   end
   defp wrap_response(error, _response, _query), do: error
 
-  defp extract_rate_limit(response) do
-    with [limit] when not is_nil(limit) <- get_in(response.headers, ["x-ratelimit-limit"]),
-         [remaining] when not is_nil(remaining) <- get_in(response.headers, ["x-ratelimit-remaining"]),
-         [reset] when not is_nil(reset) <- get_in(response.headers, ["x-ratelimit-reset"]),
-         [used] when not is_nil(used) <- get_in(response.headers, ["x-ratelimit-used"]) do
-      %{
-        limit: String.to_integer(limit),
-        remaining: String.to_integer(remaining),
-        reset: String.to_integer(reset),
-        used: String.to_integer(used)
-      }
-    else
-      _ -> nil
+  defp get_rate_limit_info(response) do
+    %{
+      limit: get_header_as_integer(response, "x-ratelimit-limit"),
+      remaining: get_header_as_integer(response, "x-ratelimit-remaining"),
+      reset: get_header_as_integer(response, "x-ratelimit-reset"),
+      used: get_header_as_integer(response, "x-ratelimit-used")
+    }
+  end
+
+  defp get_pagination_info(response) do
+    case get_in(response.headers, ["link"]) do
+      nil -> nil
+      link_header -> parse_link_header(link_header)
     end
+  end
+
+  defp get_header_as_integer(response, header) do
+    case get_in(response.headers, [header]) do
+      nil -> nil
+      [value] -> String.to_integer(value)
+      value -> String.to_integer(value)
+    end
+  end
+
+  defp parse_link_header(link_header) do
+    link_header
+    |> String.split(",")
+    |> Enum.map(&parse_link/1)
+    |> Enum.into(%{})
+  end
+
+  defp parse_link(link) do
+    [_, url, rel] = Regex.run(~r/<(.+)>;\s*rel="(.+)"/, link)
+    {rel, url}
   end
 end

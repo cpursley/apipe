@@ -87,22 +87,54 @@ defmodule Apipe do
   end
 
   @doc """
-  Adds an equality filter to the query.
+  Adds filters to the query using a map of conditions.
 
   ## Examples
 
       iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.where(query, "language", "elixir")
+      iex> query = Apipe.where(query, %{language: "elixir"})
       iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:eq, "language", "elixir"}]} = query
-      iex> query
-      %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:eq, "language", "elixir"}]}
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.where(query, %{stars: [gt: 100]})
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:gt, "stars", 100}]} = query
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.where(query, %{language: [in: ["elixir", "erlang"]]})
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:in, "language", ["elixir", "erlang"]}]} = query
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.where(query, %{stars: [gte: 100, lte: 1000]})
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:lte, "stars", 1000}, {:gte, "stars", 100}]} = query
   """
-  def where(%Query{} = query, field, value) do
-    Logger.debug("Adding where filter: field=#{field}, value=#{inspect(value)}")
+  def where(%Query{} = query, conditions) when is_map(conditions) do
+    Logger.debug("Adding where filters: #{inspect(conditions)}")
     Logger.debug("Query before where: #{inspect(query)}")
-    result = add_filter(query, {:eq, field, value})
+
+    filters = Enum.reduce(conditions, [], &process_condition/2)
+    result = Enum.reduce(filters, query, &add_filter(&2, &1))
+
     Logger.debug("Query after where: #{inspect(result)}")
     result
+  end
+
+  # Process a single field condition, which can be either a simple value or a list of operators
+  defp process_condition({field, value}, acc) do
+    field = to_string(field)
+    case value do
+      value when is_list(value) and is_tuple(hd(value)) ->
+        # Handle operator list: [gt: 100, lt: 1000]
+        Enum.map(value, fn {op, val} -> {op, field, val} end) ++ acc
+      value ->
+        # Handle simple equality: "elixir"
+        [{:eq, field, value} | acc]
+    end
+  end
+
+  # Add a single filter to the query
+  defp add_filter(%Query{} = query, {operator, field, value}) do
+    filters = [{operator, field, value} | query.filters]
+    %Query{query | filters: filters}
   end
 
   @doc """
@@ -203,7 +235,143 @@ defmodule Apipe do
     query.provider.execute(query, Keyword.merge(query.provider_opts, opts))
   end
 
-  defp add_filter(%Query{} = query, filter) do
-    struct!(Query, Map.from_struct(query) |> Map.update(:filters, [filter], &[filter | &1]))
+  @doc """
+  Adds an equality filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.eq(query, "language", "elixir")
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:eq, "language", "elixir"}]} = query
+  """
+  def eq(%Query{} = query, field, value) do
+    Logger.debug("Adding eq filter: field=#{field}, value=#{inspect(value)}")
+    add_filter(query, {:eq, field, value})
+  end
+
+  @doc """
+  Adds a not equal filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.neq(query, "language", "python")
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:neq, "language", "python"}]} = query
+  """
+  def neq(%Query{} = query, field, value) do
+    Logger.debug("Adding neq filter: field=#{field}, value=#{inspect(value)}")
+    add_filter(query, {:neq, field, value})
+  end
+
+  @doc """
+  Adds a greater than filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.gt(query, "stars", 100)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:gt, "stars", 100}]} = query
+  """
+  def gt(%Query{} = query, field, value) do
+    Logger.debug("Adding gt filter: field=#{field}, value=#{inspect(value)}")
+    add_filter(query, {:gt, field, value})
+  end
+
+  @doc """
+  Adds a greater than or equal filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.gte(query, "stars", 100)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:gte, "stars", 100}]} = query
+  """
+  def gte(%Query{} = query, field, value) do
+    Logger.debug("Adding gte filter: field=#{field}, value=#{inspect(value)}")
+    add_filter(query, {:gte, field, value})
+  end
+
+  @doc """
+  Adds a less than filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.lt(query, "stars", 1000)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:lt, "stars", 1000}]} = query
+  """
+  def lt(%Query{} = query, field, value) do
+    Logger.debug("Adding lt filter: field=#{field}, value=#{inspect(value)}")
+    add_filter(query, {:lt, field, value})
+  end
+
+  @doc """
+  Adds a less than or equal filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.lte(query, "stars", 1000)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:lte, "stars", 1000}]} = query
+  """
+  def lte(%Query{} = query, field, value) do
+    Logger.debug("Adding lte filter: field=#{field}, value=#{inspect(value)}")
+    add_filter(query, {:lte, field, value})
+  end
+
+  @doc """
+  Adds a LIKE filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.like(query, "name", "%phoenix%")
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:like, "name", "%phoenix%"}]} = query
+  """
+  def like(%Query{} = query, field, value) do
+    Logger.debug("Adding like filter: field=#{field}, value=#{inspect(value)}")
+    add_filter(query, {:like, field, value})
+  end
+
+  @doc """
+  Adds a case-insensitive LIKE filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.ilike(query, "name", "%phoenix%")
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:ilike, "name", "%phoenix%"}]} = query
+  """
+  def ilike(%Query{} = query, field, value) do
+    Logger.debug("Adding ilike filter: field=#{field}, value=#{inspect(value)}")
+    add_filter(query, {:ilike, field, value})
+  end
+
+  @doc """
+  Adds an IN filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.in_list(query, "language", ["elixir", "erlang"])
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:in, "language", ["elixir", "erlang"]}]} = query
+  """
+  def in_list(%Query{} = query, field, values) when is_list(values) do
+    Logger.debug("Adding in filter: field=#{field}, values=#{inspect(values)}")
+    add_filter(query, {:in, field, values})
+  end
+
+  @doc """
+  Adds a NOT IN filter to the query.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.nin_list(query, "language", ["java", "python"])
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:nin, "language", ["java", "python"]}]} = query
+  """
+  def nin_list(%Query{} = query, field, values) when is_list(values) do
+    Logger.debug("Adding nin filter: field=#{field}, values=#{inspect(values)}")
+    add_filter(query, {:nin, field, values})
   end
 end

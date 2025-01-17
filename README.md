@@ -7,6 +7,7 @@ It works with a provider interface, so you can easily add support for new APIs. 
 ## Features
 
 - SQL-like query interface (`select`, `where`, `order_by`, etc.)
+- Flexible filtering with map-based and chainable operators
 - Type-safe responses with automatic casting (optional)
 - Built-in rate limit handling
 - Comprehensive error handling
@@ -30,91 +31,82 @@ end
 alias Apipe.Providers.GitHub
 
 # Create a new GitHub client (token is optional)
-github = Apipe.new(GitHub, token: "your_optional_github_token")
+github = Apipe.new(GitHub)
 
-# Search for top Elixir repositories with type casting
+# Using map-based where filters with casting
 {:ok, response} =
   github
   |> Apipe.from("search/repositories")
-  |> Apipe.where("language", "elixir")
+  |> Apipe.where(%{
+    language: "elixir",
+    stars: [gt: 1000, lte: 10000],
+    name: [like: "phoenix"]
+  })
+  |> Apipe.order_by("stars", :desc)
+  |> Apipe.limit(3)
+  |> Apipe.cast(GitHub.Types.Repository) # Enable type casting
+  |> Apipe.execute()
+
+# Using chainable operators without casting (raw JSON response)
+{:ok, response} =
+  github
+  |> Apipe.from("search/repositories")
+  |> Apipe.eq("language", "elixir")
+  |> Apipe.gt("stars", 1000)
+  |> Apipe.lte("stars", 10000)
+  |> Apipe.like("name", "phoenix")
+  |> Apipe.order_by("stars", :desc)
+  |> Apipe.limit(3)
+  |> Apipe.execute()
+
+# Combining both styles with casting
+{:ok, response} =
+  github
+  |> Apipe.from("search/repositories")
+  |> Apipe.where(%{language: "elixir"})
+  |> Apipe.gt("stars", 1000)
+  |> Apipe.lte("stars", 10000)
+  |> Apipe.like("name", "phoenix")
   |> Apipe.order_by("stars", :desc)
   |> Apipe.limit(3)
   |> Apipe.cast(GitHub.Types.Repository)
   |> Apipe.execute()
 
-# Access the typed response
+# Accessing typed response (when using cast)
 response.data.items |> Enum.each(fn repo ->
   IO.puts("#{repo.full_name}: #{repo.stargazers_count} ⭐")
 end)
 
-# Or query without type casting for raw JSON response
-{:ok, response} =
-  github
-  |> Apipe.from("search/repositories")
-  |> Apipe.where("language", "elixir")
-  |> Apipe.select(["full_name", "stargazers_count"])
-  |> Apipe.order_by("stars", :desc)
-  |> Apipe.limit(3)
-  |> Apipe.execute()
-
-# Access the raw JSON response
-response.data.items |> Enum.each(fn repo ->
+# Accessing raw JSON response (when not using cast)
+response.data["items"] |> Enum.each(fn repo ->
   IO.puts("#{repo["full_name"]}: #{repo["stargazers_count"]} ⭐")
 end)
-
-# Rate limit information is included in both cases
-IO.puts("Rate limit remaining: #{response.rate_limit.remaining}")
 ```
 
-## Usage Examples
+## Filter Operators
 
-### Searching Repositories
+Apipe supports a variety of filter operators that can be used in both map-based `where` clauses and as chainable functions:
 
+### Comparison Operators
+- Equality: `where(%{field: value})` or `eq(field, value)`
+- Not Equal: `where(%{field: [neq: value]})` or `neq(field, value)`
+- Greater Than: `where(%{field: [gt: value]})` or `gt(field, value)`
+- Greater Than or Equal: `where(%{field: [gte: value]})` or `gte(field, value)`
+- Less Than: `where(%{field: [lt: value]})` or `lt(field, value)`
+- Less Than or Equal: `where(%{field: [lte: value]})` or `lte(field, value)`
+
+### List Operators
+- IN: `where(%{field: [in: values]})` or `in_list(field, values)`
+- NOT IN: `where(%{field: [nin: values]})` or `nin_list(field, values)`
+
+### Pattern Matching
+- LIKE: `where(%{field: [like: pattern]})` or `like(field, pattern)`
+- Case-insensitive LIKE: `where(%{field: [ilike: pattern]})` or `ilike(field, pattern)`
+
+### Multiple Operators
+You can combine multiple operators for the same field in a where clause:
 ```elixir
-# Find Elixir repositories with more than 1000 stars
-github
-|> Apipe.from("search/repositories")
-|> Apipe.where("language", "elixir")
-|> Apipe.where("stars", ">1000")
-|> Apipe.select(["id", "name", "description", "stargazers_count"])
-|> Apipe.order_by("stars", :desc)
-|> Apipe.cast(GitHub.Types.Repository)
-|> Apipe.execute()
-```
-
-### Fetching Issues
-
-```elixir
-# Get open issues from a repository
-github
-|> Apipe.from("repos/elixir-lang/elixir/issues")
-|> Apipe.where("state", "open")
-|> Apipe.order_by("created", :desc)
-|> Apipe.limit(5)
-|> Apipe.cast(GitHub.Types.Issue)
-|> Apipe.execute()
-```
-
-### Searching Users
-
-```elixir
-# Find users with "elixir" in their bio
-github
-|> Apipe.from("search/users")
-|> Apipe.where("bio", "elixir")
-|> Apipe.order_by("followers", :desc)
-|> Apipe.limit(10)
-|> Apipe.cast(GitHub.Types.User)
-|> Apipe.execute()
-
-# Or without type casting for raw JSON
-github
-|> Apipe.from("search/users")
-|> Apipe.where("bio", "elixir")
-|> Apipe.select(["login", "bio", "followers"])
-|> Apipe.order_by("followers", :desc)
-|> Apipe.limit(10)
-|> Apipe.execute()
+where(%{stars: [gt: 100, lte: 1000]})
 ```
 
 ## Response Types
@@ -125,17 +117,21 @@ All responses are wrapped in a `Response` struct that includes:
 
 ## Type Casting
 
-Type casting is optional. When you use `cast/2`, the response will be converted into Elixir structs with proper types. Without casting, you'll get the raw JSON response from the API. Choose based on your needs:
+Type casting is optional but must be used consistently in a query. When you use `cast/2`, the response will be converted into Elixir structs with proper types. Without casting, you'll get the raw JSON response from the API. Choose based on your needs:
 
 - Use casting when you want:
   - Type safety
   - Better IDE support
   - Cleaner access to nested data
+  - Example: `repo.full_name`, `repo.stargazers_count`
 
 - Skip casting when you want:
   - Raw JSON responses
   - Better performance
   - To access fields not defined in the type structs
+  - Example: `repo["full_name"]`, `repo["stargazers_count"]`
+
+Note: You must either use casting consistently (by calling `cast/2` before `execute/1`) or not at all. Mixing typed and untyped responses in the same query is not supported.
 
 ## Contributing
 

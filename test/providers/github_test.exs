@@ -21,6 +21,80 @@ defmodule Apipe.Providers.GitHubTest do
   end
 
   describe "build_search_query/1" do
+    test "handles simple equality filter" do
+      query = %Query{
+        provider: GitHub,
+        from: "search/repositories",
+        filters: [{:eq, "language", "elixir"}]
+      }
+
+      assert GitHub.build_search_query(query) == "language:elixir"
+    end
+
+    test "handles comparison operators" do
+      query = %Query{
+        provider: GitHub,
+        from: "search/repositories",
+        filters: [
+          {:gt, "stars", 100},
+          {:gte, "forks", 50},
+          {:lt, "size", 1000},
+          {:lte, "issues", 20}
+        ]
+      }
+
+      assert GitHub.build_search_query(query) == "stars:>100 forks:>=50 size:<1000 issues:<=20"
+    end
+
+    test "handles text search operators" do
+      query = %Query{
+        provider: GitHub,
+        from: "search/repositories",
+        filters: [
+          {:like, "name", "%phoenix%"},
+          {:ilike, "description", "%framework%"},
+          {:nlike, "topics", "%deprecated%"}
+        ]
+      }
+
+      assert GitHub.build_search_query(query) == "name:*phoenix* description:*framework* -topics:*deprecated*"
+    end
+
+    test "handles IN operator with list" do
+      query = %Query{
+        provider: GitHub,
+        from: "search/repositories",
+        filters: [{:in, "language", ["elixir", "erlang"]}]
+      }
+
+      assert GitHub.build_search_query(query) == "language:elixir,erlang"
+    end
+
+    test "handles NOT IN operator with list" do
+      query = %Query{
+        provider: GitHub,
+        from: "search/repositories",
+        filters: [{:nin, "language", ["java", "python"]}]
+      }
+
+      assert GitHub.build_search_query(query) == "-language:java,python"
+    end
+
+    test "handles multiple filters of different types" do
+      query = %Query{
+        provider: GitHub,
+        from: "search/repositories",
+        filters: [
+          {:eq, "language", "elixir"},
+          {:gt, "stars", 100},
+          {:like, "name", "%phoenix%"},
+          {:in, "topics", ["web", "api"]}
+        ]
+      }
+
+      assert GitHub.build_search_query(query) == "language:elixir stars:>100 name:*phoenix* topics:web,api"
+    end
+
     test "handles user bio search correctly" do
       query = %Query{
         provider: GitHub,
@@ -31,30 +105,7 @@ defmodule Apipe.Providers.GitHubTest do
       assert GitHub.build_search_query(query) == "elixir in:bio"
     end
 
-    test "handles repository search with numeric comparison" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        filters: [{:eq, "stars", ">1000"}]
-      }
-
-      assert GitHub.build_search_query(query) == "stars:>1000"
-    end
-
-    test "combines multiple filters correctly" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        filters: [
-          {:eq, "language", "elixir"},
-          {:eq, "stars", ">1000"}
-        ]
-      }
-
-      assert GitHub.build_search_query(query) == "language:elixir stars:>1000"
-    end
-
-    test "handles user search with multiple criteria" do
+    test "handles multiple user search criteria" do
       query = %Query{
         provider: GitHub,
         from: "search/users",
