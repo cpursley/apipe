@@ -37,6 +37,10 @@ defmodule Apipe.Providers.GitHub do
   - `search/repositories` - Search repositories
   - `search/issues` - Search issues and pull requests
   - `search/users` - Search users
+  - `search/code` - Search code in repositories
+  - `search/commits` - Search commits
+  - `search/labels` - Search repository labels
+  - `search/topics` - Search GitHub topics
   - `repos/{owner}/{repo}` - Get repository details
   - `repos/{owner}/{repo}/issues` - List repository issues
   """
@@ -45,6 +49,15 @@ defmodule Apipe.Providers.GitHub do
 
   require Logger
   alias Apipe.PostProcess
+
+  @supported_search_endpoints ~w(
+    search/repositories
+    search/users
+    search/code
+    search/issues
+    search/commits
+    search/topics
+  )
 
   @impl true
   @doc """
@@ -59,20 +72,44 @@ defmodule Apipe.Providers.GitHub do
       Apipe.new(Apipe.Providers.GitHub, token: "github_pat_...")
       |> Apipe.from("search/repositories")
       |> Apipe.execute()
+
+      # Get repository details
+      Apipe.new(Apipe.Providers.GitHub, token: "github_pat_...")
+      |> Apipe.from("repos/elixir-lang/elixir")
+      |> Apipe.execute()
   """
   def execute(query, opts \\ []) do
-    with {:ok, query} <- Apipe.Query.validate(query),
+    with {:ok, query} <- validate_endpoint(query),
+         {:ok, query} <- Apipe.Query.validate(query),
          {:ok, req} <- build_request(query, opts),
          {:ok, response} <- make_request(req, query) do
       response
       |> process_response(query)
       |> PostProcess.filter_fields(query)
-      |> wrap_response(response, query)
+      |> wrap_response(response, query, opts)
+    end
+  end
+
+  defp validate_endpoint(%{from: from} = query) do
+    cond do
+      from in @supported_search_endpoints ->
+        {:ok, query}
+      String.match?(from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+$/) ->
+        {:ok, query}
+      true ->
+        %Apipe.Error{
+          type: :provider_error,
+          message: "Unsupported endpoint",
+          details: %{
+            endpoint: from,
+            supported_endpoints: @supported_search_endpoints ++ ["repos/{owner}/{repo}"]
+          }
+        }
     end
   end
 
   @doc false
-  defp build_request(_query, opts) do
+  defp build_request(%{from: _from} = _query, opts) do
     headers = [{"accept", "application/vnd.github.v3+json"}]
 
     headers = case Keyword.get(opts, :token) do
@@ -90,7 +127,12 @@ defmodule Apipe.Providers.GitHub do
 
   @doc false
   defp make_request(req, query) do
-    params = build_params(query)
+    params = if String.starts_with?(query.from, "search/") do
+      build_params(query)
+    else
+      %{per_page: query.limit}
+    end
+
     url = query.from
 
     Logger.debug("""
@@ -109,7 +151,7 @@ defmodule Apipe.Providers.GitHub do
         {:ok, response}
       {:error, error} ->
         Logger.error("GitHub API request failed: #{inspect(error)}")
-        {:error, %Apipe.Error{
+        %Apipe.Error{
           type: :provider_error,
           message: "GitHub API request failed",
           details: %{
@@ -119,7 +161,7 @@ defmodule Apipe.Providers.GitHub do
               params: params
             }
           }
-        }}
+        }
     end
   end
 
@@ -155,6 +197,23 @@ defmodule Apipe.Providers.GitHub do
     cond do
       String.starts_with?(from, "search/users") and field in ["bio", "location", "name", "email", "company"] ->
         "#{value} in:#{field}"
+      String.starts_with?(from, "search/commits") and field == "author" ->
+        "author:#{value}"
+      String.starts_with?(from, "search/commits") and field == "committer" ->
+        "committer:#{value}"
+      String.starts_with?(from, "search/issues") and field == "is" ->
+        "is:#{value}"
+      String.starts_with?(from, "search/issues") and field == "label" ->
+        "label:#{value}"
+      String.starts_with?(from, "search/topics") and field == "name" ->
+        # For topics, we just use the name directly without qualifiers
+        case operator do
+          :like -> String.trim(value, "%")
+          :ilike -> String.trim(value, "%")
+          _ -> value
+        end
+      String.starts_with?(from, "search/topics") and field == "featured" ->
+        "is:featured"
       true ->
         case operator do
           :eq -> "#{field}:#{value}"
@@ -232,7 +291,7 @@ defmodule Apipe.Providers.GitHub do
     {:ok, response.body}
   end
   def process_response(response, query) do
-    {:error, %Apipe.Error{
+    %Apipe.Error{
       type: :provider_error,
       message: "GitHub API error",
       details: %{
@@ -243,54 +302,85 @@ defmodule Apipe.Providers.GitHub do
           params: build_params(query)
         }
       }
-    }}
+    }
   end
 
   defp maybe_add_param(params, _key, nil), do: params
   defp maybe_add_param(params, key, value), do: Map.put(params, key, value)
 
-  defp wrap_response({:ok, %{status: status, body: body} = response}, query, _opts) when status in 200..299 do
+  defp wrap_response({:ok, body}, response, query, opts) do
     response_data =
-      case query.cast_type do
-        nil -> body
-        cast_type -> cast_type.cast(body)
+      if opts[:cast_response] do
+        if String.starts_with?(query.from, "search/") do
+          item_type = case String.split(query.from, "/") do
+            ["search", "repositories" | _] -> Apipe.Providers.GitHub.Types.Repository
+            ["search", "issues" | _] -> Apipe.Providers.GitHub.Types.Issue
+            ["search", "users" | _] -> Apipe.Providers.GitHub.Types.User
+            ["search", "topics" | _] -> Apipe.Providers.GitHub.Types.Topic
+            _ ->
+              %Apipe.Error{
+                type: :provider_error,
+                message: "Unsupported search endpoint type",
+                details: %{endpoint: query.from}
+              }
+          end
+
+          case item_type do
+            %Apipe.Error{} = error -> error
+            type ->
+              {:ok, data} = Apipe.Providers.GitHub.Types.SearchResponse.cast(body, type)
+              data
+          end
+        else
+          # For non-search endpoints, cast directly to Repository
+          {:ok, data} = Apipe.Providers.GitHub.Types.Repository.cast(body)
+          data
+        end
+      else
+        body
       end
 
-    {:ok, %Apipe.Response{
-      data: response_data,
-      meta: %{
-        rate_limit: get_rate_limit_info(response),
-        pagination: get_pagination_info(response)
-      }
-    }}
+    case response_data do
+      %Apipe.Error{} = error -> error
+      data ->
+        %Apipe.Response{
+          data: data,
+          meta: %{
+            rate_limit: %{
+              limit: get_header_value(response, "x-ratelimit-limit"),
+              remaining: get_header_value(response, "x-ratelimit-remaining"),
+              reset: get_header_value(response, "x-ratelimit-reset"),
+              used: get_header_value(response, "x-ratelimit-used")
+            },
+            pagination: case get_header_value(response, "link") do
+              nil -> nil
+              link_header -> parse_link_header(link_header)
+            end
+          }
+        }
+    end
   end
-  defp wrap_response(error, _response, _query), do: error
+  defp wrap_response(error, _response, _query, _opts), do: error
 
-  defp get_rate_limit_info(response) do
-    %{
-      limit: get_header_as_integer(response, "x-ratelimit-limit"),
-      remaining: get_header_as_integer(response, "x-ratelimit-remaining"),
-      reset: get_header_as_integer(response, "x-ratelimit-reset"),
-      used: get_header_as_integer(response, "x-ratelimit-used")
-    }
-  end
-
-  defp get_pagination_info(response) do
-    case get_in(response.headers, ["link"]) do
+  defp get_header_value(response, header) do
+    value = case get_in(response.headers, [header]) do
       nil -> nil
-      link_header -> parse_link_header(link_header)
+      value when is_list(value) -> hd(value)
+      value when is_binary(value) -> value
+    end
+
+    case value do
+      nil -> nil
+      value ->
+        if String.starts_with?(header, "x-ratelimit") do
+          String.to_integer(value)
+        else
+          value
+        end
     end
   end
 
-  defp get_header_as_integer(response, header) do
-    case get_in(response.headers, [header]) do
-      nil -> nil
-      [value] -> String.to_integer(value)
-      value -> String.to_integer(value)
-    end
-  end
-
-  defp parse_link_header(link_header) do
+  defp parse_link_header(link_header) when is_binary(link_header) do
     link_header
     |> String.split(",")
     |> Enum.map(&parse_link/1)

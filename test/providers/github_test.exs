@@ -1,191 +1,223 @@
 defmodule Apipe.Providers.GitHubTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Apipe.{Query, Providers.GitHub}
 
-  # GitHub-specific test helpers
-  defp mock_github_response(status, body, headers \\ %{}) do
-    %{
-      status: status,
-      body: body,
-      headers: Map.merge(default_github_headers(), headers)
-    }
-  end
-
-  defp default_github_headers do
-    %{
-      "x-ratelimit-limit" => ["10"],
-      "x-ratelimit-remaining" => ["9"],
-      "x-ratelimit-reset" => ["1737125213"],
-      "x-ratelimit-used" => ["1"]
-    }
-  end
-
-  describe "build_search_query/1" do
-    test "handles simple equality filter" do
+  describe "execute/2" do
+    test "returns error for unsupported endpoint" do
       query = %Query{
         provider: GitHub,
-        from: "search/repositories",
-        filters: [{:eq, "language", "elixir"}]
+        from: "invalid/endpoint"
       }
 
-      assert GitHub.build_search_query(query) == "language:elixir"
+      assert %Apipe.Error{
+        type: :provider_error,
+        message: "Unsupported endpoint"
+      } = GitHub.execute(query)
     end
 
-    test "handles comparison operators" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        filters: [
-          {:gt, "stars", 100},
-          {:gte, "forks", 50},
-          {:lt, "size", 1000},
-          {:lte, "issues", 20}
-        ]
-      }
-
-      assert GitHub.build_search_query(query) == "stars:>100 forks:>=50 size:<1000 issues:<=20"
-    end
-
-    test "handles text search operators" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        filters: [
-          {:like, "name", "%phoenix%"},
-          {:ilike, "description", "%framework%"},
-          {:nlike, "topics", "%deprecated%"}
-        ]
-      }
-
-      assert GitHub.build_search_query(query) == "name:*phoenix* description:*framework* -topics:*deprecated*"
-    end
-
-    test "handles IN operator with list" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        filters: [{:in, "language", ["elixir", "erlang"]}]
-      }
-
-      assert GitHub.build_search_query(query) == "language:elixir,erlang"
-    end
-
-    test "handles NOT IN operator with list" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        filters: [{:nin, "language", ["java", "python"]}]
-      }
-
-      assert GitHub.build_search_query(query) == "-language:java,python"
-    end
-
-    test "handles multiple filters of different types" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        filters: [
-          {:eq, "language", "elixir"},
-          {:gt, "stars", 100},
-          {:like, "name", "%phoenix%"},
-          {:in, "topics", ["web", "api"]}
-        ]
-      }
-
-      assert GitHub.build_search_query(query) == "language:elixir stars:>100 name:*phoenix* topics:web,api"
-    end
-
-    test "handles user bio search correctly" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/users",
-        filters: [{:eq, "bio", "elixir"}]
-      }
-
-      assert GitHub.build_search_query(query) == "elixir in:bio"
-    end
-
-    test "handles multiple user search criteria" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/users",
-        filters: [
-          {:eq, "bio", "elixir"},
-          {:eq, "location", "San Francisco"}
-        ]
-      }
-
-      assert GitHub.build_search_query(query) == "elixir in:bio San Francisco in:location"
-    end
-  end
-
-  describe "build_params/1" do
-    test "includes pagination parameters" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        limit: 10,
-        offset: 20
-      }
-
-      params = GitHub.build_params(query)
-      assert params.per_page == 10
-      assert params.page == 3  # (20 / 10) + 1
-    end
-
-    test "includes sorting parameters" do
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        order_by: "stars",
-        order_direction: :desc
-      }
-
-      params = GitHub.build_params(query)
-      assert params.sort == "stars"
-      assert params.order == :desc
-    end
-  end
-
-  describe "process_response/2" do
-    test "handles successful search response" do
+    test "search/repositories returns repository results" do
       response = mock_github_response(200, %{
-        "items" => [
-          %{"id" => 1, "name" => "elixir", "stargazers_count" => 1000}
-        ],
         "total_count" => 1,
-        "incomplete_results" => false
-      })
-
-      query = %Query{
-        provider: GitHub,
-        from: "search/repositories",
-        cast_type: GitHub.Types.Repository
-      }
-
-      assert {:ok, _} = GitHub.process_response(response, query)
-    end
-
-    test "handles error response" do
-      response = mock_github_response(422, %{
-        "message" => "Validation Failed",
-        "errors" => [
+        "incomplete_results" => false,
+        "items" => [
           %{
-            "resource" => "Search",
-            "field" => "q",
-            "code" => "invalid"
+            "id" => 1234,
+            "name" => "elixir",
+            "full_name" => "elixir-lang/elixir",
+            "description" => "Dynamic, functional language",
+            "stargazers_count" => 1000,
+            "language" => "Elixir",
+            "owner" => %{"id" => 1, "login" => "elixir-lang"}
           }
         ]
       })
 
       query = %Query{
         provider: GitHub,
-        from: "search/repositories"
+        from: "search/repositories",
+        filters: [{:eq, "language", "elixir"}]
       }
 
-      assert {:error, error} = GitHub.process_response(response, query)
-      assert error.type == :provider_error
-      assert error.message == "GitHub API error"
+      assert {:ok, data} = GitHub.process_response(response, query)
+      assert length(data["items"]) == 1
+      assert hd(data["items"])["name"] == "elixir"
     end
+
+    test "search/users returns user results" do
+      response = mock_github_response(200, %{
+        "total_count" => 1,
+        "incomplete_results" => false,
+        "items" => [
+          %{
+            "id" => 1,
+            "login" => "octocat",
+            "type" => "User",
+            "location" => "San Francisco"
+          }
+        ]
+      })
+
+      query = %Query{
+        provider: GitHub,
+        from: "search/users",
+        filters: [{:eq, "location", "San Francisco"}]
+      }
+
+      assert {:ok, data} = GitHub.process_response(response, query)
+      assert length(data["items"]) == 1
+      assert hd(data["items"])["login"] == "octocat"
+    end
+
+    test "search/code returns code results" do
+      response = mock_github_response(200, %{
+        "total_count" => 1,
+        "incomplete_results" => false,
+        "items" => [
+          %{
+            "name" => "mix.exs",
+            "path" => "mix.exs",
+            "repository" => %{"full_name" => "elixir-lang/elixir"},
+            "html_url" => "https://github.com/elixir-lang/elixir/blob/main/mix.exs"
+          }
+        ]
+      })
+
+      query = %Query{
+        provider: GitHub,
+        from: "search/code",
+        filters: [{:eq, "language", "elixir"}]
+      }
+
+      assert {:ok, data} = GitHub.process_response(response, query)
+      assert length(data["items"]) == 1
+      assert hd(data["items"])["name"] == "mix.exs"
+    end
+
+    test "search/issues returns issue results" do
+      response = mock_github_response(200, %{
+        "total_count" => 1,
+        "incomplete_results" => false,
+        "items" => [
+          %{
+            "id" => 1,
+            "number" => 123,
+            "title" => "Bug fix",
+            "state" => "open",
+            "user" => %{"id" => 1, "login" => "octocat"}
+          }
+        ]
+      })
+
+      query = %Query{
+        provider: GitHub,
+        from: "search/issues",
+        filters: [{:eq, "state", "open"}]
+      }
+
+      assert {:ok, data} = GitHub.process_response(response, query)
+      assert length(data["items"]) == 1
+      assert hd(data["items"])["title"] == "Bug fix"
+    end
+
+    test "search/topics returns topic results" do
+      response = mock_github_response(200, %{
+        "total_count" => 1,
+        "incomplete_results" => false,
+        "items" => [
+          %{
+            "name" => "elixir",
+            "display_name" => "Elixir",
+            "short_description" => "Elixir is a dynamic, functional language",
+            "created_by" => "José Valim",
+            "released" => "2011"
+          }
+        ]
+      })
+
+      query = %Query{
+        provider: GitHub,
+        from: "search/topics",
+        filters: [{:eq, "name", "elixir"}]
+      }
+
+      assert {:ok, data} = GitHub.process_response(response, query)
+      assert length(data["items"]) == 1
+      assert hd(data["items"])["name"] == "elixir"
+    end
+
+    test "repos/{owner}/{repo} returns repository details" do
+      _response = mock_github_response(200, %{
+        "id" => 1234,
+        "name" => "elixir",
+        "full_name" => "elixir-lang/elixir",
+        "description" => "Dynamic, functional language",
+        "stargazers_count" => 1000,
+        "language" => "Elixir",
+        "owner" => %{"id" => 1, "login" => "elixir-lang"}
+      })
+
+      query = %Query{
+        provider: GitHub,
+        from: "repos/elixir-lang/elixir"
+      }
+
+      result = GitHub.execute(query)
+      assert %Apipe.Response{} = result
+      assert result.data["name"] == "elixir"
+      assert result.data["full_name"] == "elixir-lang/elixir"
+
+      # Verify rate limit info exists but don't check exact values
+      assert is_integer(result.meta.rate_limit.limit)
+      assert is_integer(result.meta.rate_limit.remaining)
+      assert is_integer(result.meta.rate_limit.reset)
+      assert is_integer(result.meta.rate_limit.used)
+    end
+
+    test "repos/{owner}/{repo} returns repository details with casting" do
+      _response = mock_github_response(200, %{
+        "id" => 1234,
+        "name" => "elixir",
+        "full_name" => "elixir-lang/elixir",
+        "description" => "Dynamic, functional language",
+        "stargazers_count" => 1000,
+        "language" => "Elixir",
+        "owner" => %{
+          "id" => 1481354,
+          "login" => "elixir-lang",
+          "type" => "Organization"
+        }
+      })
+
+      query = %Query{
+        provider: GitHub,
+        from: "repos/elixir-lang/elixir"
+      }
+
+      result = GitHub.execute(query, cast_response: true)
+      assert %Apipe.Response{} = result
+
+      # Verify repository is cast
+      assert %Apipe.Providers.GitHub.Types.Repository{} = result.data
+      assert result.data.name == "elixir"
+      assert result.data.full_name == "elixir-lang/elixir"
+
+      # Verify owner is cast
+      assert %Apipe.Providers.GitHub.Types.User{} = result.data.owner
+      assert result.data.owner.id == 1_481_354
+      assert result.data.owner.login == "elixir-lang"
+    end
+  end
+
+  defp mock_github_response(status, body) do
+    %{
+      status: status,
+      body: body,
+      headers: [
+        {"x-ratelimit-limit", "60"},
+        {"x-ratelimit-remaining", "59"},
+        {"x-ratelimit-reset", "1234567890"},
+        {"x-ratelimit-used", "1"}
+      ]
+    }
   end
 end

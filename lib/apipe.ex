@@ -32,37 +32,43 @@ defmodule Apipe do
   require Logger
 
   @doc """
-  Creates a new query for the specified provider.
+  Creates a new query with the given provider and options.
+
+  ## Options
+
+    * `:token` - Provider-specific authentication token
+    * `:cast_response` - Whether to cast responses to structs (default: false)
 
   ## Examples
 
-      iex> query = Apipe.new(Apipe.Providers.GitHub, token: "github_pat_...")
-      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, provider_opts: [token: "github_pat_..."]} = query
-      iex> query
-      %Apipe.Query{provider: Apipe.Providers.GitHub, provider_opts: [token: "github_pat_..."]}
+      # Without casting (raw JSON responses)
+      github = Apipe.new(GitHub)
+
+      # With casting (typed responses)
+      github = Apipe.new(GitHub, cast_response: true)
+
+      # With authentication
+      github = Apipe.new(GitHub, token: "github_pat_...", cast_response: true)
   """
   def new(provider, opts \\ []) do
-    Logger.debug("Creating new query: provider=#{inspect(provider)}, opts=#{inspect(opts)}")
-    query = struct!(Query, provider: provider, provider_opts: opts)
-    Logger.debug("Created query struct: #{inspect(query)}")
-    query
+    %Query{
+      provider: provider,
+      provider_opts: opts
+    }
   end
 
   @doc """
-  Specifies the resource path to query.
+  Sets the from path for the query.
 
   ## Examples
 
-      iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.from(query, "search/repositories")
-      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, from: "search/repositories"} = query
-      iex> query
-      %Apipe.Query{provider: Apipe.Providers.GitHub, from: "search/repositories"}
+      github
+      |> Apipe.from("search/repositories")
   """
-  def from(%Query{} = query, path) when is_binary(path) do
+  def from(query, path) when is_binary(path) do
     Logger.debug("Setting from path: #{path}")
     Logger.debug("Query before from: #{inspect(query)}")
-    result = struct!(Query, Map.from_struct(query) |> Map.put(:from, path))
+    result = %{query | from: path}
     Logger.debug("Query after from: #{inspect(result)}")
     result
   end

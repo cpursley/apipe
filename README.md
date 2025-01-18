@@ -1,15 +1,18 @@
 # Apipe
 
+SQL-like interface for querying APIs
+
+![Apipe mascot](mascot.jpeg)
+
 What if you could query any API like you would a database? Introducing Apipe, a library that provides a SQL-like interface for querying APIs.
 
 It works with a provider interface, so you can easily add support for new APIs. It currently supports the GitHub API, with more providers coming soon.
 
 ## Features
 
-- SQL-like query interface (`select`, `where`, `order_by`, etc.)
+- SQL-like query interface
 - Flexible filtering with map-based and chainable operators
-- Type-safe responses with automatic casting (optional)
-- Built-in rate limit handling
+- Optional type-safe responses with casting
 - Comprehensive error handling
 - Extensible provider system
 
@@ -30,57 +33,45 @@ end
 ```elixir
 alias Apipe.Providers.GitHub
 
-# Create a new GitHub client (token is optional)
-github = Apipe.new(GitHub)
+# Create a new GitHub client with casting enabled (both token and casting are optional)
+github = Apipe.new(GitHub, cast_response: true)
 
-# Using map-based where filters with casting
-{:ok, response} =
-  github
-  |> Apipe.from("search/repositories")
-  |> Apipe.where(%{
-    language: "elixir",
-    stars: [gt: 1000, lte: 10000],
-    name: [like: "phoenix"]
-  })
-  |> Apipe.order_by("stars", :desc)
-  |> Apipe.limit(3)
-  |> Apipe.cast(GitHub.Types.Repository) # Enable type casting
-  |> Apipe.execute()
+github
+|> Apipe.from("repos/cpursley/apipe")
+|> Apipe.execute()
 
-# Using chainable operators without casting (raw JSON response)
-{:ok, response} =
-  github
-  |> Apipe.from("search/repositories")
-  |> Apipe.eq("language", "elixir")
-  |> Apipe.gt("stars", 1000)
-  |> Apipe.lte("stars", 10000)
-  |> Apipe.like("name", "phoenix")
-  |> Apipe.order_by("stars", :desc)
-  |> Apipe.limit(3)
-  |> Apipe.execute()
+# Using map-based where filters (with casting)
+github
+|> Apipe.from("search/repositories")
+|> Apipe.where(%{
+  language: "elixir",
+  stars: [gt: 1000, lte: 10000],
+  name: [like: "phoenix"]
+})
+|> Apipe.order_by("stars", :desc)
+|> Apipe.limit(3)
+|> Apipe.execute()
 
-# Combining both styles with casting
-{:ok, response} =
-  github
-  |> Apipe.from("search/repositories")
-  |> Apipe.where(%{language: "elixir"})
-  |> Apipe.gt("stars", 1000)
-  |> Apipe.lte("stars", 10000)
-  |> Apipe.like("name", "phoenix")
-  |> Apipe.order_by("stars", :desc)
-  |> Apipe.limit(3)
-  |> Apipe.cast(GitHub.Types.Repository)
-  |> Apipe.execute()
+# Using chainable operators (without casting)
+Apipe.new(GitHub)
+|> Apipe.from("search/repositories")
+|> Apipe.eq("language", "elixir")
+|> Apipe.gt("stars", 1000)
+|> Apipe.lte("stars", 10000)
+|> Apipe.like("name", "phoenix")
+|> Apipe.order_by("stars", :desc)
+|> Apipe.limit(3)
+|> Apipe.execute()
 
-# Accessing typed response (when using cast)
-response.data.items |> Enum.each(fn repo ->
-  IO.puts("#{repo.full_name}: #{repo.stargazers_count} ⭐")
-end)
-
-# Accessing raw JSON response (when not using cast)
-response.data["items"] |> Enum.each(fn repo ->
-  IO.puts("#{repo["full_name"]}: #{repo["stargazers_count"]} ⭐")
-end)
+# Combining both styles (with casting)
+github  # Using the client with casting enabled
+|> Apipe.from("search/repositories")
+|> Apipe.where(%{language: "elixir"})
+|> Apipe.gt("stars", 1000)
+|> Apipe.like("name", "phoenix")
+|> Apipe.order_by("stars", :desc)
+|> Apipe.limit(3)
+|> Apipe.execute()
 ```
 
 ## Filter Operators
@@ -112,14 +103,14 @@ where(%{stars: [gt: 100, lte: 1000]})
 ## Response Types
 
 All responses are wrapped in a `Response` struct that includes:
-- `data`: The actual response data (typed if using `cast`, raw JSON otherwise)
+- `data`: The actual response data (typed if using `cast_response: true`, raw JSON otherwise)
 - Additional metadata specific to the provider (rate limits, pagination info, etc.)
 
 ## Type Casting
 
-Type casting is optional but must be used consistently in a query. When you use `cast/2`, the response will be converted into Elixir structs with proper types. Without casting, you'll get the raw JSON response from the API. Choose based on your needs:
+Type casting is configured when creating a new client with the `cast_response: true` option. When enabled, responses will be converted into Elixir structs with proper types. Without it, you'll get raw JSON responses. Choose based on your needs:
 
-- Use casting when you want:
+- Enable casting when you want:
   - Type safety
   - Better IDE support
   - Cleaner access to nested data
@@ -130,8 +121,6 @@ Type casting is optional but must be used consistently in a query. When you use 
   - Better performance
   - To access fields not defined in the type structs
   - Example: `repo["full_name"]`, `repo["stargazers_count"]`
-
-Note: You must either use casting consistently (by calling `cast/2` before `execute/1`) or not at all. Mixing typed and untyped responses in the same query is not supported.
 
 ## Contributing
 

@@ -1,106 +1,13 @@
 defmodule Apipe.Providers.GitHub.Types do
   @moduledoc """
-  Common GitHub data structures and their casting functions.
-
-  This module provides structured types for GitHub API responses and functions
-  to cast raw JSON data into these types.
+  Type definitions for GitHub API responses.
   """
 
-  alias __MODULE__.{User, Repository, Issue, SearchResponse, Response}
-
-  defmodule Response do
-    @moduledoc """
-    Generic GitHub API response wrapper.
-
-    This struct wraps any GitHub API response, providing a consistent structure
-    for metadata and pagination information.
-    """
-    @type t :: %__MODULE__{
-      data: any(),
-      rate_limit: %{
-        limit: integer(),
-        remaining: integer(),
-        reset: integer(),
-        used: integer()
-      } | nil,
-      etag: String.t() | nil
-    }
-
-    defstruct [:data, :rate_limit, :etag]
-
-    def cast(data, rate_limit \\ nil, etag \\ nil) do
-      {:ok, struct!(__MODULE__, %{
-        data: data,
-        rate_limit: rate_limit,
-        etag: etag
-      })}
-    end
-  end
-
-  defmodule SearchResponse do
-    @moduledoc """
-    GitHub search API response wrapper.
-
-    This struct wraps search results, providing metadata about the search operation
-    along with the matched items.
-    """
-    @type t :: %__MODULE__{
-      items: list(any()),
-      total_count: integer(),
-      incomplete_results: boolean()
-    }
-
-    defstruct [:items, :total_count, :incomplete_results]
-
-    def cast(data, item_type) when is_map(data) do
-      items = Enum.map(data["items"] || [], fn item ->
-        {:ok, casted} = item_type.cast(item)
-        casted
-      end)
-
-      {:ok, struct!(__MODULE__, %{
-        items: items,
-        total_count: data["total_count"],
-        incomplete_results: data["incomplete_results"]
-      })}
-    end
-  end
-
-  @doc """
-  Casts a GitHub user JSON object into a User struct.
-
-  Returns `nil` if the input is `nil` or if casting fails.
-
-  ## Examples
-
-      iex> user_data = %{"id" => 1, "login" => "octocat"}
-      iex> Apipe.Providers.GitHub.Types.cast_user(user_data)
-      %Apipe.Providers.GitHub.Types.User{id: 1, login: "octocat"}
-
-      iex> Apipe.Providers.GitHub.Types.cast_user(nil)
-      nil
-  """
-  def cast_user(nil), do: nil
-  def cast_user(user) when is_map(user) do
-    case User.cast(user) do
-      {:ok, user} -> user
-      _ -> nil
-    end
-  end
+  alias Apipe.Providers.GitHub.Types.{User, Repository, Issue, Topic, SearchResponse}
 
   @doc """
   Casts a GitHub license JSON object into a license map.
-
   Returns `nil` if the input is `nil`.
-
-  ## Examples
-
-      iex> license_data = %{"key" => "mit", "name" => "MIT License"}
-      iex> Apipe.Providers.GitHub.Types.cast_license(license_data)
-      %{key: "mit", name: "MIT License", spdx_id: nil, url: nil}
-
-      iex> Apipe.Providers.GitHub.Types.cast_license(nil)
-      nil
   """
   def cast_license(nil), do: nil
   def cast_license(license) when is_map(license) do
@@ -112,12 +19,175 @@ defmodule Apipe.Providers.GitHub.Types do
     }
   end
 
+  @doc """
+  Casts a GitHub user JSON object into a User struct.
+  Returns `nil` if the input is `nil`.
+  """
+  def cast_user(nil), do: nil
+  def cast_user(user) when is_map(user) do
+    case User.cast(user) do
+      {:ok, user} -> user
+      _ -> nil
+    end
+  end
+
+  defmodule SearchResponse do
+    @moduledoc """
+    GitHub search response data structure.
+    """
+
+    @type t :: %__MODULE__{
+      total_count: integer(),
+      incomplete_results: boolean(),
+      items: list(any())
+    }
+
+    defstruct [
+      :total_count,
+      :incomplete_results,
+      :items
+    ]
+
+    @doc """
+    Casts a GitHub search response to a SearchResponse struct.
+    """
+    def cast(data, item_type) when is_map(data) do
+      items = Enum.map(data["items"] || [], &cast_item(&1, item_type))
+      {:ok, struct(__MODULE__, %{
+        total_count: data["total_count"],
+        incomplete_results: data["incomplete_results"],
+        items: items
+      })}
+    end
+
+    defp cast_item(item, type) do
+      case type.cast(item) do
+        {:ok, data} -> data
+        _ -> item
+      end
+    end
+  end
+
+  defmodule User do
+    @moduledoc """
+    GitHub user data structure.
+    """
+
+    @type t :: %__MODULE__{
+      id: integer(),
+      login: String.t(),
+      name: String.t() | nil,
+      email: String.t() | nil,
+      bio: String.t() | nil,
+      company: String.t() | nil,
+      blog: String.t() | nil,
+      location: String.t() | nil,
+      public_repos: integer() | nil,
+      public_gists: integer() | nil,
+      followers: integer() | nil,
+      following: integer() | nil,
+      created_at: String.t() | nil,
+      updated_at: String.t() | nil,
+      score: float() | nil,
+      # Additional fields from API response
+      avatar_url: String.t(),
+      events_url: String.t(),
+      followers_url: String.t(),
+      following_url: String.t(),
+      gists_url: String.t(),
+      gravatar_id: String.t(),
+      html_url: String.t(),
+      node_id: String.t(),
+      organizations_url: String.t(),
+      received_events_url: String.t(),
+      repos_url: String.t(),
+      site_admin: boolean(),
+      starred_url: String.t(),
+      subscriptions_url: String.t(),
+      type: String.t(),
+      url: String.t()
+    }
+
+    defstruct [
+      :id,
+      :login,
+      :name,
+      :email,
+      :bio,
+      :company,
+      :blog,
+      :location,
+      :public_repos,
+      :public_gists,
+      :followers,
+      :following,
+      :created_at,
+      :updated_at,
+      :score,
+      # Additional fields from API response
+      :avatar_url,
+      :events_url,
+      :followers_url,
+      :following_url,
+      :gists_url,
+      :gravatar_id,
+      :html_url,
+      :node_id,
+      :organizations_url,
+      :received_events_url,
+      :repos_url,
+      :site_admin,
+      :starred_url,
+      :subscriptions_url,
+      :type,
+      :url
+    ]
+
+    @doc """
+    Casts a GitHub user response to a User struct.
+    """
+    def cast(data) when is_map(data) do
+      {:ok, struct(__MODULE__, %{
+        id: data["id"],
+        login: data["login"],
+        name: data["name"],
+        email: data["email"],
+        bio: data["bio"],
+        company: data["company"],
+        blog: data["blog"],
+        location: data["location"],
+        public_repos: data["public_repos"],
+        public_gists: data["public_gists"],
+        followers: data["followers"],
+        following: data["following"],
+        created_at: data["created_at"],
+        updated_at: data["updated_at"],
+        score: data["score"],
+        avatar_url: data["avatar_url"],
+        events_url: data["events_url"],
+        followers_url: data["followers_url"],
+        following_url: data["following_url"],
+        gists_url: data["gists_url"],
+        gravatar_id: data["gravatar_id"],
+        html_url: data["html_url"],
+        node_id: data["node_id"],
+        organizations_url: data["organizations_url"],
+        received_events_url: data["received_events_url"],
+        repos_url: data["repos_url"],
+        site_admin: data["site_admin"],
+        starred_url: data["starred_url"],
+        subscriptions_url: data["subscriptions_url"],
+        type: data["type"],
+        url: data["url"]
+      })}
+    end
+  end
+
   defmodule Repository do
     @moduledoc """
-    GitHub repository data structure.
-
-    Represents a GitHub repository with all its attributes.
+    Type module for GitHub repositories.
     """
+
     @type t :: %__MODULE__{
       id: integer(),
       name: String.t(),
@@ -137,7 +207,7 @@ defmodule Apipe.Providers.GitHub.Types do
       disabled: boolean(),
       open_issues_count: integer(),
       license: map() | nil,
-      topics: [String.t()],
+      topics: list(String.t()),
       visibility: String.t(),
       default_branch: String.t(),
       owner: User.t() | nil
@@ -169,19 +239,17 @@ defmodule Apipe.Providers.GitHub.Types do
     ]
 
     @doc """
-    Casts a raw GitHub repository JSON object into a Repository struct.
-
-    ## Examples
-
-        iex> repo_data = %{
-        ...>   "id" => 1234,
-        ...>   "name" => "elixir",
-        ...>   "owner" => %{"id" => 1, "login" => "elixir-lang"}
-        ...> }
-        iex> Repository.cast(repo_data)
-        {:ok, %Repository{id: 1234, name: "elixir", owner: %User{id: 1, login: "elixir-lang"}}}
+    Casts a GitHub repository response to a Repository struct.
     """
     def cast(data) when is_map(data) do
+      # Cast owner data first
+      owner = case data["owner"] do
+        nil -> nil
+        owner_data when is_map(owner_data) ->
+          {:ok, user} = Apipe.Providers.GitHub.Types.User.cast(owner_data)
+          user
+      end
+
       {:ok, struct(__MODULE__, %{
         id: data["id"],
         name: data["name"],
@@ -204,88 +272,7 @@ defmodule Apipe.Providers.GitHub.Types do
         topics: data["topics"] || [],
         visibility: data["visibility"],
         default_branch: data["default_branch"],
-        owner: Apipe.Providers.GitHub.Types.cast_user(data["owner"])
-      })}
-    end
-  end
-
-  defmodule User do
-    @moduledoc """
-    GitHub user/organization data structure.
-
-    Represents either a GitHub user or organization account.
-    """
-    @type t :: %__MODULE__{
-      id: integer(),
-      login: String.t(),
-      avatar_url: String.t(),
-      type: String.t(),
-      site_admin: boolean(),
-      name: String.t() | nil,
-      company: String.t() | nil,
-      blog: String.t() | nil,
-      location: String.t() | nil,
-      email: String.t() | nil,
-      bio: String.t() | nil,
-      twitter_username: String.t() | nil,
-      public_repos: integer(),
-      public_gists: integer(),
-      followers: integer(),
-      following: integer(),
-      created_at: String.t(),
-      updated_at: String.t()
-    }
-
-    defstruct [
-      :id,
-      :login,
-      :avatar_url,
-      :type,
-      :site_admin,
-      :name,
-      :company,
-      :blog,
-      :location,
-      :email,
-      :bio,
-      :twitter_username,
-      :public_repos,
-      :public_gists,
-      :followers,
-      :following,
-      :created_at,
-      :updated_at
-    ]
-
-    @doc """
-    Casts a raw GitHub user JSON object into a User struct.
-
-    ## Examples
-
-        iex> user_data = %{"id" => 1, "login" => "octocat", "type" => "User"}
-        iex> User.cast(user_data)
-        {:ok, %User{id: 1, login: "octocat", type: "User"}}
-    """
-    def cast(data) when is_map(data) do
-      {:ok, struct(__MODULE__, %{
-        id: data["id"],
-        login: data["login"],
-        avatar_url: data["avatar_url"],
-        type: data["type"],
-        site_admin: data["site_admin"],
-        name: data["name"],
-        company: data["company"],
-        blog: data["blog"],
-        location: data["location"],
-        email: data["email"],
-        bio: data["bio"],
-        twitter_username: data["twitter_username"],
-        public_repos: data["public_repos"],
-        public_gists: data["public_gists"],
-        followers: data["followers"],
-        following: data["following"],
-        created_at: data["created_at"],
-        updated_at: data["updated_at"]
+        owner: owner
       })}
     end
   end
@@ -293,9 +280,8 @@ defmodule Apipe.Providers.GitHub.Types do
   defmodule Issue do
     @moduledoc """
     GitHub issue data structure.
-
-    Represents a GitHub issue or pull request.
     """
+
     @type t :: %__MODULE__{
       id: integer(),
       number: integer(),
@@ -303,15 +289,15 @@ defmodule Apipe.Providers.GitHub.Types do
       state: String.t(),
       locked: boolean(),
       assignee: User.t() | nil,
-      assignees: [User.t()],
+      assignees: list(User.t()),
       milestone: map() | nil,
       comments: integer(),
       created_at: String.t(),
       updated_at: String.t(),
       closed_at: String.t() | nil,
       body: String.t(),
-      user: User.t() | nil,
-      labels: [map()]
+      user: User.t(),
+      labels: list(map())
     }
 
     defstruct [
@@ -333,18 +319,7 @@ defmodule Apipe.Providers.GitHub.Types do
     ]
 
     @doc """
-    Casts a raw GitHub issue JSON object into an Issue struct.
-
-    ## Examples
-
-        iex> issue_data = %{
-        ...>   "id" => 1,
-        ...>   "number" => 123,
-        ...>   "title" => "Bug fix",
-        ...>   "user" => %{"id" => 1, "login" => "octocat"}
-        ...> }
-        iex> Issue.cast(issue_data)
-        {:ok, %Issue{id: 1, number: 123, title: "Bug fix", user: %User{id: 1, login: "octocat"}}}
+    Casts a GitHub issue response to an Issue struct.
     """
     def cast(data) when is_map(data) do
       {:ok, struct(__MODULE__, %{
@@ -363,6 +338,59 @@ defmodule Apipe.Providers.GitHub.Types do
         body: data["body"],
         user: Apipe.Providers.GitHub.Types.cast_user(data["user"]),
         labels: data["labels"] || []
+      })}
+    end
+  end
+
+  defmodule Topic do
+    @moduledoc """
+    Type module for GitHub topics.
+    """
+
+    @type t :: %__MODULE__{
+      name: String.t(),
+      display_name: String.t(),
+      short_description: String.t(),
+      description: String.t(),
+      created_by: String.t(),
+      released: String.t(),
+      created_at: String.t(),
+      updated_at: String.t(),
+      featured: boolean(),
+      curated: boolean(),
+      score: float()
+    }
+
+    defstruct [
+      :name,
+      :display_name,
+      :short_description,
+      :description,
+      :created_by,
+      :released,
+      :created_at,
+      :updated_at,
+      :featured,
+      :curated,
+      :score
+    ]
+
+    @doc """
+    Casts a GitHub topic response to a Topic struct.
+    """
+    def cast(topic) when is_map(topic) do
+      {:ok, struct(__MODULE__, %{
+        name: topic["name"],
+        display_name: topic["display_name"],
+        short_description: topic["short_description"],
+        description: topic["description"],
+        created_by: topic["created_by"],
+        released: topic["released"],
+        created_at: topic["created_at"],
+        updated_at: topic["updated_at"],
+        featured: topic["featured"],
+        curated: topic["curated"],
+        score: topic["score"]
       })}
     end
   end
