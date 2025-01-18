@@ -6,26 +6,28 @@ defmodule Apipe do
 
       alias Apipe.Providers.GitHub
 
-      # Create a new GitHub client
-      github = Apipe.new(GitHub)
+      # Create a new GitHub client with casting enabled
+      github = Apipe.new(GitHub, cast_response: true)
 
-      # Query with type casting
-      {:ok, response} =
-        github
-        |> Apipe.from("search/repositories")
-        |> Apipe.where("language", "elixir")
-        |> Apipe.order_by("stars", :desc)
-        |> Apipe.limit(10)
-        |> Apipe.cast(GitHub.Types.Repository)
-        |> Apipe.execute()
+      # Query with type casting and field-operator syntax
+      github
+      |> Apipe.from("search/repositories")
+      |> Apipe.where(:language, eq: "elixir")
+      |> Apipe.gt(:stars, 1000)
+      |> Apipe.order_by(:stars, :desc)
+      |> Apipe.limit(10)
+      |> Apipe.execute()
 
-      # Query without type casting
-      {:ok, response} =
-        github
-        |> Apipe.from("search/repositories")
-        |> Apipe.where("language", "elixir")
-        |> Apipe.select(["id", "name", "stargazers_count"])
-        |> Apipe.execute()
+      # Query with field selection and map-based filters
+      github
+      |> Apipe.from("search/repositories")
+      |> Apipe.select([:id, :name, :stargazers_count])
+      |> Apipe.where(%{
+        language: "elixir",
+        stars: [gt: 1000, lte: 10000],
+        name: [like: "phoenix"]
+      })
+      |> Apipe.execute()
   """
 
   alias Apipe.Query
@@ -76,43 +78,75 @@ defmodule Apipe do
   @doc """
   Specifies which fields to select from the response.
 
+  Fields can be specified as:
+  - A single field (atom or string): `select(:name)` or `select("name")`
+  - A list of fields (atoms or strings): `select([:id, :name])` or `select(["id", "name"])`
+
+  All fields will be normalized to strings internally.
+
   ## Examples
 
       iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.select(query, ["id", "name", "description"])
+      iex> query = Apipe.select(query, :name)
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, select: ["name"]} = query
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.select(query, [:id, "name", :description])
       iex> %Apipe.Query{provider: Apipe.Providers.GitHub, select: ["id", "name", "description"]} = query
-      iex> query
-      %Apipe.Query{provider: Apipe.Providers.GitHub, select: ["id", "name", "description"]}
   """
+  def select(%Query{} = query, field) when is_atom(field) or is_binary(field) do
+    Logger.debug("Setting select field: #{inspect(field)}")
+    select(query, [field])
+  end
+
   def select(%Query{} = query, fields) when is_list(fields) do
-    Logger.debug("Setting select fields: #{inspect(fields)}")
+    normalized_fields = Enum.map(fields, &to_string/1)
+    Logger.debug("Setting select fields: #{inspect(normalized_fields)}")
     Logger.debug("Query before select: #{inspect(query)}")
-    result = struct!(Query, Map.from_struct(query) |> Map.put(:select, fields))
+    result = struct!(Query, Map.from_struct(query) |> Map.put(:select, normalized_fields))
     Logger.debug("Query after select: #{inspect(result)}")
     result
   end
 
   @doc """
-  Adds filters to the query using a map of conditions.
+  Adds filters to the query using one of two syntaxes:
+
+  1. Field-operator syntax:
+     ```elixir
+     where(:language, eq: "elixir")
+     where(:stars, gt: 1000)
+     ```
+
+  2. Map-based syntax with support for multiple conditions:
+     ```elixir
+     where(%{language: "elixir"})  # Simple equality
+     where(%{stars: [gt: 1000]})   # With operator
+     where(%{                      # Multiple fields and operators
+       language: "elixir",
+       stars: [gt: 1000, lte: 10000],
+       name: [like: "phoenix"]
+     })
+     ```
+
+  Both syntaxes can be mixed and chained together.
 
   ## Examples
 
+      # Field-operator syntax
       iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.where(query, %{language: "elixir"})
+      iex> query = Apipe.where(query, :language, eq: "elixir")
       iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:eq, "language", "elixir"}]} = query
 
+      # Map syntax with multiple conditions
       iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.where(query, %{stars: [gt: 100]})
-      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:gt, "stars", 100}]} = query
-
-      iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.where(query, %{language: [in: ["elixir", "erlang"]]})
-      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:in, "language", ["elixir", "erlang"]}]} = query
-
-      iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.where(query, %{stars: [gte: 100, lte: 1000]})
-      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:lte, "stars", 1000}, {:gte, "stars", 100}]} = query
+      iex> query = Apipe.where(query, %{stars: [gt: 100, lte: 1000]})
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:lte, "stars", 1000}, {:gt, "stars", 100}]} = query
   """
+  def where(%Query{} = query, field, [{operator, value}]) when is_atom(field) or is_binary(field) do
+    Logger.debug("Adding where filter: field=#{field}, operator=#{operator}, value=#{inspect(value)}")
+    add_filter(query, {operator, to_string(field), value})
+  end
+
   def where(%Query{} = query, conditions) when is_map(conditions) do
     Logger.debug("Adding where filters: #{inspect(conditions)}")
     Logger.debug("Query before where: #{inspect(query)}")
@@ -146,19 +180,25 @@ defmodule Apipe do
   @doc """
   Specifies the field and direction to order results by.
 
+  The field can be specified as either an atom or string.
+  Direction defaults to `:asc` if not specified.
+
   ## Examples
 
       iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.order_by(query, "stars", :desc)
+      iex> query = Apipe.order_by(query, :stars, :desc)
       iex> %Apipe.Query{provider: Apipe.Providers.GitHub, order_by: "stars", order_direction: :desc} = query
-      iex> query
-      %Apipe.Query{provider: Apipe.Providers.GitHub, order_by: "stars", order_direction: :desc}
+
+      # Direction defaults to :asc
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.order_by(query, "created_at")
+      iex> %Apipe.Query{provider: Apipe.Providers.GitHub, order_by: "created_at", order_direction: :asc} = query
   """
   def order_by(%Query{} = query, field, direction \\ :asc)
       when direction in [:asc, :desc] do
     Logger.debug("Setting order by: field=#{field}, direction=#{direction}")
     Logger.debug("Query before order_by: #{inspect(query)}")
-    result = struct!(Query, Map.from_struct(query) |> Map.merge(%{order_by: field, order_direction: direction}))
+    result = struct!(Query, Map.from_struct(query) |> Map.merge(%{order_by: to_string(field), order_direction: direction}))
     Logger.debug("Query after order_by: #{inspect(result)}")
     result
   end

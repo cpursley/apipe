@@ -152,6 +152,45 @@ defmodule ApipeTest do
     end
   end
 
+  describe "where/3" do
+    test "handles field-operator syntax with atom field" do
+      query =
+        GitHub
+        |> Apipe.new()
+        |> Apipe.where(:language, eq: "elixir")
+
+      assert query.filters == [{:eq, "language", "elixir"}]
+    end
+
+    test "handles field-operator syntax with string field" do
+      query =
+        GitHub
+        |> Apipe.new()
+        |> Apipe.where("language", eq: "elixir")
+
+      assert query.filters == [{:eq, "language", "elixir"}]
+    end
+
+    test "handles field-operator syntax with comparison operators" do
+      query =
+        GitHub
+        |> Apipe.new()
+        |> Apipe.where(:stars, gt: 1000)
+
+      assert query.filters == [{:gt, "stars", 1000}]
+    end
+
+    test "can be chained with map-based where" do
+      query =
+        GitHub
+        |> Apipe.new()
+        |> Apipe.where(:language, eq: "elixir")
+        |> Apipe.where(%{stars: [gt: 1000]})
+
+      assert query.filters == [{:gt, "stars", 1000}, {:eq, "language", "elixir"}]
+    end
+  end
+
   describe "order_by/3" do
     test "sets order by field and direction" do
       query =
@@ -355,6 +394,35 @@ defmodule ApipeTest do
         {:gte, "stars", 100},
         {:like, "name", "%phoenix%"}
       ]
+    end
+  end
+
+  describe "select/2" do
+    test "handles single field as atom" do
+      query =
+        GitHub
+        |> Apipe.new()
+        |> Apipe.select(:name)
+
+      assert query.select == ["name"]
+    end
+
+    test "handles single field as string" do
+      query =
+        GitHub
+        |> Apipe.new()
+        |> Apipe.select("name")
+
+      assert query.select == ["name"]
+    end
+
+    test "handles list of fields with mixed atoms and strings" do
+      query =
+        GitHub
+        |> Apipe.new()
+        |> Apipe.select([:id, "name", :description])
+
+      assert query.select == ["id", "name", "description"]
     end
   end
 end

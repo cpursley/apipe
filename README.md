@@ -1,20 +1,20 @@
-# Apipe
+# |> Apipe
 
-SQL-like interface for querying APIs
+**SQL-like interface for querying APIs**
 
-![Apipe mascot](mascot.jpeg)
+<img src="mascot.jpeg" width="250" style="float: left; margin-right: 30px; margin-bottom: 30px;" alt="Apipe mascot" />
 
-What if you could query any API like you would a database? Introducing Apipe, a library that provides a SQL-like interface for querying APIs.
+What if you could query any API like you would a database? Introducing Apipe, a library that provides a SQL-like interface for querying APIs. It's Provider interface allows you to easily add support for new APIs.
 
-It works with a provider interface, so you can easily add support for new APIs. It currently supports the GitHub API, with more providers coming soon.
+### Features
 
-## Features
+* SQL-like query interface inspired by Supabase & Ecto
+* Flexible filtering, joining and chainable operators
+* Optional type-safe responses with casting
+* Comprehensive error handling
+* Extensible provider system
 
-- SQL-like query interface
-- Flexible filtering with map-based and chainable operators
-- Optional type-safe responses with casting
-- Comprehensive error handling
-- Extensible provider system
+<br clear="left"/>
 
 ## Installation
 
@@ -31,47 +31,50 @@ end
 ## Quickstart
 
 ```elixir
+import Apipe
 alias Apipe.Providers.GitHub
 
-# Create a new GitHub client with casting enabled (both token and casting are optional)
+# Create a new GitHub client (both token and casting are optional)
 github = Apipe.new(GitHub, cast_response: true)
 
 github
-|> Apipe.from("repos/cpursley/apipe")
-|> Apipe.execute()
+|> from("repos/cpursley/apipe")
+|> execute()
+```
 
+## Advanced
+
+```elixir
 # Using map-based where filters (with casting)
 github
-|> Apipe.from("search/repositories")
-|> Apipe.where(%{
-  language: "elixir",
-  stars: [gt: 1000, lte: 10000],
-  name: [like: "phoenix"]
-})
-|> Apipe.order_by("stars", :desc)
-|> Apipe.limit(3)
-|> Apipe.execute()
+|> from("search/repositories")
+|> where(%{language: "elixir", name: [like: "phoenix"], stars: [gt: 1000, lte: 10000]})
+|> order_by(:stars, :desc)
+|> limit(3)
+|> execute()
 
-# Using chainable operators (without casting)
-Apipe.new(GitHub)
-|> Apipe.from("search/repositories")
-|> Apipe.eq("language", "elixir")
-|> Apipe.gt("stars", 1000)
-|> Apipe.lte("stars", 10000)
-|> Apipe.like("name", "phoenix")
-|> Apipe.order_by("stars", :desc)
-|> Apipe.limit(3)
-|> Apipe.execute()
+# Query using chainable operators with select (without casting)
+Apipe.new(GitHub) # using the client with casting enabled
+|> select([:id, :name, :stargazers_count])
+|> from("search/repositories")
+|> eq(:language, "elixir")
+|> gt(:stars, 1000)
+|> lte(:stars, 10000)
+|> order_by(:stars, :desc)
+|> limit(3)
+|> execute()
 
 # Combining both styles (with casting)
-github  # Using the client with casting enabled
-|> Apipe.from("search/repositories")
-|> Apipe.where(%{language: "elixir"})
-|> Apipe.gt("stars", 1000)
-|> Apipe.like("name", "phoenix")
-|> Apipe.order_by("stars", :desc)
-|> Apipe.limit(3)
-|> Apipe.execute()
+github # using the client with casting enabled (we set up earlier)
+|> select(:name) # only name field will be cast to repository struct
+|> from("search/repositories")
+|> where(:language, eq: "elixir") # using field-operator syntax instead of maps
+|> gt(:stars, 1000)
+|> lte(:stars, 10000)
+|> like(:name, "phoenix")
+|> order_by(:stars, :desc)
+|> limit(3)
+|> execute()
 ```
 
 ## Filter Operators
