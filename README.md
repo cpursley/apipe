@@ -53,7 +53,7 @@ github
 |> limit(3)
 |> execute()
 
-# Query using chainable operators with select (without casting)
+# Query using chainable operators with select (without type casting)
 Apipe.new(GitHub) # using the client with casting enabled
 |> select([:id, :name, :stargazers_count])
 |> from("search/repositories")
@@ -74,6 +74,19 @@ github # using the client with casting enabled (we set up earlier)
 |> like(:name, "phoenix")
 |> order_by(:stars, :desc)
 |> limit(3)
+|> execute()
+
+# Joining related resources
+github
+|> from("search/repositories")
+|> eq(:language, "elixir")
+|> order_by(:updated) # Find repositories with recent activity
+|> limit(3)
+|> join(:contributors, fn repo -> # join top contributors
+  github
+  |> from("repos/#{repo["full_name"]}/contributors")
+  |> limit(5)
+end)
 |> execute()
 ```
 

@@ -10,27 +10,28 @@ defmodule Apipe.Providers.GitHubTest do
       }
 
       assert %Apipe.Error{
-        type: :provider_error,
-        message: "Unsupported endpoint"
-      } = GitHub.execute(query)
+               type: :provider_error,
+               message: "Unsupported endpoint"
+             } = GitHub.execute(query)
     end
 
     test "search/repositories returns repository results" do
-      response = mock_github_response(200, %{
-        "total_count" => 1,
-        "incomplete_results" => false,
-        "items" => [
-          %{
-            "id" => 1234,
-            "name" => "elixir",
-            "full_name" => "elixir-lang/elixir",
-            "description" => "Dynamic, functional language",
-            "stargazers_count" => 1000,
-            "language" => "Elixir",
-            "owner" => %{"id" => 1, "login" => "elixir-lang"}
-          }
-        ]
-      })
+      response =
+        mock_github_response(200, %{
+          "total_count" => 1,
+          "incomplete_results" => false,
+          "items" => [
+            %{
+              "id" => 1234,
+              "name" => "elixir",
+              "full_name" => "elixir-lang/elixir",
+              "description" => "Dynamic, functional language",
+              "stargazers_count" => 1000,
+              "language" => "Elixir",
+              "owner" => %{"id" => 1, "login" => "elixir-lang"}
+            }
+          ]
+        })
 
       query = %Query{
         provider: GitHub,
@@ -38,24 +39,25 @@ defmodule Apipe.Providers.GitHubTest do
         filters: [{:eq, "language", "elixir"}]
       }
 
-      assert {:ok, data} = GitHub.process_response(response, query)
-      assert length(data["items"]) == 1
-      assert hd(data["items"])["name"] == "elixir"
+      assert {:ok, {data, _}} = GitHub.process_response(response, query)
+      assert length(data) == 1
+      assert data |> hd |> Map.get("name") == "elixir"
     end
 
     test "search/users returns user results" do
-      response = mock_github_response(200, %{
-        "total_count" => 1,
-        "incomplete_results" => false,
-        "items" => [
-          %{
-            "id" => 1,
-            "login" => "octocat",
-            "type" => "User",
-            "location" => "San Francisco"
-          }
-        ]
-      })
+      response =
+        mock_github_response(200, %{
+          "total_count" => 1,
+          "incomplete_results" => false,
+          "items" => [
+            %{
+              "id" => 1,
+              "login" => "octocat",
+              "type" => "User",
+              "location" => "San Francisco"
+            }
+          ]
+        })
 
       query = %Query{
         provider: GitHub,
@@ -63,24 +65,25 @@ defmodule Apipe.Providers.GitHubTest do
         filters: [{:eq, "location", "San Francisco"}]
       }
 
-      assert {:ok, data} = GitHub.process_response(response, query)
-      assert length(data["items"]) == 1
-      assert hd(data["items"])["login"] == "octocat"
+      assert {:ok, {data, _}} = GitHub.process_response(response, query)
+      assert length(data) == 1
+      assert data |> hd |> Map.get("login") == "octocat"
     end
 
     test "search/code returns code results" do
-      response = mock_github_response(200, %{
-        "total_count" => 1,
-        "incomplete_results" => false,
-        "items" => [
-          %{
-            "name" => "mix.exs",
-            "path" => "mix.exs",
-            "repository" => %{"full_name" => "elixir-lang/elixir"},
-            "html_url" => "https://github.com/elixir-lang/elixir/blob/main/mix.exs"
-          }
-        ]
-      })
+      response =
+        mock_github_response(200, %{
+          "total_count" => 1,
+          "incomplete_results" => false,
+          "items" => [
+            %{
+              "name" => "mix.exs",
+              "path" => "mix.exs",
+              "repository" => %{"full_name" => "elixir-lang/elixir"},
+              "html_url" => "https://github.com/elixir-lang/elixir/blob/main/mix.exs"
+            }
+          ]
+        })
 
       query = %Query{
         provider: GitHub,
@@ -88,25 +91,26 @@ defmodule Apipe.Providers.GitHubTest do
         filters: [{:eq, "language", "elixir"}]
       }
 
-      assert {:ok, data} = GitHub.process_response(response, query)
-      assert length(data["items"]) == 1
-      assert hd(data["items"])["name"] == "mix.exs"
+      assert {:ok, {data, _}} = GitHub.process_response(response, query)
+      assert length(data) == 1
+      assert data |> hd |> Map.get("name") == "mix.exs"
     end
 
     test "search/issues returns issue results" do
-      response = mock_github_response(200, %{
-        "total_count" => 1,
-        "incomplete_results" => false,
-        "items" => [
-          %{
-            "id" => 1,
-            "number" => 123,
-            "title" => "Bug fix",
-            "state" => "open",
-            "user" => %{"id" => 1, "login" => "octocat"}
-          }
-        ]
-      })
+      response =
+        mock_github_response(200, %{
+          "total_count" => 1,
+          "incomplete_results" => false,
+          "items" => [
+            %{
+              "id" => 1,
+              "number" => 123,
+              "title" => "Bug fix",
+              "state" => "open",
+              "user" => %{"id" => 1, "login" => "octocat"}
+            }
+          ]
+        })
 
       query = %Query{
         provider: GitHub,
@@ -114,25 +118,26 @@ defmodule Apipe.Providers.GitHubTest do
         filters: [{:eq, "state", "open"}]
       }
 
-      assert {:ok, data} = GitHub.process_response(response, query)
-      assert length(data["items"]) == 1
-      assert hd(data["items"])["title"] == "Bug fix"
+      assert {:ok, {data, _}} = GitHub.process_response(response, query)
+      assert length(data) == 1
+      assert data |> hd |> Map.get("title") == "Bug fix"
     end
 
     test "search/topics returns topic results" do
-      response = mock_github_response(200, %{
-        "total_count" => 1,
-        "incomplete_results" => false,
-        "items" => [
-          %{
-            "name" => "elixir",
-            "display_name" => "Elixir",
-            "short_description" => "Elixir is a dynamic, functional language",
-            "created_by" => "José Valim",
-            "released" => "2011"
-          }
-        ]
-      })
+      response =
+        mock_github_response(200, %{
+          "total_count" => 1,
+          "incomplete_results" => false,
+          "items" => [
+            %{
+              "name" => "elixir",
+              "display_name" => "Elixir",
+              "short_description" => "Elixir is a dynamic, functional language",
+              "created_by" => "José Valim",
+              "released" => "2011"
+            }
+          ]
+        })
 
       query = %Query{
         provider: GitHub,
@@ -146,15 +151,16 @@ defmodule Apipe.Providers.GitHubTest do
     end
 
     test "repos/{owner}/{repo} returns repository details" do
-      _response = mock_github_response(200, %{
-        "id" => 1234,
-        "name" => "elixir",
-        "full_name" => "elixir-lang/elixir",
-        "description" => "Dynamic, functional language",
-        "stargazers_count" => 1000,
-        "language" => "Elixir",
-        "owner" => %{"id" => 1, "login" => "elixir-lang"}
-      })
+      _response =
+        mock_github_response(200, %{
+          "id" => 1234,
+          "name" => "elixir",
+          "full_name" => "elixir-lang/elixir",
+          "description" => "Dynamic, functional language",
+          "stargazers_count" => 1000,
+          "language" => "Elixir",
+          "owner" => %{"id" => 1, "login" => "elixir-lang"}
+        })
 
       query = %Query{
         provider: GitHub,
@@ -174,19 +180,20 @@ defmodule Apipe.Providers.GitHubTest do
     end
 
     test "repos/{owner}/{repo} returns repository details with casting" do
-      _response = mock_github_response(200, %{
-        "id" => 1234,
-        "name" => "elixir",
-        "full_name" => "elixir-lang/elixir",
-        "description" => "Dynamic, functional language",
-        "stargazers_count" => 1000,
-        "language" => "Elixir",
-        "owner" => %{
-          "id" => 1481354,
-          "login" => "elixir-lang",
-          "type" => "Organization"
-        }
-      })
+      _response =
+        mock_github_response(200, %{
+          "id" => 1234,
+          "name" => "elixir",
+          "full_name" => "elixir-lang/elixir",
+          "description" => "Dynamic, functional language",
+          "stargazers_count" => 1000,
+          "language" => "Elixir",
+          "owner" => %{
+            "id" => 1_481_354,
+            "login" => "elixir-lang",
+            "type" => "Organization"
+          }
+        })
 
       query = %Query{
         provider: GitHub,

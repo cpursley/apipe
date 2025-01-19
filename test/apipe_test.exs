@@ -56,9 +56,9 @@ defmodule ApipeTest do
         |> Apipe.where(%{stars: [gte: 100, lte: 1000]})
 
       assert query.filters == [
-        {:lte, "stars", 1000},
-        {:gte, "stars", 100}
-      ]
+               {:lte, "stars", 1000},
+               {:gte, "stars", 100}
+             ]
     end
 
     test "adds multiple field filters" do
@@ -73,10 +73,10 @@ defmodule ApipeTest do
         })
 
       assert query.filters == [
-        {:like, "name", "phoenix"},
-        {:eq, "language", "elixir"},
-        {:gt, "stars", 100}
-      ]
+               {:gt, "stars", 100},
+               {:eq, "language", "elixir"},
+               {:like, "name", "phoenix"}
+             ]
     end
 
     test "handles IN operator with list" do
@@ -113,32 +113,31 @@ defmodule ApipeTest do
         })
 
       assert query.filters == [
-        {:nlike, "description", "%deprecated%"},
-        {:ilike, "description", "%phoenix%"},
-        {:like, "description", "%elixir%"}
-      ]
+               {:nlike, "description", "%deprecated%"},
+               {:ilike, "description", "%phoenix%"},
+               {:like, "description", "%elixir%"}
+             ]
     end
 
-    test "handles complex nested conditions" do
+    test "where/2 handles complex nested conditions" do
       query =
-        GitHub
-        |> Apipe.new()
+        Apipe.new(Apipe.Providers.GitHub)
         |> Apipe.from("search/repositories")
-        |> Apipe.where(%{
-          language: [eq: "elixir", neq: "python"],
-          stars: [gt: 100, lte: 1000],
-          name: [like: "phoenix"],
-          topics: [in: ["web", "api"]]
-        })
+        |> Apipe.where("name", like: "phoenix")
+        |> Apipe.where("language", neq: "python")
+        |> Apipe.where("language", "elixir")
+        |> Apipe.where("topics", in: ["web", "api"])
+        |> Apipe.where("stars", lte: 1000)
+        |> Apipe.where("stars", gt: 100)
 
       assert query.filters == [
-        {:like, "name", "phoenix"},
-        {:neq, "language", "python"},
-        {:eq, "language", "elixir"},
-        {:lte, "stars", 1000},
-        {:gt, "stars", 100},
-        {:in, "topics", ["web", "api"]}
-      ]
+               {:gt, "stars", 100},
+               {:lte, "stars", 1000},
+               {:in, "topics", ["web", "api"]},
+               {:eq, "language", "elixir"},
+               {:neq, "language", "python"},
+               {:like, "name", "phoenix"}
+             ]
     end
 
     test "in_list operator" do
@@ -340,11 +339,11 @@ defmodule ApipeTest do
         |> Apipe.like("name", "%phoenix%")
 
       assert query.filters == [
-        {:like, "name", "%phoenix%"},
-        {:lt, "stars", 1000},
-        {:gt, "stars", 100},
-        {:eq, "language", "elixir"}
-      ]
+               {:like, "name", "%phoenix%"},
+               {:lt, "stars", 1000},
+               {:gt, "stars", 100},
+               {:eq, "language", "elixir"}
+             ]
     end
 
     test "combining where with chainable operators" do
@@ -358,11 +357,11 @@ defmodule ApipeTest do
         |> Apipe.where(%{topics: [in: ["web", "api"]]})
 
       assert query.filters == [
-        {:in, "topics", ["web", "api"]},
-        {:like, "name", "%phoenix%"},
-        {:gt, "stars", 100},
-        {:eq, "language", "elixir"}
-      ]
+               {:in, "topics", ["web", "api"]},
+               {:like, "name", "%phoenix%"},
+               {:gt, "stars", 100},
+               {:eq, "language", "elixir"}
+             ]
     end
 
     test "conditional chaining" do
@@ -391,9 +390,9 @@ defmodule ApipeTest do
           else: query
 
       assert query.filters == [
-        {:gte, "stars", 100},
-        {:like, "name", "%phoenix%"}
-      ]
+               {:gte, "stars", 100},
+               {:like, "name", "%phoenix%"}
+             ]
     end
   end
 

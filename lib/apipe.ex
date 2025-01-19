@@ -142,9 +142,15 @@ defmodule Apipe do
       iex> query = Apipe.where(query, %{stars: [gt: 100, lte: 1000]})
       iex> %Apipe.Query{provider: Apipe.Providers.GitHub, filters: [{:lte, "stars", 1000}, {:gt, "stars", 100}]} = query
   """
-  def where(%Query{} = query, field, [{operator, value}]) when is_atom(field) or is_binary(field) do
-    Logger.debug("Adding where filter: field=#{field}, operator=#{operator}, value=#{inspect(value)}")
-    add_filter(query, {operator, to_string(field), value})
+  def where(%Query{} = query, field, [{operator, value}])
+      when is_atom(field) or is_binary(field) do
+    field = to_string(field)
+    %{query | filters: [{operator, field, value} | query.filters]}
+  end
+
+  def where(%Query{} = query, field, value) when is_atom(field) or is_binary(field) do
+    field = to_string(field)
+    %{query | filters: [{:eq, field, value} | query.filters]}
   end
 
   def where(%Query{} = query, conditions) when is_map(conditions) do
@@ -152,7 +158,8 @@ defmodule Apipe do
     Logger.debug("Query before where: #{inspect(query)}")
 
     filters = Enum.reduce(conditions, [], &process_condition/2)
-    result = Enum.reduce(filters, query, &add_filter(&2, &1))
+    # Reverse the accumulated filters before adding them to preserve order
+    result = Enum.reduce(Enum.reverse(filters), query, &add_filter(&2, &1))
 
     Logger.debug("Query after where: #{inspect(result)}")
     result
@@ -161,10 +168,14 @@ defmodule Apipe do
   # Process a single field condition, which can be either a simple value or a list of operators
   defp process_condition({field, value}, acc) do
     field = to_string(field)
+
     case value do
       value when is_list(value) and is_tuple(hd(value)) ->
         # Handle operator list: [gt: 100, lt: 1000]
-        Enum.map(value, fn {op, val} -> {op, field, val} end) ++ acc
+        Enum.reduce(value, acc, fn {op, val}, inner_acc ->
+          [{op, field, val} | inner_acc]
+        end)
+
       value ->
         # Handle simple equality: "elixir"
         [{:eq, field, value} | acc]
@@ -198,7 +209,14 @@ defmodule Apipe do
       when direction in [:asc, :desc] do
     Logger.debug("Setting order by: field=#{field}, direction=#{direction}")
     Logger.debug("Query before order_by: #{inspect(query)}")
-    result = struct!(Query, Map.from_struct(query) |> Map.merge(%{order_by: to_string(field), order_direction: direction}))
+
+    result =
+      struct!(
+        Query,
+        Map.from_struct(query)
+        |> Map.merge(%{order_by: to_string(field), order_direction: direction})
+      )
+
     Logger.debug("Query after order_by: #{inspect(result)}")
     result
   end
@@ -419,5 +437,55 @@ defmodule Apipe do
   def nin_list(%Query{} = query, field, values) when is_list(values) do
     Logger.debug("Adding nin filter: field=#{field}, values=#{inspect(values)}")
     add_filter(query, {:nin, field, values})
+  end
+
+  @doc """
+  Adds a transformation function to be applied to the response data.
+
+  The transform function receives the response data and should return the transformed data.
+  Transforms are applied in order, after the initial response is received but before joins.
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> query = Apipe.transform(query, fn repo -> Map.update(repo, "stars", 0, &String.to_integer/1) end)
+      iex> %Apipe.Query{transforms: [_]} = query
+  """
+  def transform(%Query{} = query, transform_fn) when is_function(transform_fn, 1) do
+    Logger.debug("Adding transform function")
+    %Query{query | transforms: query.transforms ++ [transform_fn]}
+  end
+
+  @doc """
+  Adds a join operation to fetch related data.
+
+  The join function receives a query function that will be called for each item in the result set.
+  The query function should return a new Apipe query that will be executed to fetch the related data.
+
+  ## Options
+    * `:max_concurrency` - Maximum number of concurrent requests (defaults to provider setting)
+    * `:join_strategy` - Either `:async` or `:sync` (defaults to provider setting)
+
+  ## Examples
+
+      iex> query = Apipe.new(Apipe.Providers.GitHub)
+      iex> join_fn = fn repo ->
+      ...>   Apipe.new(Apipe.Providers.GitHub)
+      ...>   |> Apipe.from("repos/\#{repo.full_name}/issues")
+      ...>   |> Apipe.where(%{state: "open"})
+      ...> end
+      iex> query = Apipe.join(query, :issues, join_fn)
+      iex> %Apipe.Query{joins: [%{field: :issues}]} = query
+  """
+  def join(%Query{} = query, field, query_fn, _opts \\ [])
+      when is_atom(field) or (is_binary(field) and is_function(query_fn, 1)) do
+    Logger.debug("Adding join on field: #{field}")
+
+    join_spec = %{
+      field: field,
+      query_fn: query_fn
+    }
+
+    %Query{query | joins: query.joins ++ [join_spec]}
   end
 end

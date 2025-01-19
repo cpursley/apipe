@@ -6,6 +6,12 @@ defmodule Apipe.Query do
   containing fields for filtering, sorting, pagination, and type casting.
   """
 
+  @type transform :: (any() -> any())
+  @type join :: %{
+    field: atom(),
+    query_fn: (any() -> t())
+  }
+
   @type t :: %__MODULE__{
     provider: module(),
     provider_opts: keyword(),
@@ -16,7 +22,9 @@ defmodule Apipe.Query do
     order_by: String.t() | nil,
     order_direction: :asc | :desc | nil,
     limit: pos_integer() | nil,
-    offset: non_neg_integer() | nil
+    offset: non_neg_integer() | nil,
+    transforms: list(transform()),
+    joins: list(join())
   }
 
   @type filter :: {:eq | :gt | :lt | :gte | :lte | :like | :in, String.t(), any()}
@@ -31,7 +39,9 @@ defmodule Apipe.Query do
             order_by: nil,
             order_direction: nil,
             limit: nil,
-            offset: nil
+            offset: nil,
+            transforms: [],
+            joins: []
 
   @doc """
   Validates the query structure before execution.
