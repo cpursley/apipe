@@ -3,6 +3,34 @@ defmodule Apipe.Providers.GitHub.Types do
   Type definitions for GitHub API responses.
   """
 
+  defmodule AccessBehaviour do
+    @moduledoc """
+    Shared Access behaviour implementation for GitHub types.
+    """
+    defmacro __using__(_) do
+      quote do
+        @behaviour Access
+
+        @impl Access
+        def fetch(struct, key) do
+          Map.fetch(Map.from_struct(struct), key)
+        end
+
+        @impl Access
+        def get_and_update(struct, key, fun) do
+          {get, update} = fun.(Map.get(struct, key))
+          {get, Map.put(struct, key, update)}
+        end
+
+        @impl Access
+        def pop(struct, key) do
+          value = Map.get(struct, key)
+          {value, Map.put(struct, key, nil)}
+        end
+      end
+    end
+  end
+
   alias Apipe.Providers.GitHub.Types.{
     User,
     Repository,
@@ -33,6 +61,8 @@ defmodule Apipe.Providers.GitHub.Types do
     @moduledoc """
     GitHub license data structure.
     """
+
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             key: String.t(),
@@ -79,6 +109,8 @@ defmodule Apipe.Providers.GitHub.Types do
     @moduledoc """
     GitHub search response data structure.
     """
+
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             total_count: integer(),
@@ -132,7 +164,7 @@ defmodule Apipe.Providers.GitHub.Types do
     GitHub User type.
     """
 
-    @behaviour Access
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             id: integer(),
@@ -202,23 +234,6 @@ defmodule Apipe.Providers.GitHub.Types do
       :url
     ]
 
-    @impl Access
-    def fetch(struct, key) do
-      Map.fetch(Map.from_struct(struct), key)
-    end
-
-    @impl Access
-    def get_and_update(struct, key, fun) do
-      {get, update} = fun.(Map.get(struct, key))
-      {get, Map.put(struct, key, update)}
-    end
-
-    @impl Access
-    def pop(struct, key) do
-      value = Map.get(struct, key)
-      {value, Map.put(struct, key, nil)}
-    end
-
     @doc """
     Casts a map to a User struct.
     """
@@ -265,6 +280,8 @@ defmodule Apipe.Providers.GitHub.Types do
     @moduledoc """
     GitHub pull request data structure.
     """
+
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             id: integer(),
@@ -367,7 +384,7 @@ defmodule Apipe.Providers.GitHub.Types do
     GitHub issue data structure.
     """
 
-    @behaviour Access
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             id: integer(),
@@ -405,23 +422,6 @@ defmodule Apipe.Providers.GitHub.Types do
       :labels
     ]
 
-    @impl Access
-    def fetch(struct, key) do
-      Map.fetch(Map.from_struct(struct), key)
-    end
-
-    @impl Access
-    def get_and_update(struct, key, fun) do
-      {get, update} = fun.(Map.get(struct, key))
-      {get, Map.put(struct, key, update)}
-    end
-
-    @impl Access
-    def pop(struct, key) do
-      value = Map.get(struct, key)
-      {value, Map.put(struct, key, nil)}
-    end
-
     @doc """
     Casts a GitHub issue response to an Issue struct.
     """
@@ -455,6 +455,8 @@ defmodule Apipe.Providers.GitHub.Types do
     @moduledoc """
     Type module for GitHub repositories.
     """
+
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             id: integer(),
@@ -714,6 +716,8 @@ defmodule Apipe.Providers.GitHub.Types do
     Type module for GitHub topics.
     """
 
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
+
     @type t :: %__MODULE__{
             name: String.t(),
             display_name: String.t(),
@@ -767,6 +771,8 @@ defmodule Apipe.Providers.GitHub.Types do
     @moduledoc """
     GitHub release data structure.
     """
+
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             id: integer(),
@@ -834,6 +840,8 @@ defmodule Apipe.Providers.GitHub.Types do
     GitHub branch data structure.
     """
 
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
+
     @type t :: %__MODULE__{
             name: String.t(),
             commit: map(),
@@ -870,6 +878,8 @@ defmodule Apipe.Providers.GitHub.Types do
     GitHub tag data structure.
     """
 
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
+
     @type t :: %__MODULE__{
             name: String.t(),
             commit: map(),
@@ -905,6 +915,8 @@ defmodule Apipe.Providers.GitHub.Types do
     @moduledoc """
     GitHub commit data structure.
     """
+
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             sha: String.t(),
@@ -953,6 +965,8 @@ defmodule Apipe.Providers.GitHub.Types do
     @moduledoc """
     GitHub label data structure.
     """
+
+    use Apipe.Providers.GitHub.Types.AccessBehaviour
 
     @type t :: %__MODULE__{
             id: integer(),

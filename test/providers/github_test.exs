@@ -33,15 +33,24 @@ defmodule Apipe.Providers.GitHubTest do
           ]
         })
 
+      # Test uncasted (raw map) response
       query = %Query{
         provider: GitHub,
         from: "search/repositories",
         filters: [{:eq, "language", "elixir"}]
       }
 
-      assert {:ok, {data, _}} = GitHub.process_response(response, query)
-      assert length(data) == 1
-      assert data |> hd |> Map.get("name") == "elixir"
+      result = GitHub.execute(query, test_response: response)
+      assert %Apipe.Response{} = result
+      assert length(result.data) == 1
+      assert (result.data |> hd)["name"] == "elixir"
+
+      # Test casted (struct) response
+      result = GitHub.execute(query, test_response: response, cast_response: true)
+      assert %Apipe.Response{} = result
+      assert length(result.data) == 1
+      assert (result.data |> hd).name == "elixir"
+      assert %Apipe.Providers.GitHub.Types.Repository{} = hd(result.data)
     end
 
     test "search/users returns user results" do
@@ -59,15 +68,24 @@ defmodule Apipe.Providers.GitHubTest do
           ]
         })
 
+      # Test uncasted (raw map) response
       query = %Query{
         provider: GitHub,
         from: "search/users",
         filters: [{:eq, "location", "San Francisco"}]
       }
 
-      assert {:ok, {data, _}} = GitHub.process_response(response, query)
-      assert length(data) == 1
-      assert data |> hd |> Map.get("login") == "octocat"
+      result = GitHub.execute(query, test_response: response)
+      assert %Apipe.Response{} = result
+      assert length(result.data) == 1
+      assert (result.data |> hd)["login"] == "octocat"
+
+      # Test casted (struct) response
+      result = GitHub.execute(query, test_response: response, cast_response: true)
+      assert %Apipe.Response{} = result
+      assert length(result.data) == 1
+      assert (result.data |> hd).login == "octocat"
+      assert %Apipe.Providers.GitHub.Types.User{} = hd(result.data)
     end
 
     test "search/code returns code results" do
@@ -88,7 +106,8 @@ defmodule Apipe.Providers.GitHubTest do
       query = %Query{
         provider: GitHub,
         from: "search/code",
-        filters: [{:eq, "language", "elixir"}]
+        filters: [{:eq, "language", "elixir"}],
+        provider_opts: [cast_response: true]
       }
 
       assert {:ok, {data, _}} = GitHub.process_response(response, query)
@@ -112,15 +131,24 @@ defmodule Apipe.Providers.GitHubTest do
           ]
         })
 
+      # Test uncasted (raw map) response
       query = %Query{
         provider: GitHub,
         from: "search/issues",
         filters: [{:eq, "state", "open"}]
       }
 
-      assert {:ok, {data, _}} = GitHub.process_response(response, query)
-      assert length(data) == 1
-      assert data |> hd |> Map.get("title") == "Bug fix"
+      result = GitHub.execute(query, test_response: response)
+      assert %Apipe.Response{} = result
+      assert length(result.data) == 1
+      assert (result.data |> hd)["title"] == "Bug fix"
+
+      # Test casted (struct) response
+      result = GitHub.execute(query, test_response: response, cast_response: true)
+      assert %Apipe.Response{} = result
+      assert length(result.data) == 1
+      assert (result.data |> hd).title == "Bug fix"
+      assert %Apipe.Providers.GitHub.Types.Issue{} = hd(result.data)
     end
 
     test "search/topics returns topic results" do
@@ -139,19 +167,28 @@ defmodule Apipe.Providers.GitHubTest do
           ]
         })
 
+      # Test uncasted (raw map) response
       query = %Query{
         provider: GitHub,
         from: "search/topics",
         filters: [{:eq, "name", "elixir"}]
       }
 
-      assert {:ok, data} = GitHub.process_response(response, query)
-      assert length(data["items"]) == 1
-      assert hd(data["items"])["name"] == "elixir"
+      result = GitHub.execute(query, test_response: response)
+      assert %Apipe.Response{} = result
+      assert length(result.data) == 1
+      assert (result.data |> hd)["name"] == "elixir"
+
+      # Test casted (struct) response
+      result = GitHub.execute(query, test_response: response, cast_response: true)
+      assert %Apipe.Response{} = result
+      assert length(result.data) == 1
+      assert (result.data |> hd).name == "elixir"
+      assert %Apipe.Providers.GitHub.Types.Topic{} = hd(result.data)
     end
 
     test "repos/{owner}/{repo} returns repository details" do
-      _response =
+      response =
         mock_github_response(200, %{
           "id" => 1234,
           "name" => "elixir",
@@ -162,25 +199,27 @@ defmodule Apipe.Providers.GitHubTest do
           "owner" => %{"id" => 1, "login" => "elixir-lang"}
         })
 
+      # Test uncasted (raw map) response
       query = %Query{
         provider: GitHub,
         from: "repos/elixir-lang/elixir"
       }
 
-      result = GitHub.execute(query)
+      result = GitHub.execute(query, test_response: response)
       assert %Apipe.Response{} = result
       assert result.data["name"] == "elixir"
       assert result.data["full_name"] == "elixir-lang/elixir"
 
-      # Verify rate limit info exists but don't check exact values
-      assert is_integer(result.meta.rate_limit.limit)
-      assert is_integer(result.meta.rate_limit.remaining)
-      assert is_integer(result.meta.rate_limit.reset)
-      assert is_integer(result.meta.rate_limit.used)
+      # Test casted (struct) response
+      result = GitHub.execute(query, test_response: response, cast_response: true)
+      assert %Apipe.Response{} = result
+      assert result.data.name == "elixir"
+      assert result.data.full_name == "elixir-lang/elixir"
+      assert %Apipe.Providers.GitHub.Types.Repository{} = result.data
     end
 
     test "repos/{owner}/{repo} returns repository details with casting" do
-      _response =
+      response =
         mock_github_response(200, %{
           "id" => 1234,
           "name" => "elixir",
@@ -200,7 +239,7 @@ defmodule Apipe.Providers.GitHubTest do
         from: "repos/elixir-lang/elixir"
       }
 
-      result = GitHub.execute(query, cast_response: true)
+      result = GitHub.execute(query, test_response: response, cast_response: true)
       assert %Apipe.Response{} = result
 
       # Verify repository is cast

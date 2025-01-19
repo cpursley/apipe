@@ -102,14 +102,24 @@ defmodule Apipe.Providers.GitHub do
          {:ok, query} <- Apipe.Query.validate(query) do
       settings = Map.merge(@default_settings, Keyword.get(opts, :settings, %{}))
 
-      req =
-        Req.new(
-          base_url: "https://api.github.com",
-          retry: &should_retry?/2,
-          headers: build_headers(opts)
-        )
+      # Allow test_response to bypass HTTP call
+      response =
+        case Keyword.get(opts, :test_response) do
+          nil ->
+            req =
+              Req.new(
+                base_url: "https://api.github.com",
+                retry: &should_retry?/2,
+                headers: build_headers(opts)
+              )
 
-      case make_request(req, query) do
+            make_request(req, query)
+
+          test_response ->
+            {:ok, test_response}
+        end
+
+      case response do
         {:ok, response} ->
           response
           |> process_response(query)
@@ -614,10 +624,9 @@ defmodule Apipe.Providers.GitHub do
 
   defp get_header_value(response, header) do
     value =
-      case get_in(response.headers, [header]) do
+      case List.keyfind(response.headers, header, 0) do
+        {^header, value} -> value
         nil -> nil
-        value when is_list(value) -> hd(value)
-        value when is_binary(value) -> value
       end
 
     case value do
