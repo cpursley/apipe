@@ -1,0 +1,142 @@
+defmodule GitHubOpenAPI.PullRequestSimple do
+  @moduledoc """
+  Provides struct and type for a PullRequestSimple
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          _links: GitHubOpenAPI.PullRequestSimpleLinks.t(),
+          active_lock_reason: String.t() | nil,
+          assignee: GitHubOpenAPI.SimpleUser.t() | nil,
+          assignees: [GitHubOpenAPI.SimpleUser.t()] | nil,
+          author_association: String.t(),
+          auto_merge: GitHubOpenAPI.AutoMerge.t() | nil,
+          base: GitHubOpenAPI.PullRequestSimpleBase.t(),
+          body: String.t() | nil,
+          closed_at: DateTime.t() | nil,
+          comments_url: String.t(),
+          commits_url: String.t(),
+          created_at: DateTime.t(),
+          diff_url: String.t(),
+          draft: boolean | nil,
+          head: GitHubOpenAPI.PullRequestSimpleHead.t(),
+          html_url: String.t(),
+          id: integer,
+          issue_url: String.t(),
+          labels: [GitHubOpenAPI.PullRequestSimpleLabels.t()],
+          locked: boolean,
+          merge_commit_sha: String.t() | nil,
+          merged_at: DateTime.t() | nil,
+          milestone: GitHubOpenAPI.Milestone.t() | nil,
+          node_id: String.t(),
+          number: integer,
+          patch_url: String.t(),
+          requested_reviewers: [GitHubOpenAPI.SimpleUser.t()] | nil,
+          requested_teams: [GitHubOpenAPI.Team.t()] | nil,
+          review_comment_url: String.t(),
+          review_comments_url: String.t(),
+          state: String.t(),
+          statuses_url: String.t(),
+          title: String.t(),
+          updated_at: DateTime.t(),
+          url: String.t(),
+          user: GitHubOpenAPI.SimpleUser.t() | nil
+        }
+
+  defstruct [
+    :__info__,
+    :_links,
+    :active_lock_reason,
+    :assignee,
+    :assignees,
+    :author_association,
+    :auto_merge,
+    :base,
+    :body,
+    :closed_at,
+    :comments_url,
+    :commits_url,
+    :created_at,
+    :diff_url,
+    :draft,
+    :head,
+    :html_url,
+    :id,
+    :issue_url,
+    :labels,
+    :locked,
+    :merge_commit_sha,
+    :merged_at,
+    :milestone,
+    :node_id,
+    :number,
+    :patch_url,
+    :requested_reviewers,
+    :requested_teams,
+    :review_comment_url,
+    :review_comments_url,
+    :state,
+    :statuses_url,
+    :title,
+    :updated_at,
+    :url,
+    :user
+  ]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [
+      _links: {GitHubOpenAPI.PullRequestSimpleLinks, :t},
+      active_lock_reason: {:union, [{:string, :generic}, :null]},
+      assignee: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      assignees: {:union, [[{GitHubOpenAPI.SimpleUser, :t}], :null]},
+      author_association:
+        {:enum,
+         [
+           "COLLABORATOR",
+           "CONTRIBUTOR",
+           "FIRST_TIMER",
+           "FIRST_TIME_CONTRIBUTOR",
+           "MANNEQUIN",
+           "MEMBER",
+           "NONE",
+           "OWNER"
+         ]},
+      auto_merge: {:union, [{GitHubOpenAPI.AutoMerge, :t}, :null]},
+      base: {GitHubOpenAPI.PullRequestSimpleBase, :t},
+      body: {:union, [{:string, :generic}, :null]},
+      closed_at: {:union, [{:string, :date_time}, :null]},
+      comments_url: {:string, :uri},
+      commits_url: {:string, :uri},
+      created_at: {:string, :date_time},
+      diff_url: {:string, :uri},
+      draft: :boolean,
+      head: {GitHubOpenAPI.PullRequestSimpleHead, :t},
+      html_url: {:string, :uri},
+      id: :integer,
+      issue_url: {:string, :uri},
+      labels: [{GitHubOpenAPI.PullRequestSimpleLabels, :t}],
+      locked: :boolean,
+      merge_commit_sha: {:union, [{:string, :generic}, :null]},
+      merged_at: {:union, [{:string, :date_time}, :null]},
+      milestone: {:union, [{GitHubOpenAPI.Milestone, :t}, :null]},
+      node_id: {:string, :generic},
+      number: :integer,
+      patch_url: {:string, :uri},
+      requested_reviewers: {:union, [[{GitHubOpenAPI.SimpleUser, :t}], :null]},
+      requested_teams: {:union, [[{GitHubOpenAPI.Team, :t}], :null]},
+      review_comment_url: {:string, :generic},
+      review_comments_url: {:string, :uri},
+      state: {:string, :generic},
+      statuses_url: {:string, :uri},
+      title: {:string, :generic},
+      updated_at: {:string, :date_time},
+      url: {:string, :uri},
+      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+    ]
+  end
+end

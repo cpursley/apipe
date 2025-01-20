@@ -1,0 +1,25 @@
+defmodule GitHubOpenAPI.CheckSuitePreference do
+  @moduledoc """
+  Provides struct and type for a CheckSuitePreference
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          preferences: GitHubOpenAPI.CheckSuitePreferencePreferences.t(),
+          repository: GitHubOpenAPI.MinimalRepository.t()
+        }
+
+  defstruct [:__info__, :preferences, :repository]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [
+      preferences: {GitHubOpenAPI.CheckSuitePreferencePreferences, :t},
+      repository: {GitHubOpenAPI.MinimalRepository, :t}
+    ]
+  end
+end

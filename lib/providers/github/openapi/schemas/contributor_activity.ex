@@ -1,0 +1,27 @@
+defmodule GitHubOpenAPI.ContributorActivity do
+  @moduledoc """
+  Provides struct and type for a ContributorActivity
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          author: GitHubOpenAPI.SimpleUser.t() | nil,
+          total: integer,
+          weeks: [GitHubOpenAPI.ContributorActivityWeeks.t()]
+        }
+
+  defstruct [:__info__, :author, :total, :weeks]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [
+      author: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      total: :integer,
+      weeks: [{GitHubOpenAPI.ContributorActivityWeeks, :t}]
+    ]
+  end
+end

@@ -1,0 +1,22 @@
+defmodule GitHubOpenAPI.WorkflowRunUsage do
+  @moduledoc """
+  Provides struct and type for a WorkflowRunUsage
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          billable: GitHubOpenAPI.WorkflowRunUsageBillable.t(),
+          run_duration_ms: integer | nil
+        }
+
+  defstruct [:__info__, :billable, :run_duration_ms]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [billable: {GitHubOpenAPI.WorkflowRunUsageBillable, :t}, run_duration_ms: :integer]
+  end
+end

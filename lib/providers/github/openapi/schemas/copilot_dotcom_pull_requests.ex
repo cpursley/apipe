@@ -1,0 +1,25 @@
+defmodule GitHubOpenAPI.CopilotDotcomPullRequests do
+  @moduledoc """
+  Provides struct and type for a CopilotDotcomPullRequests
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          repositories: [GitHubOpenAPI.CopilotDotcomPullRequestsRepositories.t()] | nil,
+          total_engaged_users: integer | nil
+        }
+
+  defstruct [:__info__, :repositories, :total_engaged_users]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [
+      repositories: [{GitHubOpenAPI.CopilotDotcomPullRequestsRepositories, :t}],
+      total_engaged_users: :integer
+    ]
+  end
+end

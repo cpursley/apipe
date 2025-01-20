@@ -1,0 +1,22 @@
+defmodule GitHubOpenAPI.ApiInsightsSummaryStats do
+  @moduledoc """
+  Provides struct and type for a ApiInsightsSummaryStats
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          rate_limited_request_count: integer | nil,
+          total_request_count: integer | nil
+        }
+
+  defstruct [:__info__, :rate_limited_request_count, :total_request_count]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [rate_limited_request_count: :integer, total_request_count: :integer]
+  end
+end

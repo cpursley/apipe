@@ -1,0 +1,18 @@
+defmodule GitHubOpenAPI.WorkflowUsageBillableWINDOWS do
+  @moduledoc """
+  Provides struct and type for a WorkflowUsageBillableWINDOWS
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{__info__: map, total_ms: integer | nil}
+
+  defstruct [:__info__, :total_ms]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [total_ms: :integer]
+  end
+end

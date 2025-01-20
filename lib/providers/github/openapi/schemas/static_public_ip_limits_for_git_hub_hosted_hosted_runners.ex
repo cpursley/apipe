@@ -1,0 +1,18 @@
+defmodule GitHubOpenAPI.StaticPublicIPLimitsForGitHubHostedHostedRunners do
+  @moduledoc """
+  Provides struct and type for a StaticPublicIPLimitsForGitHubHostedHostedRunners
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{__info__: map, current_usage: integer, maximum: integer}
+
+  defstruct [:__info__, :current_usage, :maximum]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [current_usage: :integer, maximum: :integer]
+  end
+end

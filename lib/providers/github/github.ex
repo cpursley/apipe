@@ -48,7 +48,8 @@ defmodule Apipe.Providers.GitHub do
   @behaviour Apipe.Provider
 
   require Logger
-  alias Apipe.{PostProcess, Provider.Settings}
+  alias Apipe.{PostProcess, Providers.Settings}
+  alias GitHubOpenAPI.Repository
 
   @default_settings %Settings{
     max_concurrency: 3,
@@ -103,6 +104,7 @@ defmodule Apipe.Providers.GitHub do
       settings = Map.merge(@default_settings, Keyword.get(opts, :settings, %{}))
 
       # Allow test_response to bypass HTTP call
+      # we prob don't want this here
       response =
         case Keyword.get(opts, :test_response) do
           nil ->
@@ -426,202 +428,6 @@ defmodule Apipe.Providers.GitHub do
     }
   end
 
-  defp wrap_response({:ok, body}, response, query, opts) do
-    {response_data, search_meta, join_rate_limits} =
-      case body do
-        # Handle filtered data with metadata
-        {data, meta} when is_map(meta) ->
-          {data, meta, []}
-
-        # Handle data with join rate limits
-        {data, join_rate_limits} when is_list(join_rate_limits) ->
-          {data, nil, join_rate_limits}
-
-        # Handle search results with join rate limits
-        {items, meta, join_rate_limits} when is_list(join_rate_limits) ->
-          {items, meta, join_rate_limits}
-
-        # Handle non-search results without joins
-        other ->
-          {other, nil, []}
-      end
-
-    # Cast the response after joins have been processed
-    response_data =
-      if opts[:cast_response] do
-        cond do
-          String.starts_with?(query.from, "search/") ->
-            item_type =
-              case String.split(query.from, "/") do
-                ["search", "repositories" | _] ->
-                  Apipe.Providers.GitHub.Types.Repository
-
-                ["search", "issues" | _] ->
-                  Apipe.Providers.GitHub.Types.Issue
-
-                ["search", "users" | _] ->
-                  Apipe.Providers.GitHub.Types.User
-
-                ["search", "topics" | _] ->
-                  Apipe.Providers.GitHub.Types.Topic
-
-                _ ->
-                  %Apipe.Error{
-                    type: :provider_error,
-                    message: "Unsupported search endpoint type",
-                    details: %{endpoint: query.from}
-                  }
-              end
-
-            case item_type do
-              %Apipe.Error{} = error ->
-                error
-
-              type ->
-                # Cast items directly since we've already flattened the structure
-                Enum.map(response_data, fn item ->
-                  case item do
-                    {_field, value} when is_list(value) ->
-                      # Handle tuple format from earlier processing
-                      Enum.map(value, fn v ->
-                        {:ok, cast_item} = type.cast(v)
-                        cast_item
-                      end)
-
-                    item when is_map(item) ->
-                      # Preserve any joined data before casting
-                      joined_data =
-                        Map.take(item, [
-                          :contributors,
-                          :issues,
-                          :pulls,
-                          :releases,
-                          :commits,
-                          :branches,
-                          :tags
-                        ])
-
-                      {:ok, cast_item} = type.cast(item)
-                      # Merge back the joined data after casting
-                      Map.merge(cast_item, joined_data)
-                  end
-                end)
-            end
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/issues$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Issue)
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/pulls$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.PullRequest)
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/releases$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Release)
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/contributors$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.User)
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/commits$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Commit)
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/branches$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Branch)
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/tags$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Tag)
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Repository)
-
-          true ->
-            response_data
-        end
-      else
-        response_data
-      end
-
-    case response_data do
-      %Apipe.Error{} = error ->
-        error
-
-      data ->
-        # Get rate limit from main request
-        main_rate_limit = %{
-          limit: get_header_value(response, "x-ratelimit-limit"),
-          remaining: get_header_value(response, "x-ratelimit-remaining"),
-          reset: get_header_value(response, "x-ratelimit-reset"),
-          used: get_header_value(response, "x-ratelimit-used")
-        }
-
-        # Aggregate rate limits from main request and all joins
-        aggregated_rate_limit =
-          [main_rate_limit | join_rate_limits]
-          |> Enum.reduce(%{limit: 0, remaining: nil, used: 0, reset: nil}, fn limit, acc ->
-            %{
-              limit: (acc.limit || 0) + (limit[:limit] || 0),
-              remaining: min_remaining(acc.remaining, limit[:remaining]),
-              used: (acc.used || 0) + (limit[:used] || 0),
-              # Use the latest reset time
-              reset: limit[:reset] || acc.reset
-            }
-          end)
-
-        meta = %{
-          rate_limit: aggregated_rate_limit,
-          pagination:
-            case get_header_value(response, "link") do
-              nil -> nil
-              link_header -> parse_link_header(link_header)
-            end
-        }
-
-        # Add search metadata if present
-        meta =
-          if search_meta do
-            Map.merge(meta, search_meta)
-          else
-            meta
-          end
-
-        # For search endpoints, extract items from the data structure
-        final_data =
-          if String.starts_with?(query.from, "search/") do
-            case data do
-              # Handle tuple format
-              {items, _meta} -> items
-              # Handle list format
-              items when is_list(items) -> items
-              # Handle single item
-              other -> [other]
-            end
-          else
-            data
-          end
-
-        %Apipe.Response{
-          data: final_data,
-          meta: meta
-        }
-    end
-  end
-
-  # Helper function to cast response data consistently
-  defp cast_response_data(data, type) do
-    case data do
-      items when is_list(items) ->
-        Enum.map(items, fn item ->
-          {:ok, cast_item} = type.cast(item)
-          cast_item
-        end)
-
-      item when is_map(item) ->
-        {:ok, cast_item} = type.cast(item)
-        cast_item
-
-      _ ->
-        data
-    end
-  end
-
   defp get_header_value(response, header) do
     value =
       case get_in(response.headers, [header]) do
@@ -653,6 +459,199 @@ defmodule Apipe.Providers.GitHub do
   defp parse_link(link) do
     [_, url, rel] = Regex.run(~r/<(.+)>;\s*rel="(.+)"/, link)
     {rel, url}
+  end
+
+  defp wrap_response({:ok, body}, response, query, opts) do
+    {response_data, search_meta} =
+      case body do
+        # Handle filtered data with metadata
+        {data, meta} when is_map(meta) ->
+          {data, meta}
+
+        # Handle data with join rate limits (legacy)
+        {data, join_rate_limits} when is_list(join_rate_limits) ->
+          {data, nil}
+
+        # Handle search results with join rate limits (legacy)
+        {items, meta, join_rate_limits} when is_list(join_rate_limits) ->
+          {items, meta}
+
+        # Handle non-search results without joins
+        other ->
+          {other, nil}
+      end
+
+    # Cast the response after joins have been processed
+    response_data =
+      if opts[:cast_response] do
+        cond do
+          String.starts_with?(query.from, "search/") ->
+            item_type =
+              case String.split(query.from, "/") do
+                ["search", "repositories" | _] ->
+                  Repository
+
+                ["search", "issues" | _] ->
+                  Apipe.Providers.GitHub.Types.Issue
+
+                ["search", "users" | _] ->
+                  Apipe.Providers.GitHub.Types.User
+
+                ["search", "topics" | _] ->
+                  Apipe.Providers.GitHub.Types.Topic
+
+                _ ->
+                  nil
+              end
+
+            if item_type do
+              case response_data do
+                items when is_list(items) ->
+                  Enum.map(items, fn item ->
+                    # Preserve any joined data before casting
+                    joined_data =
+                      Map.take(item, [
+                        :contributors,
+                        :issues,
+                        :pulls,
+                        :releases,
+                        :commits,
+                        :branches,
+                        :tags
+                      ])
+
+                    {:ok, cast_item} = item_type.cast(item)
+                    # Merge back the joined data after casting
+                    Map.merge(cast_item, joined_data)
+                  end)
+
+                item when is_map(item) ->
+                  # Preserve any joined data before casting
+                  joined_data =
+                    Map.take(item, [
+                      :contributors,
+                      :issues,
+                      :pulls,
+                      :releases,
+                      :commits,
+                      :branches,
+                      :tags
+                    ])
+
+                  {:ok, cast_item} = item_type.cast(item)
+                  # Merge back the joined data after casting
+                  Map.merge(cast_item, joined_data)
+              end
+            else
+              response_data
+            end
+
+          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+$/) ->
+            cast_response_data(response_data, Repository)
+
+          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/issues$/) ->
+            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Issue)
+
+          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/pulls$/) ->
+            cast_response_data(response_data, Apipe.Providers.GitHub.Types.PullRequest)
+
+          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/releases$/) ->
+            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Release)
+
+          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/commits$/) ->
+            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Commit)
+
+          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/branches$/) ->
+            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Branch)
+
+          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/tags$/) ->
+            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Tag)
+
+          String.match?(query.from, ~r/^users\/[\w\-\.]+$/) ->
+            cast_response_data(response_data, Apipe.Providers.GitHub.Types.User)
+
+          true ->
+            response_data
+        end
+      else
+        response_data
+      end
+
+    # Build rate limit metadata
+    meta =
+      case response do
+        %{headers: _headers} = resp ->
+          # Extract rate limit headers and create RateLimit struct
+          rate_limit_data = %{
+            "limit" => get_header_value(resp, "x-ratelimit-limit"),
+            "remaining" => get_header_value(resp, "x-ratelimit-remaining"),
+            "reset" => get_header_value(resp, "x-ratelimit-reset"),
+            "used" => get_header_value(resp, "x-ratelimit-used")
+          }
+
+          {:ok, rate_limit} = GitHubOpenAPI.RateLimit.cast(rate_limit_data)
+
+          # Extract pagination links if present
+          pagination =
+            case get_header_value(resp, "link") do
+              nil -> %{}
+              link_header -> parse_link_header(link_header)
+            end
+
+          Map.merge(
+            %{rate_limit: rate_limit},
+            if(pagination != %{}, do: %{pagination: pagination}, else: %{})
+          )
+
+        _ ->
+          %{}
+      end
+
+    # Add search metadata if present
+    meta =
+      if search_meta do
+        Map.merge(meta, search_meta)
+      else
+        meta
+      end
+
+    # For search endpoints, extract items from the data structure
+    final_data =
+      if String.starts_with?(query.from, "search/") do
+        case response_data do
+          # Handle tuple format
+          {items, _meta} -> items
+          # Handle list format
+          items when is_list(items) -> items
+          # Handle single item
+          other -> [other]
+        end
+      else
+        response_data
+      end
+
+    %Apipe.Response{
+      data: final_data,
+      meta: meta
+    }
+  end
+
+  # Helper function to cast response data consistently
+  defp cast_response_data(data, type) do
+    case data do
+      items when is_list(items) ->
+        Enum.map(items, fn item ->
+          {:ok, cast_item} = type.cast(item)
+          cast_item
+        end)
+
+      item when is_map(item) ->
+        {:ok, cast_item} = type.cast(item)
+        cast_item
+
+      _ ->
+        data
+    end
   end
 
   defp apply_transforms({:ok, data}, transforms) do
@@ -836,9 +835,4 @@ defmodule Apipe.Providers.GitHub do
       end
     end)
   end
-
-  # Helper to calculate minimum remaining rate limit, handling nil values
-  defp min_remaining(nil, b), do: b
-  defp min_remaining(a, nil), do: a
-  defp min_remaining(a, b), do: min(a, b)
 end

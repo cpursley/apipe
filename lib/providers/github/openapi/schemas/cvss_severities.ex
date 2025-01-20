@@ -1,0 +1,25 @@
+defmodule GitHubOpenAPI.CvssSeverities do
+  @moduledoc """
+  Provides struct and type for a CvssSeverities
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          cvss_v3: GitHubOpenAPI.CvssSeveritiesCvssV3.t() | nil,
+          cvss_v4: GitHubOpenAPI.CvssSeveritiesCvssV4.t() | nil
+        }
+
+  defstruct [:__info__, :cvss_v3, :cvss_v4]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [
+      cvss_v3: {:union, [{GitHubOpenAPI.CvssSeveritiesCvssV3, :t}, :null]},
+      cvss_v4: {:union, [{GitHubOpenAPI.CvssSeveritiesCvssV4, :t}, :null]}
+    ]
+  end
+end

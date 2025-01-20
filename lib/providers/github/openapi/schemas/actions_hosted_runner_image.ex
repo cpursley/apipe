@@ -1,0 +1,31 @@
+defmodule GitHubOpenAPI.ActionsHostedRunnerImage do
+  @moduledoc """
+  Provides struct and type for a ActionsHostedRunnerImage
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          display_name: String.t(),
+          id: String.t(),
+          platform: String.t(),
+          size_gb: integer,
+          source: String.t()
+        }
+
+  defstruct [:__info__, :display_name, :id, :platform, :size_gb, :source]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [
+      display_name: {:string, :generic},
+      id: {:string, :generic},
+      platform: {:string, :generic},
+      size_gb: :integer,
+      source: {:enum, ["github", "partner", "custom"]}
+    ]
+  end
+end

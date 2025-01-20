@@ -26,6 +26,10 @@ defmodule Apipe.MixProject do
       {:jason, "~> 1.4"},
       {:req, "~> 0.5"},
 
+      # Providers
+      {:oapi_generator, "~> 0.2.0", only: :dev, runtime: false},
+
+      # Dev
       {:ex_doc, "~> 0.36.1"}
     ]
   end

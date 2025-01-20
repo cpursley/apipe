@@ -1,0 +1,18 @@
+defmodule GitHubOpenAPI.HookDeliveryRequest do
+  @moduledoc """
+  Provides struct and type for a HookDeliveryRequest
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{__info__: map, headers: map | nil, payload: map | nil}
+
+  defstruct [:__info__, :headers, :payload]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [headers: {:union, [:map, :null]}, payload: {:union, [:map, :null]}]
+  end
+end

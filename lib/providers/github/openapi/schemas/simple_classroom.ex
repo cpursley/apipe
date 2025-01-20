@@ -1,0 +1,24 @@
+defmodule GitHubOpenAPI.SimpleClassroom do
+  @moduledoc """
+  Provides struct and type for a SimpleClassroom
+  """
+  use Apipe.Providers.OpenAPIEncoder
+
+  @type t :: %__MODULE__{
+          __info__: map,
+          archived: boolean,
+          id: integer,
+          name: String.t(),
+          url: String.t()
+        }
+
+  defstruct [:__info__, :archived, :id, :name, :url]
+
+  @doc false
+  @spec __fields__(atom) :: keyword
+  def __fields__(type \\ :t)
+
+  def __fields__(:t) do
+    [archived: :boolean, id: :integer, name: {:string, :generic}, url: {:string, :generic}]
+  end
+end
