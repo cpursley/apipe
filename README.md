@@ -77,6 +77,8 @@ github # using the client with casting enabled (we set up earlier)
 |> execute()
 
 # Joining related resources
+contributors = fn repo -> "repos/#{repo["full_name"]}/contributors" end
+
 github
 |> from("search/repositories")
 |> eq(:language, "elixir")
@@ -84,7 +86,7 @@ github
 |> limit(3)
 |> join(:contributors, fn repo -> # join top contributors
   github
-  |> from("repos/#{repo["full_name"]}/contributors")
+  |> from(contributors.(repo))
   |> limit(5)
 end)
 |> execute()

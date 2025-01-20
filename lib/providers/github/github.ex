@@ -624,9 +624,10 @@ defmodule Apipe.Providers.GitHub do
 
   defp get_header_value(response, header) do
     value =
-      case List.keyfind(response.headers, header, 0) do
-        {^header, value} -> value
+      case get_in(response.headers, [header]) do
         nil -> nil
+        value when is_list(value) -> hd(value)
+        value when is_binary(value) -> value
       end
 
     case value do
