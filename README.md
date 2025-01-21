@@ -87,7 +87,7 @@ github
 |> join(:contributors, fn repo -> # join top contributors
   github
   |> from(contributors.(repo))
-  |> limit(5)
+  |> limit(2)
 end)
 |> execute()
 ```

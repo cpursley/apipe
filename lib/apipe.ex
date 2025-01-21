@@ -572,14 +572,16 @@ defmodule Apipe do
     Logger.debug("Applying joins to item: #{inspect(item)}")
 
     joined_data =
-      Enum.reduce(joins, %{}, fn join, acc ->
+      Enum.reduce(joins, [], fn join, acc ->
         Logger.debug("Executing join for field: #{inspect(join.field)} on item: #{inspect(item)}")
 
         case join.query_fn.(item) do
           %Query{provider_opts: opts} = query ->
             case execute(query, opts) do
               %{data: joined_data} ->
-                Map.put(acc, join.field, joined_data)
+                # Create a map with the join field as the key
+                join_map = Map.put(%{}, join.field, joined_data)
+                acc ++ [join_map]
 
               _ ->
                 acc
@@ -588,7 +590,9 @@ defmodule Apipe do
           query ->
             case execute(query) do
               %{data: joined_data} ->
-                Map.put(acc, join.field, joined_data)
+                # Create a map with the join field as the key
+                join_map = Map.put(%{}, join.field, joined_data)
+                acc ++ [join_map]
 
               _ ->
                 acc
@@ -596,11 +600,25 @@ defmodule Apipe do
         end
       end)
 
-    # Store joined data in __joins__ field if the item is a struct
+    # Store joined data in __joins__ field and merge into the struct
     if is_struct(item) do
-      Map.put(item, :__joins__, joined_data)
+      item = Map.put(item, :__joins__, joined_data)
+
+      # Merge join data into the struct fields
+      Enum.reduce(joined_data, item, fn join_map, acc ->
+        # Get the first (and only) key-value pair
+        {field, data} = Enum.at(join_map, 0)
+        Map.put(acc, field, data)
+      end)
     else
-      Map.put(item, "__joins__", joined_data)
+      item = Map.put(item, "__joins__", joined_data)
+
+      # Merge join data into the map fields
+      Enum.reduce(joined_data, item, fn join_map, acc ->
+        # Get the first (and only) key-value pair
+        {field, data} = Enum.at(join_map, 0)
+        Map.put(acc, Atom.to_string(field), data)
+      end)
     end
   end
 end
