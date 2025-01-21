@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CloneTraffic do
   @moduledoc """
   Provides struct and type for a CloneTraffic
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

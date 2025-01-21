@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.HovercardContexts do
   @moduledoc """
   Provides struct and type for a HovercardContexts
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, message: String.t(), octicon: String.t()}
 

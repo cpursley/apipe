@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.Runner do
   @moduledoc """
   Provides struct and type for a Runner
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

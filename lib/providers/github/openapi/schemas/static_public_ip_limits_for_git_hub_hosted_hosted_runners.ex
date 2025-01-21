@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.StaticPublicIPLimitsForGitHubHostedHostedRunners do
   @moduledoc """
   Provides struct and type for a StaticPublicIPLimitsForGitHubHostedHostedRunners
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, current_usage: integer, maximum: integer}
 

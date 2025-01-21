@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.InstallationToken do
   @moduledoc """
   Provides struct and type for a InstallationToken
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

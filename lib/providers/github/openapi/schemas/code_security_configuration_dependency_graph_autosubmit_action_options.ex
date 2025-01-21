@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CodeSecurityConfigurationDependencyGraphAutosubmitAction
   @moduledoc """
   Provides struct and type for a CodeSecurityConfigurationDependencyGraphAutosubmitActionOptions
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, labeled_runners: boolean | nil}
 

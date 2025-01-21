@@ -3,7 +3,8 @@ import Config
 if config_env() == :dev do
   # specific to GitHub
   config :oapi_generator,
-    default: [
+    # default: [
+    github: [
       output: [
         base_module: GitHubOpenAPI,
         extra_fields: [
@@ -13,7 +14,7 @@ if config_env() == :dev do
         location: "lib/providers/github/openapi",
         operation_subdirectory: "operations/",
         schema_subdirectory: "schemas/",
-        schema_use: Apipe.Providers.OpenAPIEncoder
+        schema_use: Apipe.Providers.OpenAPI.Encoder
         # types: [
         #   error: {GitHubOpenAPI.Error, :t}
         # ]

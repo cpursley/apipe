@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CodeScanningAlertItems do
   @moduledoc """
   Provides struct and type for a CodeScanningAlertItems
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.BranchProtectionRequiredSignatures do
   @moduledoc """
   Provides struct and type for a BranchProtectionRequiredSignatures
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, enabled: boolean, url: String.t()}
 

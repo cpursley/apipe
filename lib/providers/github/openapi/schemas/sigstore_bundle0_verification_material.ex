@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterial do
   @moduledoc """
   Provides struct and type for a SigstoreBundle0VerificationMaterial
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

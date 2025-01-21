@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.SecretScanningLocationIssueTitle do
   @moduledoc """
   Provides struct and type for a SecretScanningLocationIssueTitle
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, issue_title_url: String.t()}
 

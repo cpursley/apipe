@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.MarketplacePurchaseMarketplacePurchase do
   @moduledoc """
   Provides struct and type for a MarketplacePurchaseMarketplacePurchase
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

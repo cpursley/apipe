@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CodespaceWithFullRepository do
   @moduledoc """
   Provides struct and type for a CodespaceWithFullRepository
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

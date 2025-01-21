@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.LinkWithType do
   @moduledoc """
   Provides struct and type for a LinkWithType
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, href: String.t(), type: String.t()}
 

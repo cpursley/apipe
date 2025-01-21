@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.ActionsBillingUsageMinutesUsedBreakdown do
   @moduledoc """
   Provides struct and type for a ActionsBillingUsageMinutesUsedBreakdown
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           MACOS: integer | nil,

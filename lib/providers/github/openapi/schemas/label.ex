@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.Label do
   @moduledoc """
   Provides struct and type for a Label
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.PagesHealthCheckDomain do
   @moduledoc """
   Provides struct and type for a PagesHealthCheckDomain
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

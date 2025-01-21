@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.GitTree do
   @moduledoc """
   Provides struct and types for a GitTree
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

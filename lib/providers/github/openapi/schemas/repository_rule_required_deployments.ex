@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.RepositoryRuleRequiredDeployments do
   @moduledoc """
   Provides struct and type for a RepositoryRuleRequiredDeployments
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, parameters: map | nil, type: String.t()}
 

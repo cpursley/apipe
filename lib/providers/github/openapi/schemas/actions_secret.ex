@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.ActionsSecret do
   @moduledoc """
   Provides struct and type for a ActionsSecret
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

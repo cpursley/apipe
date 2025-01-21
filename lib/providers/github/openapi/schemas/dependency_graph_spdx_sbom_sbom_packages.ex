@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.DependencyGraphSpdxSbomSbomPackages do
   @moduledoc """
   Provides struct and type for a DependencyGraphSpdxSbomSbomPackages
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           SPDXID: String.t() | nil,

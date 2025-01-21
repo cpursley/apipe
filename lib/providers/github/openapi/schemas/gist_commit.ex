@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.GistCommit do
   @moduledoc """
   Provides struct and type for a GistCommit
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

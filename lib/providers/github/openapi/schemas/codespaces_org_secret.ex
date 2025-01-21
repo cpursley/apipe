@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CodespacesOrgSecret do
   @moduledoc """
   Provides struct and type for a CodespacesOrgSecret
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

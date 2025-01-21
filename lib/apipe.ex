@@ -521,6 +521,7 @@ defmodule Apipe do
 
     case data do
       items when is_list(items) ->
+        # todo: extract out with one below into helper
         {results, _} =
           Task.async_stream(
             items,

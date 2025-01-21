@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepositories do
   @moduledoc """
   Provides struct and type for a CodeScanningVariantAnalysisSkippedRepositories
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

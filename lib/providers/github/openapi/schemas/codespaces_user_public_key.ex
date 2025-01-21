@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CodespacesUserPublicKey do
   @moduledoc """
   Provides struct and type for a CodespacesUserPublicKey
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, key: String.t(), key_id: String.t()}
 

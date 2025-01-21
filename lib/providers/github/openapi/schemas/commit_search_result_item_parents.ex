@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CommitSearchResultItemParents do
   @moduledoc """
   Provides struct and type for a CommitSearchResultItemParents
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

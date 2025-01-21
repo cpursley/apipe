@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.Classroom do
   @moduledoc """
   Provides API endpoints related to classroom
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @default_client GitHubOpenAPI.Client
 

@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.GitignoreTemplate do
   @moduledoc """
   Provides struct and type for a GitignoreTemplate
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, name: String.t(), source: String.t()}
 

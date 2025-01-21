@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CheckAutomatedSecurityFixes do
   @moduledoc """
   Provides struct and type for a CheckAutomatedSecurityFixes
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, enabled: boolean, paused: boolean}
 

@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.Activity do
   @moduledoc """
   Provides API endpoints related to activity
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @default_client GitHubOpenAPI.Client
 

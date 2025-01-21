@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.SigstoreBundle0DsseEnvelopeSignatures do
   @moduledoc """
   Provides struct and type for a SigstoreBundle0DsseEnvelopeSignatures
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

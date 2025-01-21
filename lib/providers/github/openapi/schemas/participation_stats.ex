@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.ParticipationStats do
   @moduledoc """
   Provides struct and type for a ParticipationStats
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, all: [integer], owner: [integer]}
 

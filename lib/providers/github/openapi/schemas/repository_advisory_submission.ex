@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisorySubmission do
   @moduledoc """
   Provides struct and type for a RepositoryAdvisorySubmission
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, accepted: boolean}
 

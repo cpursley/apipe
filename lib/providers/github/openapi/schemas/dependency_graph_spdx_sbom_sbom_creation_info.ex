@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.DependencyGraphSpdxSbomSbomCreationInfo do
   @moduledoc """
   Provides struct and type for a DependencyGraphSpdxSbomSbomCreationInfo
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

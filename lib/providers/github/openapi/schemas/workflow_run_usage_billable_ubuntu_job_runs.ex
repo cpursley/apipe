@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.WorkflowRunUsageBillableUBUNTUJobRuns do
   @moduledoc """
   Provides struct and type for a WorkflowRunUsageBillableUBUNTUJobRuns
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, duration_ms: integer, job_id: integer}
 

@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.ReviewDismissedIssueEventDismissedReview do
   @moduledoc """
   Provides struct and type for a ReviewDismissedIssueEventDismissedReview
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

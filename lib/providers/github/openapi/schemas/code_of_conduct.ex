@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CodeOfConduct do
   @moduledoc """
   Provides struct and type for a CodeOfConduct
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

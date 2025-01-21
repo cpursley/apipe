@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.ApiOverviewSshKeyFingerprints do
   @moduledoc """
   Provides struct and type for a ApiOverviewSshKeyFingerprints
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           SHA256_DSA: String.t() | nil,

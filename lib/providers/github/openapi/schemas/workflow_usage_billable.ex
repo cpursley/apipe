@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.WorkflowUsageBillable do
   @moduledoc """
   Provides struct and type for a WorkflowUsageBillable
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           MACOS: GitHubOpenAPI.WorkflowUsageBillableMACOS.t() | nil,

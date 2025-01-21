@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.ActionsRunnerLabelsReadonly do
   @moduledoc """
   Provides struct and type for a ActionsRunnerLabelsReadonly
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type json_resp :: %__MODULE__{
           __info__: map,

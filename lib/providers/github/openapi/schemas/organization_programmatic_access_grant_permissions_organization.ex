@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.OrganizationProgrammaticAccessGrantPermissionsOrganizati
   @moduledoc """
   Provides struct and type for a OrganizationProgrammaticAccessGrantPermissionsOrganization
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map}
 

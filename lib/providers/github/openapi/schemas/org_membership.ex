@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.OrgMembership do
   @moduledoc """
   Provides struct and type for a OrgMembership
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

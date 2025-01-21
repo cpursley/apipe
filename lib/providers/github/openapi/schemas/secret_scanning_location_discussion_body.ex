@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.SecretScanningLocationDiscussionBody do
   @moduledoc """
   Provides struct and type for a SecretScanningLocationDiscussionBody
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, discussion_body_url: String.t()}
 

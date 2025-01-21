@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.ShortBranchCommit do
   @moduledoc """
   Provides struct and type for a ShortBranchCommit
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, sha: String.t(), url: String.t()}
 

@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.RateLimit do
   @moduledoc """
   Provides API endpoint related to rate limit
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @default_client GitHubOpenAPI.Client
 

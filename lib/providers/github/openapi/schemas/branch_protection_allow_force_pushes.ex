@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.BranchProtectionAllowForcePushes do
   @moduledoc """
   Provides struct and type for a BranchProtectionAllowForcePushes
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{__info__: map, __joins__: map, enabled: boolean | nil}
 

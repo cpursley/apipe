@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.SubIssuesSummary do
   @moduledoc """
   Provides struct and types for a SubIssuesSummary
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,

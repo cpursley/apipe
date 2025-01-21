@@ -2,7 +2,7 @@ defmodule GitHubOpenAPI.CodeSecurityConfigurationSecretScanningDelegatedBypassOp
   @moduledoc """
   Provides struct and type for a CodeSecurityConfigurationSecretScanningDelegatedBypassOptions
   """
-  use Apipe.Providers.OpenAPIEncoder
+  use Apipe.Providers.OpenAPI.Encoder
 
   @type t :: %__MODULE__{
           __info__: map,
