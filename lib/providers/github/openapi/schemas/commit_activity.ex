@@ -4,9 +4,15 @@ defmodule GitHubOpenAPI.CommitActivity do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, days: [integer], total: integer, week: integer}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          days: [integer],
+          total: integer,
+          week: integer
+        }
 
-  defstruct [:__info__, :days, :total, :week]
+  defstruct [:__info__, :__joins__, :days, :total, :week]
 
   @doc false
   @spec __fields__(atom) :: keyword

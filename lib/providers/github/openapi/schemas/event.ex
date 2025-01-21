@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Event do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor: GitHubOpenAPI.Actor.t(),
           created_at: DateTime.t() | nil,
           id: String.t(),
@@ -16,7 +17,18 @@ defmodule GitHubOpenAPI.Event do
           type: String.t() | nil
         }
 
-  defstruct [:__info__, :actor, :created_at, :id, :org, :payload, :public, :repo, :type]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :actor,
+    :created_at,
+    :id,
+    :org,
+    :payload,
+    :public,
+    :repo,
+    :type
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

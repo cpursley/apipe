@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CommitSearchResultItemCommit do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: GitHubOpenAPI.CommitSearchResultItemCommitAuthor.t(),
           comment_count: integer,
           committer: GitHubOpenAPI.GitUser.t() | nil,
@@ -15,7 +16,17 @@ defmodule GitHubOpenAPI.CommitSearchResultItemCommit do
           verification: GitHubOpenAPI.Verification.t() | nil
         }
 
-  defstruct [:__info__, :author, :comment_count, :committer, :message, :tree, :url, :verification]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :author,
+    :comment_count,
+    :committer,
+    :message,
+    :tree,
+    :url,
+    :verification
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

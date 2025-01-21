@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.DeploymentProtectionRule do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           app: GitHubOpenAPI.CustomDeploymentRuleApp.t(),
           enabled: boolean,
           id: integer,
           node_id: String.t()
         }
 
-  defstruct [:__info__, :app, :enabled, :id, :node_id]
+  defstruct [:__info__, :__joins__, :app, :enabled, :id, :node_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

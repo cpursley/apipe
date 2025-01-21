@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RemovedFromProjectIssueEventProjectCard do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           column_name: String.t(),
           id: integer,
           previous_column_name: String.t() | nil,
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.RemovedFromProjectIssueEventProjectCard do
           url: String.t()
         }
 
-  defstruct [:__info__, :column_name, :id, :previous_column_name, :project_id, :project_url, :url]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :column_name,
+    :id,
+    :previous_column_name,
+    :project_id,
+    :project_url,
+    :url
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

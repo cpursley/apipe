@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CheckRunOutput do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           annotations_count: integer,
           annotations_url: String.t(),
           summary: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.CheckRunOutput do
           title: String.t() | nil
         }
 
-  defstruct [:__info__, :annotations_count, :annotations_url, :summary, :text, :title]
+  defstruct [:__info__, :__joins__, :annotations_count, :annotations_url, :summary, :text, :title]
 
   @doc false
   @spec __fields__(atom) :: keyword

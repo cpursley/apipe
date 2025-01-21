@@ -5,7 +5,7 @@ defmodule GitHubOpenAPI.Emojis do
 
   @default_client GitHubOpenAPI.Client
 
-  @type get_200_json_resp :: %{__info__: map}
+  @type get_200_json_resp :: %{__info__: map, __joins__: map}
 
   @doc """
   Get emojis

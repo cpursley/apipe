@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.Email do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           email: String.t(),
           primary: boolean,
           verified: boolean,
           visibility: String.t() | nil
         }
 
-  defstruct [:__info__, :email, :primary, :verified, :visibility]
+  defstruct [:__info__, :__joins__, :email, :primary, :verified, :visibility]
 
   @doc false
   @spec __fields__(atom) :: keyword

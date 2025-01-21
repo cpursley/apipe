@@ -49,7 +49,6 @@ defmodule Apipe.Providers.GitHub do
 
   require Logger
   alias Apipe.{PostProcess, Providers.Settings}
-  alias GitHubOpenAPI.Repository
 
   @default_settings %Settings{
     max_concurrency: 3,
@@ -104,7 +103,6 @@ defmodule Apipe.Providers.GitHub do
       settings = Map.merge(@default_settings, Keyword.get(opts, :settings, %{}))
 
       # Allow test_response to bypass HTTP call
-      # we prob don't want this here
       response =
         case Keyword.get(opts, :test_response) do
           nil ->
@@ -126,7 +124,7 @@ defmodule Apipe.Providers.GitHub do
           response
           |> process_response(query)
           |> apply_transforms(query.transforms)
-          |> apply_joins(query.joins, settings)
+          |> Apipe.apply_joins(query.joins, settings)
           |> case do
             {:ok, {data, meta}} when is_list(data) ->
               # Handle search results or list data with metadata
@@ -489,16 +487,16 @@ defmodule Apipe.Providers.GitHub do
             item_type =
               case String.split(query.from, "/") do
                 ["search", "repositories" | _] ->
-                  Repository
+                  GitHubOpenAPI.Repository
 
                 ["search", "issues" | _] ->
-                  Apipe.Providers.GitHub.Types.Issue
+                  GitHubOpenAPI.Issue
 
                 ["search", "users" | _] ->
-                  Apipe.Providers.GitHub.Types.User
+                  GitHubOpenAPI.SimpleUser
 
                 ["search", "topics" | _] ->
-                  Apipe.Providers.GitHub.Types.Topic
+                  GitHubOpenAPI.Topic
 
                 _ ->
                   nil
@@ -520,6 +518,7 @@ defmodule Apipe.Providers.GitHub do
                         :tags
                       ])
 
+                    # Use the OpenAPI generator's built-in casting
                     {:ok, cast_item} = item_type.cast(item)
                     # Merge back the joined data after casting
                     Map.merge(cast_item, joined_data)
@@ -538,6 +537,7 @@ defmodule Apipe.Providers.GitHub do
                       :tags
                     ])
 
+                  # Use the OpenAPI generator's built-in casting
                   {:ok, cast_item} = item_type.cast(item)
                   # Merge back the joined data after casting
                   Map.merge(cast_item, joined_data)
@@ -547,28 +547,132 @@ defmodule Apipe.Providers.GitHub do
             end
 
           String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+$/) ->
-            cast_response_data(response_data, Repository)
+            case response_data do
+              items when is_list(items) ->
+                Enum.map(items, fn item ->
+                  {:ok, cast_item} = GitHubOpenAPI.Repository.cast(item)
+                  cast_item
+                end)
+
+              item when is_map(item) ->
+                {:ok, cast_item} = GitHubOpenAPI.Repository.cast(item)
+                cast_item
+
+              _ ->
+                response_data
+            end
 
           String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/issues$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Issue)
+            case response_data do
+              items when is_list(items) ->
+                Enum.map(items, fn item ->
+                  {:ok, cast_item} = GitHubOpenAPI.Issue.cast(item)
+                  cast_item
+                end)
+
+              item when is_map(item) ->
+                {:ok, cast_item} = GitHubOpenAPI.Issue.cast(item)
+                cast_item
+
+              _ ->
+                response_data
+            end
 
           String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/pulls$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.PullRequest)
+            case response_data do
+              items when is_list(items) ->
+                Enum.map(items, fn item ->
+                  {:ok, cast_item} = GitHubOpenAPI.PullRequest.cast(item)
+                  cast_item
+                end)
+
+              item when is_map(item) ->
+                {:ok, cast_item} = GitHubOpenAPI.PullRequest.cast(item)
+                cast_item
+
+              _ ->
+                response_data
+            end
 
           String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/releases$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Release)
+            case response_data do
+              items when is_list(items) ->
+                Enum.map(items, fn item ->
+                  {:ok, cast_item} = GitHubOpenAPI.Release.cast(item)
+                  cast_item
+                end)
+
+              item when is_map(item) ->
+                {:ok, cast_item} = GitHubOpenAPI.Release.cast(item)
+                cast_item
+
+              _ ->
+                response_data
+            end
 
           String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/commits$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Commit)
+            case response_data do
+              items when is_list(items) ->
+                Enum.map(items, fn item ->
+                  {:ok, cast_item} = GitHubOpenAPI.Commit.cast(item)
+                  cast_item
+                end)
+
+              item when is_map(item) ->
+                {:ok, cast_item} = GitHubOpenAPI.Commit.cast(item)
+                cast_item
+
+              _ ->
+                response_data
+            end
 
           String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/branches$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Branch)
+            case response_data do
+              items when is_list(items) ->
+                Enum.map(items, fn item ->
+                  {:ok, cast_item} = GitHubOpenAPI.ShortBranch.cast(item)
+                  cast_item
+                end)
+
+              item when is_map(item) ->
+                {:ok, cast_item} = GitHubOpenAPI.ShortBranch.cast(item)
+                cast_item
+
+              _ ->
+                response_data
+            end
 
           String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/tags$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.Tag)
+            case response_data do
+              items when is_list(items) ->
+                Enum.map(items, fn item ->
+                  {:ok, cast_item} = GitHubOpenAPI.Tag.cast(item)
+                  cast_item
+                end)
+
+              item when is_map(item) ->
+                {:ok, cast_item} = GitHubOpenAPI.Tag.cast(item)
+                cast_item
+
+              _ ->
+                response_data
+            end
 
           String.match?(query.from, ~r/^users\/[\w\-\.]+$/) ->
-            cast_response_data(response_data, Apipe.Providers.GitHub.Types.User)
+            case response_data do
+              items when is_list(items) ->
+                Enum.map(items, fn item ->
+                  {:ok, cast_item} = GitHubOpenAPI.SimpleUser.cast(item)
+                  cast_item
+                end)
+
+              item when is_map(item) ->
+                {:ok, cast_item} = GitHubOpenAPI.SimpleUser.cast(item)
+                cast_item
+
+              _ ->
+                response_data
+            end
 
           true ->
             response_data
@@ -636,24 +740,6 @@ defmodule Apipe.Providers.GitHub do
     }
   end
 
-  # Helper function to cast response data consistently
-  defp cast_response_data(data, type) do
-    case data do
-      items when is_list(items) ->
-        Enum.map(items, fn item ->
-          {:ok, cast_item} = type.cast(item)
-          cast_item
-        end)
-
-      item when is_map(item) ->
-        {:ok, cast_item} = type.cast(item)
-        cast_item
-
-      _ ->
-        data
-    end
-  end
-
   defp apply_transforms({:ok, data}, transforms) do
     case data do
       {items, meta} when is_list(items) ->
@@ -684,155 +770,5 @@ defmodule Apipe.Providers.GitHub do
       _ ->
         {:ok, data}
     end
-  end
-
-  defp apply_joins({:ok, data}, joins, %{join_strategy: :async} = settings)
-       when length(joins) > 0 do
-    Logger.debug("Applying async joins: #{inspect(joins)}")
-    Logger.debug("Data structure before joins: #{inspect(data)}")
-
-    case data do
-      %{"items" => items} = search_response ->
-        Logger.debug("Processing search response items: #{inspect(items)}")
-
-        {results, join_rate_limits} =
-          Task.async_stream(
-            items,
-            &apply_joins_to_item(&1, joins),
-            max_concurrency: settings.max_concurrency,
-            ordered: true
-          )
-          |> Enum.map_reduce([], fn {:ok, {result, rate_limit}}, acc ->
-            {result, [rate_limit | acc]}
-          end)
-
-        Logger.debug("Join results: #{inspect(results)}")
-        {:ok, {Map.put(search_response, "items", results), join_rate_limits}}
-
-      items when is_list(items) ->
-        Logger.debug("Processing list items: #{inspect(items)}")
-
-        {results, join_rate_limits} =
-          Task.async_stream(
-            items,
-            &apply_joins_to_item(&1, joins),
-            max_concurrency: settings.max_concurrency,
-            ordered: true
-          )
-          |> Enum.map_reduce([], fn {:ok, {result, rate_limit}}, acc ->
-            {result, [rate_limit | acc]}
-          end)
-
-        Logger.debug("Join results: #{inspect(results)}")
-        {:ok, {results, join_rate_limits}}
-
-      {items, _meta} when is_list(items) ->
-        Logger.debug("Processing items with metadata: #{inspect(items)}")
-
-        {results, join_rate_limits} =
-          Task.async_stream(
-            items,
-            &apply_joins_to_item(&1, joins),
-            max_concurrency: settings.max_concurrency,
-            ordered: true
-          )
-          |> Enum.map_reduce([], fn {:ok, {result, rate_limit}}, acc ->
-            {result, [rate_limit | acc]}
-          end)
-
-        Logger.debug("Join results: #{inspect(results)}")
-        {:ok, {results, join_rate_limits}}
-
-      _ ->
-        Logger.debug("Data is not a list or search response: #{inspect(data)}")
-        {:ok, {data, []}}
-    end
-  end
-
-  defp apply_joins({:ok, data}, joins, _settings) when length(joins) > 0 do
-    Logger.debug("Applying sync joins: #{inspect(joins)}")
-    Logger.debug("Data structure before joins: #{inspect(data)}")
-
-    case data do
-      %{"items" => items} = search_response ->
-        Logger.debug("Processing search response items: #{inspect(items)}")
-
-        {results, join_rate_limits} =
-          Enum.map_reduce(items, [], fn item, acc ->
-            {result, rate_limit} = apply_joins_to_item(item, joins)
-            {result, [rate_limit | acc]}
-          end)
-
-        Logger.debug("Join results: #{inspect(results)}")
-        {:ok, {Map.put(search_response, "items", results), join_rate_limits}}
-
-      items when is_list(items) ->
-        Logger.debug("Processing list items: #{inspect(items)}")
-
-        {results, join_rate_limits} =
-          Enum.map_reduce(items, [], fn item, acc ->
-            {result, rate_limit} = apply_joins_to_item(item, joins)
-            {result, [rate_limit | acc]}
-          end)
-
-        Logger.debug("Join results: #{inspect(results)}")
-        {:ok, {results, join_rate_limits}}
-
-      {items, _meta} when is_list(items) ->
-        Logger.debug("Processing items with metadata: #{inspect(items)}")
-
-        {results, join_rate_limits} =
-          Enum.map_reduce(items, [], fn item, acc ->
-            {result, rate_limit} = apply_joins_to_item(item, joins)
-            {result, [rate_limit | acc]}
-          end)
-
-        Logger.debug("Join results: #{inspect(results)}")
-        {:ok, {results, join_rate_limits}}
-
-      _ ->
-        Logger.debug("Data is not a list or search response: #{inspect(data)}")
-        {:ok, {data, []}}
-    end
-  end
-
-  defp apply_joins(response, _, _), do: response
-
-  defp apply_joins_to_item(item, joins) do
-    Logger.debug("Applying joins to item: #{inspect(item)}")
-
-    Enum.reduce(joins, {item, []}, fn join, {acc, rate_limits} ->
-      Logger.debug("Executing join for field: #{inspect(join.field)} on item: #{inspect(item)}")
-
-      case join.query_fn.(item) do
-        %Apipe.Query{provider_opts: opts} = query ->
-          Logger.debug("Join query: #{inspect(query)}")
-
-          case execute(query, opts) do
-            %Apipe.Response{data: joined_data, meta: %{rate_limit: rate_limit}} ->
-              Logger.debug("Join response data: #{inspect(joined_data)}")
-              # Preserve the joined data directly without additional casting
-              {Map.put(acc, join.field, joined_data), [rate_limit | rate_limits]}
-
-            error ->
-              Logger.error("Join failed: #{inspect(error)}")
-              {acc, rate_limits}
-          end
-
-        other ->
-          Logger.debug("Join query (other): #{inspect(other)}")
-
-          case execute(other) do
-            %Apipe.Response{data: joined_data, meta: %{rate_limit: rate_limit}} ->
-              Logger.debug("Join response data: #{inspect(joined_data)}")
-              # Preserve the joined data directly without additional casting
-              {Map.put(acc, join.field, joined_data), [rate_limit | rate_limits]}
-
-            error ->
-              Logger.error("Join failed: #{inspect(error)}")
-              {acc, rate_limits}
-          end
-      end
-    end)
   end
 end

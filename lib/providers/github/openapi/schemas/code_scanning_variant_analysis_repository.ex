@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisRepository do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           full_name: String.t(),
           id: integer,
           name: String.t(),
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisRepository do
           updated_at: DateTime.t() | nil
         }
 
-  defstruct [:__info__, :full_name, :id, :name, :private, :stargazers_count, :updated_at]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :full_name,
+    :id,
+    :name,
+    :private,
+    :stargazers_count,
+    :updated_at
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

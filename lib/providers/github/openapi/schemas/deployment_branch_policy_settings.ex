@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.DeploymentBranchPolicySettings do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           custom_branch_policies: boolean,
           protected_branches: boolean
         }
 
-  defstruct [:__info__, :custom_branch_policies, :protected_branches]
+  defstruct [:__info__, :__joins__, :custom_branch_policies, :protected_branches]
 
   @doc false
   @spec __fields__(atom) :: keyword

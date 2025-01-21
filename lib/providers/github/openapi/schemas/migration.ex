@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Migration do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           archive_url: String.t() | nil,
           created_at: DateTime.t(),
           exclude: [String.t()] | nil,
@@ -28,6 +29,7 @@ defmodule GitHubOpenAPI.Migration do
 
   defstruct [
     :__info__,
+    :__joins__,
     :archive_url,
     :created_at,
     :exclude,

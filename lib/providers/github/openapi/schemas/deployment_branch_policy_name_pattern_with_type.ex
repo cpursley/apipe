@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.DeploymentBranchPolicyNamePatternWithType do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, name: String.t(), type: String.t() | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, name: String.t(), type: String.t() | nil}
 
-  defstruct [:__info__, :name, :type]
+  defstruct [:__info__, :__joins__, :name, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

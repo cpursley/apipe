@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.GistComment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author_association: String.t(),
           body: String.t(),
           created_at: DateTime.t(),
@@ -18,6 +19,7 @@ defmodule GitHubOpenAPI.GistComment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author_association,
     :body,
     :created_at,

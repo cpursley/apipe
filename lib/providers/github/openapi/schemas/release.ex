@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Release do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           assets: [GitHubOpenAPI.ReleaseAsset.t()],
           assets_url: String.t(),
           author: GitHubOpenAPI.SimpleUser.t(),
@@ -33,6 +34,7 @@ defmodule GitHubOpenAPI.Release do
 
   defstruct [
     :__info__,
+    :__joins__,
     :assets,
     :assets_url,
     :author,

@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.HovercardContexts do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, message: String.t(), octicon: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, message: String.t(), octicon: String.t()}
 
-  defstruct [:__info__, :message, :octicon]
+  defstruct [:__info__, :__joins__, :message, :octicon]
 
   @doc false
   @spec __fields__(atom) :: keyword

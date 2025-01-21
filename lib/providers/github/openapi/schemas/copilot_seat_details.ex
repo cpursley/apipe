@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CopilotSeatDetails do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           assignee: GitHubOpenAPI.SimpleUser.t(),
           assigning_team: GitHubOpenAPI.EnterpriseTeam.t() | GitHubOpenAPI.Team.t() | nil,
           created_at: DateTime.t(),
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.CopilotSeatDetails do
 
   defstruct [
     :__info__,
+    :__joins__,
     :assignee,
     :assigning_team,
     :created_at,

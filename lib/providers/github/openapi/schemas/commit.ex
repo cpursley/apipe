@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Commit do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: GitHubOpenAPI.EmptyObject.t() | GitHubOpenAPI.SimpleUser.t(),
           comments_url: String.t(),
           commit: GitHubOpenAPI.CommitCommit.t(),
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.Commit do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author,
     :comments_url,
     :commit,

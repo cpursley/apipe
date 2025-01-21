@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.CheckSuitePreferencePreferences do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           auto_trigger_checks:
             [GitHubOpenAPI.CheckSuitePreferencePreferencesAutoTriggerChecks.t()] | nil
         }
 
-  defstruct [:__info__, :auto_trigger_checks]
+  defstruct [:__info__, :__joins__, :auto_trigger_checks]
 
   @doc false
   @spec __fields__(atom) :: keyword

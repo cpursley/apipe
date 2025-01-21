@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.HookResponse do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           code: integer | nil,
           message: String.t() | nil,
           status: String.t() | nil
         }
 
-  defstruct [:__info__, :code, :message, :status]
+  defstruct [:__info__, :__joins__, :code, :message, :status]
 
   @doc false
   @spec __fields__(atom) :: keyword

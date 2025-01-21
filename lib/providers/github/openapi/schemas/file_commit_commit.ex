@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.FileCommitCommit do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: GitHubOpenAPI.FileCommitCommitAuthor.t() | nil,
           committer: GitHubOpenAPI.FileCommitCommitCommitter.t() | nil,
           html_url: String.t() | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.FileCommitCommit do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author,
     :committer,
     :html_url,

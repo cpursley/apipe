@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilities do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           package: GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilitiesPackage.t(),
           patched_versions: String.t() | nil,
           vulnerable_functions: [String.t()] | nil,
@@ -14,6 +15,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilities do
 
   defstruct [
     :__info__,
+    :__joins__,
     :package,
     :patched_versions,
     :vulnerable_functions,

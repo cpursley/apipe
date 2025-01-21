@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PackageVersion do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           deleted_at: DateTime.t() | nil,
           description: String.t() | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.PackageVersion do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :deleted_at,
     :description,

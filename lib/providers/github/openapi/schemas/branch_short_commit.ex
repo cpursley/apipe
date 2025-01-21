@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.BranchShortCommit do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, sha: String.t(), url: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, sha: String.t(), url: String.t()}
 
-  defstruct [:__info__, :sha, :url]
+  defstruct [:__info__, :__joins__, :sha, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

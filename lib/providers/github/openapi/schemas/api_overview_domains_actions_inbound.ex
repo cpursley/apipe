@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.ApiOverviewDomainsActionsInbound do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           full_domains: [String.t()] | nil,
           wildcard_domains: [String.t()] | nil
         }
 
-  defstruct [:__info__, :full_domains, :wildcard_domains]
+  defstruct [:__info__, :__joins__, :full_domains, :wildcard_domains]
 
   @doc false
   @spec __fields__(atom) :: keyword

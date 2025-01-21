@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningAnalysis do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           analysis_key: String.t(),
           category: String.t() | nil,
           commit_sha: String.t(),
@@ -25,6 +26,7 @@ defmodule GitHubOpenAPI.CodeScanningAnalysis do
 
   defstruct [
     :__info__,
+    :__joins__,
     :analysis_key,
     :category,
     :commit_sha,

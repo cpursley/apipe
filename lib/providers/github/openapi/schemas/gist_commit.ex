@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.GistCommit do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           change_status: GitHubOpenAPI.GistCommitChangeStatus.t(),
           committed_at: DateTime.t(),
           url: String.t(),
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.GistCommit do
           version: String.t()
         }
 
-  defstruct [:__info__, :change_status, :committed_at, :url, :user, :version]
+  defstruct [:__info__, :__joins__, :change_status, :committed_at, :url, :user, :version]
 
   @doc false
   @spec __fields__(atom) :: keyword

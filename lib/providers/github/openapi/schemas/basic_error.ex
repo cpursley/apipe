@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.BasicError do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           message: String.t() | nil,
           status: String.t() | nil,
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :documentation_url, :message, :status, :url]
+  defstruct [:__info__, :__joins__, :documentation_url, :message, :status, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

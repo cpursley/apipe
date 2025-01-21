@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.HookDeliveryItem do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           action: String.t() | nil,
           delivered_at: DateTime.t(),
           duration: number,
@@ -22,6 +23,7 @@ defmodule GitHubOpenAPI.HookDeliveryItem do
 
   defstruct [
     :__info__,
+    :__joins__,
     :action,
     :delivered_at,
     :duration,

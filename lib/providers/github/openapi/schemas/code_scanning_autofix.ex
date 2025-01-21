@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.CodeScanningAutofix do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           description: String.t() | nil,
           started_at: DateTime.t(),
           status: String.t()
         }
 
-  defstruct [:__info__, :description, :started_at, :status]
+  defstruct [:__info__, :__joins__, :description, :started_at, :status]
 
   @doc false
   @spec __fields__(atom) :: keyword

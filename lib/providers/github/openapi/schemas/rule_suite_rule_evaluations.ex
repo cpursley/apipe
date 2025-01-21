@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RuleSuiteRuleEvaluations do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           details: String.t() | nil,
           enforcement: String.t() | nil,
           result: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.RuleSuiteRuleEvaluations do
           rule_type: String.t() | nil
         }
 
-  defstruct [:__info__, :details, :enforcement, :result, :rule_source, :rule_type]
+  defstruct [:__info__, :__joins__, :details, :enforcement, :result, :rule_source, :rule_type]
 
   @doc false
   @spec __fields__(atom) :: keyword

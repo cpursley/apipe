@@ -306,7 +306,11 @@ defmodule GitHubOpenAPI.Repos do
     })
   end
 
-  @type check_private_vulnerability_reporting_200_json_resp :: %{__info__: map, enabled: boolean}
+  @type check_private_vulnerability_reporting_200_json_resp :: %{
+          __info__: map,
+          __joins__: map,
+          enabled: boolean
+        }
 
   @doc """
   Check if private vulnerability reporting is enabled for a repository
@@ -483,7 +487,7 @@ defmodule GitHubOpenAPI.Repos do
     })
   end
 
-  @type create_attestation_201_json_resp :: %{__info__: map, id: integer | nil}
+  @type create_attestation_201_json_resp :: %{__info__: map, __joins__: map, id: integer | nil}
 
   @doc """
   Create an attestation
@@ -675,7 +679,11 @@ defmodule GitHubOpenAPI.Repos do
     })
   end
 
-  @type create_deployment_202_json_resp :: %{__info__: map, message: String.t() | nil}
+  @type create_deployment_202_json_resp :: %{
+          __info__: map,
+          __joins__: map,
+          message: String.t() | nil
+        }
 
   @doc """
   Create a deployment
@@ -1425,6 +1433,7 @@ defmodule GitHubOpenAPI.Repos do
 
   @type delete_403_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           message: String.t() | nil
         }
@@ -2406,6 +2415,7 @@ defmodule GitHubOpenAPI.Repos do
 
   @type get_all_deployment_protection_rules_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           custom_deployment_protection_rules: [GitHubOpenAPI.DeploymentProtectionRule.t()] | nil,
           total_count: integer | nil
         }
@@ -2441,6 +2451,7 @@ defmodule GitHubOpenAPI.Repos do
 
   @type get_all_environments_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           environments: [GitHubOpenAPI.Environment.t()] | nil,
           total_count: integer | nil
         }
@@ -2650,6 +2661,7 @@ defmodule GitHubOpenAPI.Repos do
 
   @type get_branch_rules_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           parameters: map | nil,
           ruleset_id: integer | nil,
           ruleset_source: String.t() | nil,
@@ -4420,6 +4432,7 @@ defmodule GitHubOpenAPI.Repos do
 
   @type list_attestations_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           attestations: [GitHubOpenAPI.ReposAttestations.list_attestations_200_json_resp()] | nil
         }
 
@@ -4819,6 +4832,7 @@ defmodule GitHubOpenAPI.Repos do
 
   @type list_custom_deployment_rule_integrations_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           available_custom_deployment_protection_rule_integrations:
             [GitHubOpenAPI.CustomDeploymentRuleApp.t()] | nil,
           total_count: integer | nil
@@ -4899,6 +4913,7 @@ defmodule GitHubOpenAPI.Repos do
 
   @type list_deployment_branch_policies_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           branch_policies: [GitHubOpenAPI.DeploymentBranchPolicy.t()],
           total_count: integer
         }

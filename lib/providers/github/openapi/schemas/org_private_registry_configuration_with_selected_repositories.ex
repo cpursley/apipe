@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrgPrivateRegistryConfigurationWithSelectedRepositories 
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           name: String.t(),
           registry_type: String.t(),
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.OrgPrivateRegistryConfigurationWithSelectedRepositories 
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :name,
     :registry_type,

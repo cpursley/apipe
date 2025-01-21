@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.GlobalAdvisoryEpss do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, percentage: number | nil, percentile: number | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          percentage: number | nil,
+          percentile: number | nil
+        }
 
-  defstruct [:__info__, :percentage, :percentile]
+  defstruct [:__info__, :__joins__, :percentage, :percentile]
 
   @doc false
   @spec __fields__(atom) :: keyword

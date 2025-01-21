@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepoGroup do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.CodeScanningVariantAnalysisRepository.t()],
           repository_count: integer
         }
 
-  defstruct [:__info__, :repositories, :repository_count]
+  defstruct [:__info__, :__joins__, :repositories, :repository_count]
 
   @doc false
   @spec __fields__(atom) :: keyword

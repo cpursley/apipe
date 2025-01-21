@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.FeedLinks do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           current_user: GitHubOpenAPI.LinkWithType.t() | nil,
           current_user_actor: GitHubOpenAPI.LinkWithType.t() | nil,
           current_user_organization: GitHubOpenAPI.LinkWithType.t() | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.FeedLinks do
 
   defstruct [
     :__info__,
+    :__joins__,
     :current_user,
     :current_user_actor,
     :current_user_organization,

@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.SecretScanningScan do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           completed_at: DateTime.t() | nil,
           started_at: DateTime.t() | nil,
           status: String.t() | nil,
           type: String.t() | nil
         }
 
-  defstruct [:__info__, :completed_at, :started_at, :status, :type]
+  defstruct [:__info__, :__joins__, :completed_at, :started_at, :status, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

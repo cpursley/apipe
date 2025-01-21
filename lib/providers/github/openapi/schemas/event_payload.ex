@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.EventPayload do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           action: String.t() | nil,
           comment: GitHubOpenAPI.IssueComment.t() | nil,
           issue: GitHubOpenAPI.Issue.t() | nil,
           pages: [GitHubOpenAPI.EventPayloadPages.t()] | nil
         }
 
-  defstruct [:__info__, :action, :comment, :issue, :pages]
+  defstruct [:__info__, :__joins__, :action, :comment, :issue, :pages]
 
   @doc false
   @spec __fields__(atom) :: keyword

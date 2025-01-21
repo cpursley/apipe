@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.FileCommitCommitTree do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, sha: String.t() | nil, url: String.t() | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          sha: String.t() | nil,
+          url: String.t() | nil
+        }
 
-  defstruct [:__info__, :sha, :url]
+  defstruct [:__info__, :__joins__, :sha, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

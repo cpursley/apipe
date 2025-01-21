@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.FilePathRestrictionParameters do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, restricted_file_paths: [String.t()]}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, restricted_file_paths: [String.t()]}
 
-  defstruct [:__info__, :restricted_file_paths]
+  defstruct [:__info__, :__joins__, :restricted_file_paths]
 
   @doc false
   @spec __fields__(atom) :: keyword

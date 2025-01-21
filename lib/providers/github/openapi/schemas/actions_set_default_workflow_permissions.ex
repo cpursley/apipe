@@ -6,11 +6,17 @@ defmodule GitHubOpenAPI.ActionsSetDefaultWorkflowPermissions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           can_approve_pull_request_reviews: boolean | nil,
           default_workflow_permissions: String.t() | nil
         }
 
-  defstruct [:__info__, :can_approve_pull_request_reviews, :default_workflow_permissions]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :can_approve_pull_request_reviews,
+    :default_workflow_permissions
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

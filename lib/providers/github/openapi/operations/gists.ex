@@ -5,7 +5,7 @@ defmodule GitHubOpenAPI.Gists do
 
   @default_client GitHubOpenAPI.Client
 
-  @type check_is_starred_404_json_resp :: %{__info__: map}
+  @type check_is_starred_404_json_resp :: %{__info__: map, __joins__: map}
 
   @doc """
   Check if a gist is starred

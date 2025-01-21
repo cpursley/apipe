@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ActionsHostedRunner do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           id: integer,
           image_details: GitHubOpenAPI.ActionsHostedRunnerPoolImage.t() | nil,
           last_active_on: DateTime.t() | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.ActionsHostedRunner do
 
   defstruct [
     :__info__,
+    :__joins__,
     :id,
     :image_details,
     :last_active_on,

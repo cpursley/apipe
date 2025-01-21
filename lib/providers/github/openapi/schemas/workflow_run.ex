@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.WorkflowRun do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor: GitHubOpenAPI.SimpleUser.t() | nil,
           artifacts_url: String.t(),
           cancel_url: String.t(),
@@ -46,6 +47,7 @@ defmodule GitHubOpenAPI.WorkflowRun do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actor,
     :artifacts_url,
     :cancel_url,

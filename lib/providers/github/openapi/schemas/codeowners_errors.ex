@@ -4,9 +4,13 @@ defmodule GitHubOpenAPI.CodeownersErrors do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, errors: [GitHubOpenAPI.CodeownersErrorsErrors.t()]}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          errors: [GitHubOpenAPI.CodeownersErrorsErrors.t()]
+        }
 
-  defstruct [:__info__, :errors]
+  defstruct [:__info__, :__joins__, :errors]
 
   @doc false
   @spec __fields__(atom) :: keyword

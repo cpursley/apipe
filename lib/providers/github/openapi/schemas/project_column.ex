@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ProjectColumn do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           cards_url: String.t(),
           created_at: DateTime.t(),
           id: integer,
@@ -18,6 +19,7 @@ defmodule GitHubOpenAPI.ProjectColumn do
 
   defstruct [
     :__info__,
+    :__joins__,
     :cards_url,
     :created_at,
     :id,

@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.DependabotAlertSecurityAdvisoryCwes do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, cwe_id: String.t(), name: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, cwe_id: String.t(), name: String.t()}
 
-  defstruct [:__info__, :cwe_id, :name]
+  defstruct [:__info__, :__joins__, :cwe_id, :name]
 
   @doc false
   @spec __fields__(atom) :: keyword

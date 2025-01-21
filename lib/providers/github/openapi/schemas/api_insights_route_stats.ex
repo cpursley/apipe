@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ApiInsightsRouteStats do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           api_route: String.t() | nil,
           http_method: String.t() | nil,
           last_rate_limited_timestamp: String.t() | nil,
@@ -16,6 +17,7 @@ defmodule GitHubOpenAPI.ApiInsightsRouteStats do
 
   defstruct [
     :__info__,
+    :__joins__,
     :api_route,
     :http_method,
     :last_rate_limited_timestamp,

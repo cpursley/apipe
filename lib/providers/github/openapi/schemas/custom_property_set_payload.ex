@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CustomPropertySetPayload do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           allowed_values: [String.t()] | nil,
           default_value: String.t() | [String.t()] | nil,
           description: String.t() | nil,
@@ -13,7 +14,15 @@ defmodule GitHubOpenAPI.CustomPropertySetPayload do
           value_type: String.t()
         }
 
-  defstruct [:__info__, :allowed_values, :default_value, :description, :required, :value_type]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :allowed_values,
+    :default_value,
+    :description,
+    :required,
+    :value_type
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

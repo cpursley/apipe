@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TimelineCommittedEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: GitHubOpenAPI.TimelineCommittedEventAuthor.t(),
           committer: GitHubOpenAPI.TimelineCommittedEventCommitter.t(),
           event: String.t() | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.TimelineCommittedEvent do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author,
     :committer,
     :event,

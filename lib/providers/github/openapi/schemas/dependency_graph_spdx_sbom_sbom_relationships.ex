@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.DependencyGraphSpdxSbomSbomRelationships do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           relatedSpdxElement: String.t() | nil,
           relationshipType: String.t() | nil,
           spdxElementId: String.t() | nil
         }
 
-  defstruct [:__info__, :relatedSpdxElement, :relationshipType, :spdxElementId]
+  defstruct [:__info__, :__joins__, :relatedSpdxElement, :relationshipType, :spdxElementId]
 
   @doc false
   @spec __fields__(atom) :: keyword

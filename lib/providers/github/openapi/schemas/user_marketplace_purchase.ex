@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.UserMarketplacePurchase do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           account: GitHubOpenAPI.MarketplaceAccount.t(),
           billing_cycle: String.t(),
           free_trial_ends_on: DateTime.t() | nil,
@@ -18,6 +19,7 @@ defmodule GitHubOpenAPI.UserMarketplacePurchase do
 
   defstruct [
     :__info__,
+    :__joins__,
     :account,
     :billing_cycle,
     :free_trial_ends_on,

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CommitSearchResultItem do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: GitHubOpenAPI.SimpleUser.t() | nil,
           comments_url: String.t(),
           commit: GitHubOpenAPI.CommitSearchResultItemCommit.t(),
@@ -22,6 +23,7 @@ defmodule GitHubOpenAPI.CommitSearchResultItem do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author,
     :comments_url,
     :commit,

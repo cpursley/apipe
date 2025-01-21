@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Blob do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           content: String.t(),
           encoding: String.t(),
           highlighted_content: String.t() | nil,
@@ -15,7 +16,17 @@ defmodule GitHubOpenAPI.Blob do
           url: String.t()
         }
 
-  defstruct [:__info__, :content, :encoding, :highlighted_content, :node_id, :sha, :size, :url]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :content,
+    :encoding,
+    :highlighted_content,
+    :node_id,
+    :sha,
+    :size,
+    :url
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

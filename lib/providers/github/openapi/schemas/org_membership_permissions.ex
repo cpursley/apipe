@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.OrgMembershipPermissions do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, can_create_repository: boolean}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, can_create_repository: boolean}
 
-  defstruct [:__info__, :can_create_repository]
+  defstruct [:__info__, :__joins__, :can_create_repository]
 
   @doc false
   @spec __fields__(atom) :: keyword

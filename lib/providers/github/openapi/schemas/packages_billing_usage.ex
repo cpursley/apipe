@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PackagesBillingUsage do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           included_gigabytes_bandwidth: integer,
           total_gigabytes_bandwidth_used: integer,
           total_paid_gigabytes_bandwidth_used: integer
@@ -13,6 +14,7 @@ defmodule GitHubOpenAPI.PackagesBillingUsage do
 
   defstruct [
     :__info__,
+    :__joins__,
     :included_gigabytes_bandwidth,
     :total_gigabytes_bandwidth_used,
     :total_paid_gigabytes_bandwidth_used

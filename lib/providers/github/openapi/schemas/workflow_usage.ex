@@ -4,9 +4,13 @@ defmodule GitHubOpenAPI.WorkflowUsage do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, billable: GitHubOpenAPI.WorkflowUsageBillable.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          billable: GitHubOpenAPI.WorkflowUsageBillable.t()
+        }
 
-  defstruct [:__info__, :billable]
+  defstruct [:__info__, :__joins__, :billable]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ApiOverview do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actions: [String.t()] | nil,
           actions_macos: [String.t()] | nil,
           api: [String.t()] | nil,
@@ -27,6 +28,7 @@ defmodule GitHubOpenAPI.ApiOverview do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actions,
     :actions_macos,
     :api,

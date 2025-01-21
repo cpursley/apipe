@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.CodeSecurityConfigurationForRepository do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           configuration: GitHubOpenAPI.CodeSecurityConfiguration.t() | nil,
           status: String.t() | nil
         }
 
-  defstruct [:__info__, :configuration, :status]
+  defstruct [:__info__, :__joins__, :configuration, :status]
 
   @doc false
   @spec __fields__(atom) :: keyword

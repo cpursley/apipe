@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.RepositoryNameAndRefNameRepositoryName do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           exclude: [String.t()] | nil,
           include: [String.t()] | nil,
           protected: boolean | nil
         }
 
-  defstruct [:__info__, :exclude, :include, :protected]
+  defstruct [:__info__, :__joins__, :exclude, :include, :protected]
 
   @doc false
   @spec __fields__(atom) :: keyword

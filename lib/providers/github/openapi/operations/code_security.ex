@@ -603,6 +603,7 @@ defmodule GitHubOpenAPI.CodeSecurity do
 
   @type set_configuration_as_default_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           configuration: GitHubOpenAPI.CodeSecurityConfiguration.t() | nil,
           default_for_new_repos: String.t() | nil
         }
@@ -646,6 +647,7 @@ defmodule GitHubOpenAPI.CodeSecurity do
 
   @type set_configuration_as_default_for_enterprise_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           configuration: GitHubOpenAPI.CodeSecurityConfiguration.t() | nil,
           default_for_new_repos: String.t() | nil
         }

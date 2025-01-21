@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CopilotOrganizationDetails do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           cli: String.t() | nil,
           ide_chat: String.t() | nil,
           plan_type: String.t() | nil,
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.CopilotOrganizationDetails do
 
   defstruct [
     :__info__,
+    :__joins__,
     :cli,
     :ide_chat,
     :plan_type,

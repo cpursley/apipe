@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrganizationRole do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           base_role: String.t() | nil,
           created_at: DateTime.t(),
           description: String.t() | nil,
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.OrganizationRole do
 
   defstruct [
     :__info__,
+    :__joins__,
     :base_role,
     :created_at,
     :description,

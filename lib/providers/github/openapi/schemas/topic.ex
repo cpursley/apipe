@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.Topic do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, names: [String.t()]}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, names: [String.t()]}
 
-  defstruct [:__info__, :names]
+  defstruct [:__info__, :__joins__, :names]
 
   @doc false
   @spec __fields__(atom) :: keyword

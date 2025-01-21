@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CopilotIdeCodeCompletionsEditorsModelsLanguages do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           name: String.t() | nil,
           total_code_acceptances: integer | nil,
           total_code_lines_accepted: integer | nil,
@@ -16,6 +17,7 @@ defmodule GitHubOpenAPI.CopilotIdeCodeCompletionsEditorsModelsLanguages do
 
   defstruct [
     :__info__,
+    :__joins__,
     :name,
     :total_code_acceptances,
     :total_code_lines_accepted,

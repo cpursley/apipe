@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Installation do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           access_tokens_url: String.t(),
           account: GitHubOpenAPI.Enterprise.t() | GitHubOpenAPI.SimpleUser.t(),
           app_id: integer,
@@ -30,6 +31,7 @@ defmodule GitHubOpenAPI.Installation do
 
   defstruct [
     :__info__,
+    :__joins__,
     :access_tokens_url,
     :account,
     :app_id,

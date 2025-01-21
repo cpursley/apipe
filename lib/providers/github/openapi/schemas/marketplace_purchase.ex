@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.MarketplacePurchase do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           email: String.t() | nil,
           id: integer,
           login: String.t(),
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.MarketplacePurchase do
 
   defstruct [
     :__info__,
+    :__joins__,
     :email,
     :id,
     :login,

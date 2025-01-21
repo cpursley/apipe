@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ScopedInstallation do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           account: GitHubOpenAPI.SimpleUser.t(),
           has_multiple_single_files: boolean | nil,
           permissions: GitHubOpenAPI.AppPermissions.t(),
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.ScopedInstallation do
 
   defstruct [
     :__info__,
+    :__joins__,
     :account,
     :has_multiple_single_files,
     :permissions,

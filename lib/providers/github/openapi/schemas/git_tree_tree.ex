@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.GitTreeTree do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           mode: String.t() | nil,
           path: String.t() | nil,
           sha: String.t() | nil,
@@ -14,7 +15,7 @@ defmodule GitHubOpenAPI.GitTreeTree do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :mode, :path, :sha, :size, :type, :url]
+  defstruct [:__info__, :__joins__, :mode, :path, :sha, :size, :type, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

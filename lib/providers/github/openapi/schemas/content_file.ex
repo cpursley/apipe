@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ContentFile do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.ContentFileLinks.t(),
           content: String.t(),
           download_url: String.t() | nil,
@@ -24,6 +25,7 @@ defmodule GitHubOpenAPI.ContentFile do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :content,
     :download_url,

@@ -11,11 +11,19 @@ defmodule Apipe.Providers.OpenAPIEncoder do
       Casts a map to a struct.
       """
       def cast(data) when is_map(data) do
+        # Get the list of fields defined in the struct
+        fields = __MODULE__.__struct__() |> Map.keys() |> MapSet.new()
+
+        # Only convert keys that exist in the struct
         atomized_data =
           data
-          |> Enum.map(fn {k, v} -> {String.to_existing_atom(k), v} end)
+          |> Enum.filter(fn {key, _} ->
+            String.to_atom(key) in fields
+          end)
+          |> Enum.map(fn {k, v} -> {String.to_atom(k), v} end)
           |> Map.new()
           |> Map.put(:__info__, %{})
+          |> Map.put(:__joins__, %{})
 
         result = struct(__MODULE__, atomized_data)
         {:ok, result}

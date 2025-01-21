@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.BranchRestrictionPolicyTeams do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           description: String.t() | nil,
           html_url: String.t() | nil,
           id: integer | nil,
@@ -23,6 +24,7 @@ defmodule GitHubOpenAPI.BranchRestrictionPolicyTeams do
 
   defstruct [
     :__info__,
+    :__joins__,
     :description,
     :html_url,
     :id,

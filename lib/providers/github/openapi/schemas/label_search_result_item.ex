@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.LabelSearchResultItem do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           color: String.t(),
           default: boolean,
           description: String.t() | nil,
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.LabelSearchResultItem do
 
   defstruct [
     :__info__,
+    :__joins__,
     :color,
     :default,
     :description,

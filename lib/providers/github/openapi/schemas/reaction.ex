@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Reaction do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           content: String.t(),
           created_at: DateTime.t(),
           id: integer,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.Reaction do
           user: GitHubOpenAPI.SimpleUser.t() | nil
         }
 
-  defstruct [:__info__, :content, :created_at, :id, :node_id, :user]
+  defstruct [:__info__, :__joins__, :content, :created_at, :id, :node_id, :user]
 
   @doc false
   @spec __fields__(atom) :: keyword

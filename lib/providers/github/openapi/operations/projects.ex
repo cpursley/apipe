@@ -41,6 +41,7 @@ defmodule GitHubOpenAPI.Projects do
 
   @type create_card_503_json_resp :: %{
           __info__: map,
+          __joins__: map,
           code: String.t() | nil,
           documentation_url: String.t() | nil,
           errors: [GitHubOpenAPI.ProjectsErrors.create_card_503_json_resp()] | nil,
@@ -226,6 +227,7 @@ defmodule GitHubOpenAPI.Projects do
 
   @type delete_403_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           errors: [String.t()] | nil,
           message: String.t() | nil
@@ -264,6 +266,7 @@ defmodule GitHubOpenAPI.Projects do
 
   @type delete_card_403_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           errors: [String.t()] | nil,
           message: String.t() | nil
@@ -679,10 +682,11 @@ defmodule GitHubOpenAPI.Projects do
     })
   end
 
-  @type move_card_201_json_resp :: %{__info__: map}
+  @type move_card_201_json_resp :: %{__info__: map, __joins__: map}
 
   @type move_card_403_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           errors: [GitHubOpenAPI.ProjectsErrors.move_card_403_json_resp()] | nil,
           message: String.t() | nil
@@ -690,6 +694,7 @@ defmodule GitHubOpenAPI.Projects do
 
   @type move_card_503_json_resp :: %{
           __info__: map,
+          __joins__: map,
           code: String.t() | nil,
           documentation_url: String.t() | nil,
           errors: [GitHubOpenAPI.ProjectsErrors.move_card_503_json_resp()] | nil,
@@ -729,7 +734,7 @@ defmodule GitHubOpenAPI.Projects do
     })
   end
 
-  @type move_column_201_json_resp :: %{__info__: map}
+  @type move_column_201_json_resp :: %{__info__: map, __joins__: map}
 
   @doc """
   Move a project column
@@ -797,6 +802,7 @@ defmodule GitHubOpenAPI.Projects do
 
   @type update_403_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           errors: [String.t()] | nil,
           message: String.t() | nil

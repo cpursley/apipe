@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ActionsCacheListActionsCaches do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t() | nil,
           id: integer | nil,
           key: String.t() | nil,
@@ -15,7 +16,17 @@ defmodule GitHubOpenAPI.ActionsCacheListActionsCaches do
           version: String.t() | nil
         }
 
-  defstruct [:__info__, :created_at, :id, :key, :last_accessed_at, :ref, :size_in_bytes, :version]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :created_at,
+    :id,
+    :key,
+    :last_accessed_at,
+    :ref,
+    :size_in_bytes,
+    :version
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

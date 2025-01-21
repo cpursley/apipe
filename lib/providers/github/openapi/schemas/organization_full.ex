@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrganizationFull do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           advanced_security_enabled_for_new_repositories: boolean | nil,
           archived_at: DateTime.t() | nil,
           avatar_url: String.t(),
@@ -68,6 +69,7 @@ defmodule GitHubOpenAPI.OrganizationFull do
 
   defstruct [
     :__info__,
+    :__joins__,
     :advanced_security_enabled_for_new_repositories,
     :archived_at,
     :avatar_url,

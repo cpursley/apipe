@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.StarredRepository do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           repo: GitHubOpenAPI.Repository.t(),
           starred_at: DateTime.t()
         }
 
-  defstruct [:__info__, :repo, :starred_at]
+  defstruct [:__info__, :__joins__, :repo, :starred_at]
 
   @doc false
   @spec __fields__(atom) :: keyword

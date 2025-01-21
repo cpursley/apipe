@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrganizationSecretScanningAlert do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t() | nil,
           html_url: String.t() | nil,
           locations_url: String.t() | nil,
@@ -35,6 +36,7 @@ defmodule GitHubOpenAPI.OrganizationSecretScanningAlert do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :html_url,
     :locations_url,

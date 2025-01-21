@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.WorkflowRunUsageBillableMACOSJobRuns do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, duration_ms: integer, job_id: integer}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, duration_ms: integer, job_id: integer}
 
-  defstruct [:__info__, :duration_ms, :job_id]
+  defstruct [:__info__, :__joins__, :duration_ms, :job_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

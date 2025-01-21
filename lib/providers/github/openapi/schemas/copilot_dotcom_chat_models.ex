@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CopilotDotcomChatModels do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           custom_model_training_date: String.t() | nil,
           is_custom_model: boolean | nil,
           name: String.t() | nil,
@@ -15,6 +16,7 @@ defmodule GitHubOpenAPI.CopilotDotcomChatModels do
 
   defstruct [
     :__info__,
+    :__joins__,
     :custom_model_training_date,
     :is_custom_model,
     :name,

@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.CvssSeveritiesCvssV3 do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, score: number | nil, vector_string: String.t() | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          score: number | nil,
+          vector_string: String.t() | nil
+        }
 
-  defstruct [:__info__, :score, :vector_string]
+  defstruct [:__info__, :__joins__, :score, :vector_string]
 
   @doc false
   @spec __fields__(atom) :: keyword

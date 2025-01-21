@@ -126,6 +126,7 @@ defmodule GitHubOpenAPI.Teams do
 
   @type add_or_update_project_permissions_in_org_403_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           message: String.t() | nil
         }
@@ -170,6 +171,7 @@ defmodule GitHubOpenAPI.Teams do
 
   @type add_or_update_project_permissions_legacy_403_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           message: String.t() | nil
         }

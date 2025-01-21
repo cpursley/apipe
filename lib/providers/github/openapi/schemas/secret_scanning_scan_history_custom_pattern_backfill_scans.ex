@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SecretScanningScanHistoryCustomPatternBackfillScans do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           completed_at: DateTime.t() | nil,
           pattern_name: String.t() | nil,
           pattern_scope: String.t() | nil,
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.SecretScanningScanHistoryCustomPatternBackfillScans do
           type: String.t() | nil
         }
 
-  defstruct [:__info__, :completed_at, :pattern_name, :pattern_scope, :started_at, :status, :type]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :completed_at,
+    :pattern_name,
+    :pattern_scope,
+    :started_at,
+    :status,
+    :type
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.DependencyGraphDiff do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           change_type: String.t(),
           ecosystem: String.t(),
           license: String.t() | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.DependencyGraphDiff do
 
   defstruct [
     :__info__,
+    :__joins__,
     :change_type,
     :ecosystem,
     :license,

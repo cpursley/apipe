@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.OrganizationProgrammaticAccessGrantPermissionsRepository
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map}
+  @type t :: %__MODULE__{__info__: map, __joins__: map}
 
-  defstruct [:__info__]
+  defstruct [:__info__, :__joins__]
 
   @doc false
   @spec __fields__(atom) :: keyword

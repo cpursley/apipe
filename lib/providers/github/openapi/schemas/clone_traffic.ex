@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.CloneTraffic do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           clones: [GitHubOpenAPI.Traffic.t()],
           count: integer,
           uniques: integer
         }
 
-  defstruct [:__info__, :clones, :count, :uniques]
+  defstruct [:__info__, :__joins__, :clones, :count, :uniques]
 
   @doc false
   @spec __fields__(atom) :: keyword

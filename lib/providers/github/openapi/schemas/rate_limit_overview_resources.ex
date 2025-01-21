@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RateLimitOverviewResources do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actions_runner_registration: GitHubOpenAPI.RateLimit.t() | nil,
           code_scanning_autofix: GitHubOpenAPI.RateLimit.t() | nil,
           code_scanning_upload: GitHubOpenAPI.RateLimit.t() | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.RateLimitOverviewResources do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actions_runner_registration,
     :code_scanning_autofix,
     :code_scanning_upload,

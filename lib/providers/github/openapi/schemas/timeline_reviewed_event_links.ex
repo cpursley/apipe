@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.TimelineReviewedEventLinks do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           html: GitHubOpenAPI.TimelineReviewedEventLinksHtml.t(),
           pull_request: GitHubOpenAPI.TimelineReviewedEventLinksPullRequest.t()
         }
 
-  defstruct [:__info__, :html, :pull_request]
+  defstruct [:__info__, :__joins__, :html, :pull_request]
 
   @doc false
   @spec __fields__(atom) :: keyword

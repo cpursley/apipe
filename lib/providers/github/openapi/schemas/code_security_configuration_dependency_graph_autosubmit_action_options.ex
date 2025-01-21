@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.CodeSecurityConfigurationDependencyGraphAutosubmitAction
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, labeled_runners: boolean | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, labeled_runners: boolean | nil}
 
-  defstruct [:__info__, :labeled_runners]
+  defstruct [:__info__, :__joins__, :labeled_runners]
 
   @doc false
   @spec __fields__(atom) :: keyword

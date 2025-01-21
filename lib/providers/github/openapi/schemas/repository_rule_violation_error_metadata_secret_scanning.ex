@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RepositoryRuleViolationErrorMetadataSecretScanning do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           bypass_placeholders:
             [
               GitHubOpenAPI.RepositoryRuleViolationErrorMetadataSecretScanningBypassPlaceholders.t()
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.RepositoryRuleViolationErrorMetadataSecretScanning do
             | nil
         }
 
-  defstruct [:__info__, :bypass_placeholders]
+  defstruct [:__info__, :__joins__, :bypass_placeholders]
 
   @doc false
   @spec __fields__(atom) :: keyword

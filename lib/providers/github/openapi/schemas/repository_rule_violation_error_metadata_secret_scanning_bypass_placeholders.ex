@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.RepositoryRuleViolationErrorMetadataSecretScanningBypass
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           placeholder_id: String.t() | nil,
           token_type: String.t() | nil
         }
 
-  defstruct [:__info__, :placeholder_id, :token_type]
+  defstruct [:__info__, :__joins__, :placeholder_id, :token_type]
 
   @doc false
   @spec __fields__(atom) :: keyword

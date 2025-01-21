@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.RepositoryRulesetConditionsRepositoryPropertySpec do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           name: String.t(),
           property_values: [String.t()],
           source: String.t() | nil
         }
 
-  defstruct [:__info__, :name, :property_values, :source]
+  defstruct [:__info__, :__joins__, :name, :property_values, :source]
 
   @doc false
   @spec __fields__(atom) :: keyword

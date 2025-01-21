@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RunnerGroupsOrg do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           allows_public_repositories: boolean,
           default: boolean,
           hosted_runners_url: String.t() | nil,
@@ -24,6 +25,7 @@ defmodule GitHubOpenAPI.RunnerGroupsOrg do
 
   defstruct [
     :__info__,
+    :__joins__,
     :allows_public_repositories,
     :default,
     :hosted_runners_url,

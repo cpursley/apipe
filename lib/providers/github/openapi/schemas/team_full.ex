@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TeamFull do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           description: String.t() | nil,
           html_url: String.t(),
@@ -29,6 +30,7 @@ defmodule GitHubOpenAPI.TeamFull do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :description,
     :html_url,

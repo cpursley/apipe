@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PullRequestSimple do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.PullRequestSimpleLinks.t(),
           active_lock_reason: String.t() | nil,
           assignee: GitHubOpenAPI.SimpleUser.t() | nil,
@@ -46,6 +47,7 @@ defmodule GitHubOpenAPI.PullRequestSimple do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :active_lock_reason,
     :assignee,

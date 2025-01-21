@@ -116,6 +116,7 @@ defmodule GitHubOpenAPI.HostedCompute do
 
   @type list_network_configurations_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           network_configurations: [GitHubOpenAPI.NetworkConfiguration.t()],
           total_count: integer
         }

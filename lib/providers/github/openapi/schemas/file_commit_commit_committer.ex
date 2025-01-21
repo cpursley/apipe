@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.FileCommitCommitCommitter do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           date: String.t() | nil,
           email: String.t() | nil,
           name: String.t() | nil
         }
 
-  defstruct [:__info__, :date, :email, :name]
+  defstruct [:__info__, :__joins__, :date, :email, :name]
 
   @doc false
   @spec __fields__(atom) :: keyword

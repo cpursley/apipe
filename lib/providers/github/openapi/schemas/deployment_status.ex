@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.DeploymentStatus do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           creator: GitHubOpenAPI.SimpleUser.t() | nil,
           deployment_url: String.t(),
@@ -25,6 +26,7 @@ defmodule GitHubOpenAPI.DeploymentStatus do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :creator,
     :deployment_url,

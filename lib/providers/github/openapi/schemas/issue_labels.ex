@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.IssueLabels do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           color: String.t() | nil,
           default: boolean | nil,
           description: String.t() | nil,
@@ -15,7 +16,7 @@ defmodule GitHubOpenAPI.IssueLabels do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :color, :default, :description, :id, :name, :node_id, :url]
+  defstruct [:__info__, :__joins__, :color, :default, :description, :id, :name, :node_id, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

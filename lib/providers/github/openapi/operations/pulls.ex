@@ -784,12 +784,14 @@ defmodule GitHubOpenAPI.Pulls do
 
   @type merge_405_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           message: String.t() | nil
         }
 
   @type merge_409_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           message: String.t() | nil
         }
@@ -975,6 +977,7 @@ defmodule GitHubOpenAPI.Pulls do
 
   @type update_branch_202_json_resp :: %{
           __info__: map,
+          __joins__: map,
           message: String.t() | nil,
           url: String.t() | nil
         }

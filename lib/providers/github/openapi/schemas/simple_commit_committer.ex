@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.SimpleCommitCommitter do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, email: String.t(), name: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, email: String.t(), name: String.t()}
 
-  defstruct [:__info__, :email, :name]
+  defstruct [:__info__, :__joins__, :email, :name]
 
   @doc false
   @spec __fields__(atom) :: keyword

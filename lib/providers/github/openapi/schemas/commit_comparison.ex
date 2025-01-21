@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CommitComparison do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           ahead_by: integer,
           base_commit: GitHubOpenAPI.Commit.t(),
           behind_by: integer,
@@ -23,6 +24,7 @@ defmodule GitHubOpenAPI.CommitComparison do
 
   defstruct [
     :__info__,
+    :__joins__,
     :ahead_by,
     :base_commit,
     :behind_by,

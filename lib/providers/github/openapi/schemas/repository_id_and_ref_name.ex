@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.RepositoryIdAndRefName do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           ref_name: map | nil,
           repository_id: GitHubOpenAPI.RepositoryIdAndRefNameRepositoryId.t() | nil
         }
 
-  defstruct [:__info__, :ref_name, :repository_id]
+  defstruct [:__info__, :__joins__, :ref_name, :repository_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Thread do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           id: String.t(),
           last_read_at: String.t() | nil,
           reason: String.t(),
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.Thread do
 
   defstruct [
     :__info__,
+    :__joins__,
     :id,
     :last_read_at,
     :reason,

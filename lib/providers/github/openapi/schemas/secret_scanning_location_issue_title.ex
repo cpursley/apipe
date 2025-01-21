@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.SecretScanningLocationIssueTitle do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, issue_title_url: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, issue_title_url: String.t()}
 
-  defstruct [:__info__, :issue_title_url]
+  defstruct [:__info__, :__joins__, :issue_title_url]
 
   @doc false
   @spec __fields__(atom) :: keyword

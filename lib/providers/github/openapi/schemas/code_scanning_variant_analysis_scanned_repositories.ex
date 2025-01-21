@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisScannedRepositories do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           analysis_status: String.t(),
           artifact_size_in_bytes: integer | nil,
           failure_message: String.t() | nil,
@@ -15,6 +16,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisScannedRepositories do
 
   defstruct [
     :__info__,
+    :__joins__,
     :analysis_status,
     :artifact_size_in_bytes,
     :failure_message,

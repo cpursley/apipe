@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.CodeScanningSarifsStatus do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           analyses_url: String.t() | nil,
           errors: [String.t()] | nil,
           processing_status: String.t() | nil
         }
 
-  defstruct [:__info__, :analyses_url, :errors, :processing_status]
+  defstruct [:__info__, :__joins__, :analyses_url, :errors, :processing_status]
 
   @doc false
   @spec __fields__(atom) :: keyword

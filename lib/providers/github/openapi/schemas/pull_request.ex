@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PullRequest do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.PullRequestLinks.t(),
           active_lock_reason: String.t() | nil,
           additions: integer,
@@ -58,6 +59,7 @@ defmodule GitHubOpenAPI.PullRequest do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :active_lock_reason,
     :additions,

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.MarketplaceListingPlan do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           accounts_url: String.t(),
           bullets: [String.t()],
           description: String.t(),
@@ -23,6 +24,7 @@ defmodule GitHubOpenAPI.MarketplaceListingPlan do
 
   defstruct [
     :__info__,
+    :__joins__,
     :accounts_url,
     :bullets,
     :description,

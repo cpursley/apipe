@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.FileExtensionRestrictionParameters do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, restricted_file_extensions: [String.t()]}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, restricted_file_extensions: [String.t()]}
 
-  defstruct [:__info__, :restricted_file_extensions]
+  defstruct [:__info__, :__joins__, :restricted_file_extensions]
 
   @doc false
   @spec __fields__(atom) :: keyword

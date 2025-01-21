@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.ContributorActivity do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: GitHubOpenAPI.SimpleUser.t() | nil,
           total: integer,
           weeks: [GitHubOpenAPI.ContributorActivityWeeks.t()]
         }
 
-  defstruct [:__info__, :author, :total, :weeks]
+  defstruct [:__info__, :__joins__, :author, :total, :weeks]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.SimpleClassroom do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           archived: boolean,
           id: integer,
           name: String.t(),
           url: String.t()
         }
 
-  defstruct [:__info__, :archived, :id, :name, :url]
+  defstruct [:__info__, :__joins__, :archived, :id, :name, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

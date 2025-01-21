@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ActionsOrganizationPermissions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           allowed_actions: String.t() | nil,
           enabled_repositories: String.t(),
           selected_actions_url: String.t() | nil,
@@ -14,6 +15,7 @@ defmodule GitHubOpenAPI.ActionsOrganizationPermissions do
 
   defstruct [
     :__info__,
+    :__joins__,
     :allowed_actions,
     :enabled_repositories,
     :selected_actions_url,

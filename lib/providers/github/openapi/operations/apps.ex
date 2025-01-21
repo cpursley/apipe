@@ -71,6 +71,7 @@ defmodule GitHubOpenAPI.Apps do
 
   @type create_from_manifest_201_json_resp :: %{
           __info__: map,
+          __joins__: map,
           client_id: String.t() | nil,
           client_secret: String.t() | nil,
           created_at: DateTime.t() | nil,
@@ -615,6 +616,7 @@ defmodule GitHubOpenAPI.Apps do
 
   @type list_installation_repos_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.Repository.t()],
           repository_selection: String.t() | nil,
           total_count: integer
@@ -736,6 +738,7 @@ defmodule GitHubOpenAPI.Apps do
 
   @type list_installations_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           installations: [GitHubOpenAPI.Installation.t()],
           total_count: integer
         }
@@ -860,6 +863,7 @@ defmodule GitHubOpenAPI.Apps do
 
   @type list_repos_accessible_to_installation_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.Repository.t()],
           repository_selection: String.t() | nil,
           total_count: integer

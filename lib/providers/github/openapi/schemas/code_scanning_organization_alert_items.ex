@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningOrganizationAlertItems do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           dismissed_at: DateTime.t() | nil,
           dismissed_by: GitHubOpenAPI.SimpleUser.t() | nil,
@@ -26,6 +27,7 @@ defmodule GitHubOpenAPI.CodeScanningOrganizationAlertItems do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :dismissed_at,
     :dismissed_by,

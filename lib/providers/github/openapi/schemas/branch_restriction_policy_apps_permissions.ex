@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.BranchRestrictionPolicyAppsPermissions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           contents: String.t() | nil,
           issues: String.t() | nil,
           metadata: String.t() | nil,
           single_file: String.t() | nil
         }
 
-  defstruct [:__info__, :contents, :issues, :metadata, :single_file]
+  defstruct [:__info__, :__joins__, :contents, :issues, :metadata, :single_file]
 
   @doc false
   @spec __fields__(atom) :: keyword

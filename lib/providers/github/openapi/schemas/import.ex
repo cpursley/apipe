@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Import do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           authors_count: integer | nil,
           authors_url: String.t(),
           commit_count: integer | nil,
@@ -33,6 +34,7 @@ defmodule GitHubOpenAPI.Import do
 
   defstruct [
     :__info__,
+    :__joins__,
     :authors_count,
     :authors_url,
     :commit_count,

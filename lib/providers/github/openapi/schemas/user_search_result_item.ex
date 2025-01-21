@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.UserSearchResultItem do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           avatar_url: String.t(),
           bio: String.t() | nil,
           blog: String.t() | nil,
@@ -45,6 +46,7 @@ defmodule GitHubOpenAPI.UserSearchResultItem do
 
   defstruct [
     :__info__,
+    :__joins__,
     :avatar_url,
     :bio,
     :blog,

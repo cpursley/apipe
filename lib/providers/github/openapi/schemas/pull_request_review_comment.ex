@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PullRequestReviewComment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.PullRequestReviewCommentLinks.t(),
           author_association: String.t(),
           body: String.t(),
@@ -39,6 +40,7 @@ defmodule GitHubOpenAPI.PullRequestReviewComment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :author_association,
     :body,

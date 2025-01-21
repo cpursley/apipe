@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.IssueComment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author_association: String.t(),
           body: String.t() | nil,
           body_html: String.t() | nil,
@@ -24,6 +25,7 @@ defmodule GitHubOpenAPI.IssueComment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author_association,
     :body,
     :body_html,

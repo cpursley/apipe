@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.PorterLargeFile do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           oid: String.t(),
           path: String.t(),
           ref_name: String.t(),
           size: integer
         }
 
-  defstruct [:__info__, :oid, :path, :ref_name, :size]
+  defstruct [:__info__, :__joins__, :oid, :path, :ref_name, :size]
 
   @doc false
   @spec __fields__(atom) :: keyword

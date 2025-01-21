@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.OidcCustomSub do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, include_claim_keys: [String.t()]}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, include_claim_keys: [String.t()]}
 
-  defstruct [:__info__, :include_claim_keys]
+  defstruct [:__info__, :__joins__, :include_claim_keys]
 
   @doc false
   @spec __fields__(atom) :: keyword

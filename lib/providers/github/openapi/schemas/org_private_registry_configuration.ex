@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrgPrivateRegistryConfiguration do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           name: String.t(),
           registry_type: String.t(),
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.OrgPrivateRegistryConfiguration do
           visibility: String.t()
         }
 
-  defstruct [:__info__, :created_at, :name, :registry_type, :updated_at, :username, :visibility]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :created_at,
+    :name,
+    :registry_type,
+    :updated_at,
+    :username,
+    :visibility
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

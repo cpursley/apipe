@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TimelineCrossReferencedEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor: GitHubOpenAPI.SimpleUser.t() | nil,
           created_at: DateTime.t(),
           event: String.t(),
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.TimelineCrossReferencedEvent do
           updated_at: DateTime.t()
         }
 
-  defstruct [:__info__, :actor, :created_at, :event, :source, :updated_at]
+  defstruct [:__info__, :__joins__, :actor, :created_at, :event, :source, :updated_at]
 
   @doc false
   @spec __fields__(atom) :: keyword

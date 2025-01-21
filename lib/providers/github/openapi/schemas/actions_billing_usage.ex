@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ActionsBillingUsage do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           included_minutes: integer,
           minutes_used_breakdown: GitHubOpenAPI.ActionsBillingUsageMinutesUsedBreakdown.t(),
           total_minutes_used: integer,
@@ -14,6 +15,7 @@ defmodule GitHubOpenAPI.ActionsBillingUsage do
 
   defstruct [
     :__info__,
+    :__joins__,
     :included_minutes,
     :minutes_used_breakdown,
     :total_minutes_used,

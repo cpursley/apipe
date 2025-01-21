@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.ContentTraffic do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           count: integer,
           path: String.t(),
           title: String.t(),
           uniques: integer
         }
 
-  defstruct [:__info__, :count, :path, :title, :uniques]
+  defstruct [:__info__, :__joins__, :count, :path, :title, :uniques]
 
   @doc false
   @spec __fields__(atom) :: keyword

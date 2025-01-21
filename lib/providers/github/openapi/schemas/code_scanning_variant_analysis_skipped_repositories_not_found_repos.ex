@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepositoriesNotFoundRe
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           repository_count: integer,
           repository_full_names: [String.t()]
         }
 
-  defstruct [:__info__, :repository_count, :repository_full_names]
+  defstruct [:__info__, :__joins__, :repository_count, :repository_full_names]
 
   @doc false
   @spec __fields__(atom) :: keyword

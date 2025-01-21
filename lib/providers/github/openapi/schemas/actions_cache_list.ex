@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.ActionsCacheList do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actions_caches: [GitHubOpenAPI.ActionsCacheListActionsCaches.t()],
           total_count: integer
         }
 
-  defstruct [:__info__, :actions_caches, :total_count]
+  defstruct [:__info__, :__joins__, :actions_caches, :total_count]
 
   @doc false
   @spec __fields__(atom) :: keyword

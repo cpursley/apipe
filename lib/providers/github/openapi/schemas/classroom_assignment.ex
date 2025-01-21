@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ClassroomAssignment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           accepted: integer,
           classroom: GitHubOpenAPI.Classroom.t(),
           deadline: DateTime.t() | nil,
@@ -29,6 +30,7 @@ defmodule GitHubOpenAPI.ClassroomAssignment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :accepted,
     :classroom,
     :deadline,

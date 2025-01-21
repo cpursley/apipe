@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SimpleClassroomRepository do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           default_branch: String.t(),
           full_name: String.t(),
           html_url: String.t(),
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.SimpleClassroomRepository do
           private: boolean
         }
 
-  defstruct [:__info__, :default_branch, :full_name, :html_url, :id, :node_id, :private]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :default_branch,
+    :full_name,
+    :html_url,
+    :id,
+    :node_id,
+    :private
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

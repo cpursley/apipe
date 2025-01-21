@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.TimelineLineCommentedEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           comments: [GitHubOpenAPI.PullRequestReviewComment.t()] | nil,
           event: String.t() | nil,
           node_id: String.t() | nil
         }
 
-  defstruct [:__info__, :comments, :event, :node_id]
+  defstruct [:__info__, :__joins__, :comments, :event, :node_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

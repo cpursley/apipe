@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.RepositoryRuleViolationError do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           message: String.t() | nil,
           metadata: GitHubOpenAPI.RepositoryRuleViolationErrorMetadata.t() | nil,
           status: String.t() | nil
         }
 
-  defstruct [:__info__, :documentation_url, :message, :metadata, :status]
+  defstruct [:__info__, :__joins__, :documentation_url, :message, :metadata, :status]
 
   @doc false
   @spec __fields__(atom) :: keyword

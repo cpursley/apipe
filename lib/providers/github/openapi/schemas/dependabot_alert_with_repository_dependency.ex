@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.DependabotAlertWithRepositoryDependency do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           manifest_path: String.t() | nil,
           package: GitHubOpenAPI.DependabotAlertPackage.t() | nil,
           scope: String.t() | nil
         }
 
-  defstruct [:__info__, :manifest_path, :package, :scope]
+  defstruct [:__info__, :__joins__, :manifest_path, :package, :scope]
 
   @doc false
   @spec __fields__(atom) :: keyword

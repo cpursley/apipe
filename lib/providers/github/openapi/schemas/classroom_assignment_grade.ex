@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ClassroomAssignmentGrade do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           assignment_name: String.t(),
           assignment_url: String.t(),
           github_username: String.t(),
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.ClassroomAssignmentGrade do
 
   defstruct [
     :__info__,
+    :__joins__,
     :assignment_name,
     :assignment_url,
     :github_username,

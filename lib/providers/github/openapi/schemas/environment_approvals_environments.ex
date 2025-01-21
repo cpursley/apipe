@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.EnvironmentApprovalsEnvironments do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t() | nil,
           html_url: String.t() | nil,
           id: integer | nil,
@@ -15,7 +16,17 @@ defmodule GitHubOpenAPI.EnvironmentApprovalsEnvironments do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :created_at, :html_url, :id, :name, :node_id, :updated_at, :url]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :created_at,
+    :html_url,
+    :id,
+    :name,
+    :node_id,
+    :updated_at,
+    :url
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

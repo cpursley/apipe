@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Workflow do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           badge_url: String.t(),
           created_at: DateTime.t(),
           deleted_at: DateTime.t() | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.Workflow do
 
   defstruct [
     :__info__,
+    :__joins__,
     :badge_url,
     :created_at,
     :deleted_at,

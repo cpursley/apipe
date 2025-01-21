@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.GpgKeySubkeys do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           can_certify: boolean | nil,
           can_encrypt_comms: boolean | nil,
           can_encrypt_storage: boolean | nil,
@@ -24,6 +25,7 @@ defmodule GitHubOpenAPI.GpgKeySubkeys do
 
   defstruct [
     :__info__,
+    :__joins__,
     :can_certify,
     :can_encrypt_comms,
     :can_encrypt_storage,

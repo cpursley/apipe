@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryCreateVulnerabilitiesPackage do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, ecosystem: String.t(), name: String.t() | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          ecosystem: String.t(),
+          name: String.t() | nil
+        }
 
-  defstruct [:__info__, :ecosystem, :name]
+  defstruct [:__info__, :__joins__, :ecosystem, :name]
 
   @doc false
   @spec __fields__(atom) :: keyword

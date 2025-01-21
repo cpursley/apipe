@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.Autolink do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           id: integer,
           is_alphanumeric: boolean,
           key_prefix: String.t(),
           url_template: String.t()
         }
 
-  defstruct [:__info__, :id, :is_alphanumeric, :key_prefix, :url_template]
+  defstruct [:__info__, :__joins__, :id, :is_alphanumeric, :key_prefix, :url_template]
 
   @doc false
   @spec __fields__(atom) :: keyword

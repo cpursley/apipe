@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.MinimalRepositoryLicense do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           key: String.t() | nil,
           name: String.t() | nil,
           node_id: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.MinimalRepositoryLicense do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :key, :name, :node_id, :spdx_id, :url]
+  defstruct [:__info__, :__joins__, :key, :name, :node_id, :spdx_id, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

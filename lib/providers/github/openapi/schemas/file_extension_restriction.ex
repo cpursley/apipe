@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.FileExtensionRestriction do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           parameters: GitHubOpenAPI.FileExtensionRestrictionParameters.t() | nil,
           type: String.t()
         }
 
-  defstruct [:__info__, :parameters, :type]
+  defstruct [:__info__, :__joins__, :parameters, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.MinimalRepository do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           allow_forking: boolean | nil,
           archive_url: String.t(),
           archived: boolean | nil,
@@ -97,6 +98,7 @@ defmodule GitHubOpenAPI.MinimalRepository do
 
   defstruct [
     :__info__,
+    :__joins__,
     :allow_forking,
     :archive_url,
     :archived,

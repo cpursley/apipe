@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.DeployKey do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           added_by: String.t() | nil,
           created_at: String.t(),
           enabled: boolean | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.DeployKey do
 
   defstruct [
     :__info__,
+    :__joins__,
     :added_by,
     :created_at,
     :enabled,

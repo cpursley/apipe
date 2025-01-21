@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.ValidationErrorSimple do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t(),
           errors: [String.t()] | nil,
           message: String.t()
         }
 
-  defstruct [:__info__, :documentation_url, :errors, :message]
+  defstruct [:__info__, :__joins__, :documentation_url, :errors, :message]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Integration do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           client_id: String.t() | nil,
           client_secret: String.t() | nil,
           created_at: DateTime.t(),
@@ -27,6 +28,7 @@ defmodule GitHubOpenAPI.Integration do
 
   defstruct [
     :__info__,
+    :__joins__,
     :client_id,
     :client_secret,
     :created_at,

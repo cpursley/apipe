@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.ContentSymlinkLinks do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           git: String.t() | nil,
           html: String.t() | nil,
           self: String.t()
         }
 
-  defstruct [:__info__, :git, :html, :self]
+  defstruct [:__info__, :__joins__, :git, :html, :self]
 
   @doc false
   @spec __fields__(atom) :: keyword

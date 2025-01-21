@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.KeySimple do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, id: integer, key: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, id: integer, key: String.t()}
 
-  defstruct [:__info__, :id, :key]
+  defstruct [:__info__, :__joins__, :id, :key]
 
   @doc false
   @spec __fields__(atom) :: keyword

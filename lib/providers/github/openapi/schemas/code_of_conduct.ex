@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeOfConduct do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           body: String.t() | nil,
           html_url: String.t() | nil,
           key: String.t(),
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.CodeOfConduct do
           url: String.t()
         }
 
-  defstruct [:__info__, :body, :html_url, :key, :name, :url]
+  defstruct [:__info__, :__joins__, :body, :html_url, :key, :name, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

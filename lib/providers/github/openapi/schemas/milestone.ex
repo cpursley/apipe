@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Milestone do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           closed_at: DateTime.t() | nil,
           closed_issues: integer,
           created_at: DateTime.t(),
@@ -26,6 +27,7 @@ defmodule GitHubOpenAPI.Milestone do
 
   defstruct [
     :__info__,
+    :__joins__,
     :closed_at,
     :closed_issues,
     :created_at,

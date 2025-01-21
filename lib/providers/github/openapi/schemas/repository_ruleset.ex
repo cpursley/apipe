@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RepositoryRuleset do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.RepositoryRulesetLinks.t() | nil,
           bypass_actors: [GitHubOpenAPI.RepositoryRulesetBypassActor.t()] | nil,
           conditions:
@@ -53,6 +54,7 @@ defmodule GitHubOpenAPI.RepositoryRuleset do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :bypass_actors,
     :conditions,

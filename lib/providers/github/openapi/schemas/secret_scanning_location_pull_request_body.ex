@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.SecretScanningLocationPullRequestBody do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, pull_request_body_url: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, pull_request_body_url: String.t()}
 
-  defstruct [:__info__, :pull_request_body_url]
+  defstruct [:__info__, :__joins__, :pull_request_body_url]
 
   @doc false
   @spec __fields__(atom) :: keyword

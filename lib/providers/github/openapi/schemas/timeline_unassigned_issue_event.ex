@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TimelineUnassignedIssueEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor: GitHubOpenAPI.SimpleUser.t(),
           assignee: GitHubOpenAPI.SimpleUser.t(),
           commit_id: String.t() | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.TimelineUnassignedIssueEvent do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actor,
     :assignee,
     :commit_id,

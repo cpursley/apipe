@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysis do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actions_workflow_run_id: integer | nil,
           actor: GitHubOpenAPI.SimpleUser.t(),
           completed_at: DateTime.t() | nil,
@@ -25,6 +26,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysis do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actions_workflow_run_id,
     :actor,
     :completed_at,

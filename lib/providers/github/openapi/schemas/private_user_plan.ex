@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.PrivateUserPlan do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           collaborators: integer,
           name: String.t(),
           private_repos: integer,
           space: integer
         }
 
-  defstruct [:__info__, :collaborators, :name, :private_repos, :space]
+  defstruct [:__info__, :__joins__, :collaborators, :name, :private_repos, :space]
 
   @doc false
   @spec __fields__(atom) :: keyword

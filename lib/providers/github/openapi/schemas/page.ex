@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Page do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           build_type: String.t() | nil,
           cname: String.t() | nil,
           custom_404: boolean,
@@ -22,6 +23,7 @@ defmodule GitHubOpenAPI.Page do
 
   defstruct [
     :__info__,
+    :__joins__,
     :build_type,
     :cname,
     :custom_404,

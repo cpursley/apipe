@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.BillingUsageReportUsageItems do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           date: String.t(),
           discountAmount: number,
           grossAmount: number,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.BillingUsageReportUsageItems do
 
   defstruct [
     :__info__,
+    :__joins__,
     :date,
     :discountAmount,
     :grossAmount,

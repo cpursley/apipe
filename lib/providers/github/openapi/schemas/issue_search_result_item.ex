@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.IssueSearchResultItem do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           active_lock_reason: String.t() | nil,
           assignee: GitHubOpenAPI.SimpleUser.t() | nil,
           assignees: [GitHubOpenAPI.SimpleUser.t()] | nil,
@@ -46,6 +47,7 @@ defmodule GitHubOpenAPI.IssueSearchResultItem do
 
   defstruct [
     :__info__,
+    :__joins__,
     :active_lock_reason,
     :assignee,
     :assignees,

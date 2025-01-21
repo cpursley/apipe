@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.RepositoryRuleParamsCodeScanningTool do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           alerts_threshold: String.t(),
           security_alerts_threshold: String.t(),
           tool: String.t()
         }
 
-  defstruct [:__info__, :alerts_threshold, :security_alerts_threshold, :tool]
+  defstruct [:__info__, :__joins__, :alerts_threshold, :security_alerts_threshold, :tool]
 
   @doc false
   @spec __fields__(atom) :: keyword

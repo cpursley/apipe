@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.FileCommit do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           commit: GitHubOpenAPI.FileCommitCommit.t(),
           content: GitHubOpenAPI.FileCommitContent.t() | nil
         }
 
-  defstruct [:__info__, :commit, :content]
+  defstruct [:__info__, :__joins__, :commit, :content]
 
   @doc false
   @spec __fields__(atom) :: keyword

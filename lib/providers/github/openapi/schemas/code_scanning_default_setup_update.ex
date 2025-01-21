@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningDefaultSetupUpdate do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           languages: [String.t()] | nil,
           query_suite: String.t() | nil,
           runner_label: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.CodeScanningDefaultSetupUpdate do
           state: String.t() | nil
         }
 
-  defstruct [:__info__, :languages, :query_suite, :runner_label, :runner_type, :state]
+  defstruct [:__info__, :__joins__, :languages, :query_suite, :runner_label, :runner_type, :state]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.FileCommitCommitVerification do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           payload: String.t() | nil,
           reason: String.t() | nil,
           signature: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.FileCommitCommitVerification do
           verified_at: String.t() | nil
         }
 
-  defstruct [:__info__, :payload, :reason, :signature, :verified, :verified_at]
+  defstruct [:__info__, :__joins__, :payload, :reason, :signature, :verified, :verified_at]
 
   @doc false
   @spec __fields__(atom) :: keyword

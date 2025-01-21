@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.SubIssuesSummary do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           completed: integer,
           percent_completed: integer,
           total: integer
         }
 
-  defstruct [:__info__, :completed, :percent_completed, :total]
+  defstruct [:__info__, :__joins__, :completed, :percent_completed, :total]
 
   @doc false
   @spec __fields__(atom) :: keyword

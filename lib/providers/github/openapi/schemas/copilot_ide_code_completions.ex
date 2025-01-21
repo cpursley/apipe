@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.CopilotIdeCodeCompletions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           editors: [GitHubOpenAPI.CopilotIdeCodeCompletionsEditors.t()] | nil,
           languages: [GitHubOpenAPI.CopilotIdeCodeCompletionsLanguages.t()] | nil,
           total_engaged_users: integer | nil
         }
 
-  defstruct [:__info__, :editors, :languages, :total_engaged_users]
+  defstruct [:__info__, :__joins__, :editors, :languages, :total_engaged_users]
 
   @doc false
   @spec __fields__(atom) :: keyword

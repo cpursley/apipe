@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.CodespacesPermissionsCheckForDevcontainer do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, accepted: boolean}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, accepted: boolean}
 
-  defstruct [:__info__, :accepted]
+  defstruct [:__info__, :__joins__, :accepted]
 
   @doc false
   @spec __fields__(atom) :: keyword

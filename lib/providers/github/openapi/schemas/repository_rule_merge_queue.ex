@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.RepositoryRuleMergeQueue do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, parameters: map | nil, type: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, parameters: map | nil, type: String.t()}
 
-  defstruct [:__info__, :parameters, :type]
+  defstruct [:__info__, :__joins__, :parameters, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

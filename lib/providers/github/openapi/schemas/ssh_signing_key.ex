@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.SshSigningKey do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           id: integer,
           key: String.t(),
           title: String.t()
         }
 
-  defstruct [:__info__, :created_at, :id, :key, :title]
+  defstruct [:__info__, :__joins__, :created_at, :id, :key, :title]
 
   @doc false
   @spec __fields__(atom) :: keyword

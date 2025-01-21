@@ -4,9 +4,15 @@ defmodule GitHubOpenAPI.TeamMembership do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, role: String.t(), state: String.t(), url: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          role: String.t(),
+          state: String.t(),
+          url: String.t()
+        }
 
-  defstruct [:__info__, :role, :state, :url]
+  defstruct [:__info__, :__joins__, :role, :state, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

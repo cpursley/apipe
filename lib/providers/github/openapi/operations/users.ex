@@ -781,6 +781,7 @@ defmodule GitHubOpenAPI.Users do
 
   @type list_attestations_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           attestations: [GitHubOpenAPI.UsersAttestations.list_attestations_200_json_resp()] | nil
         }
 

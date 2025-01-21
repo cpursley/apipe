@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CheckSuite do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           after: String.t() | nil,
           app: GitHubOpenAPI.Integration.t() | nil,
           before: String.t() | nil,
@@ -29,6 +30,7 @@ defmodule GitHubOpenAPI.CheckSuite do
 
   defstruct [
     :__info__,
+    :__joins__,
     :after,
     :app,
     :before,

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ProjectCard do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           archived: boolean | nil,
           column_name: String.t() | nil,
           column_url: String.t(),
@@ -23,6 +24,7 @@ defmodule GitHubOpenAPI.ProjectCard do
 
   defstruct [
     :__info__,
+    :__joins__,
     :archived,
     :column_name,
     :column_url,

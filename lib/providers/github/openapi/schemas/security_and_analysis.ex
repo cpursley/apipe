@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SecurityAndAnalysis do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           advanced_security: GitHubOpenAPI.SecurityAndAnalysisAdvancedSecurity.t() | nil,
           dependabot_security_updates:
             GitHubOpenAPI.SecurityAndAnalysisDependabotSecurityUpdates.t() | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.SecurityAndAnalysis do
 
   defstruct [
     :__info__,
+    :__joins__,
     :advanced_security,
     :dependabot_security_updates,
     :secret_scanning,

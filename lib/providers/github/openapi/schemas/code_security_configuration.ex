@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeSecurityConfiguration do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           advanced_security: String.t() | nil,
           code_scanning_default_setup: String.t() | nil,
           code_scanning_default_setup_options:
@@ -38,6 +39,7 @@ defmodule GitHubOpenAPI.CodeSecurityConfiguration do
 
   defstruct [
     :__info__,
+    :__joins__,
     :advanced_security,
     :code_scanning_default_setup,
     :code_scanning_default_setup_options,

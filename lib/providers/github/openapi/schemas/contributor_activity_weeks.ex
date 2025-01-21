@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.ContributorActivityWeeks do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           a: integer | nil,
           c: integer | nil,
           d: integer | nil,
           w: integer | nil
         }
 
-  defstruct [:__info__, :a, :c, :d, :w]
+  defstruct [:__info__, :__joins__, :a, :c, :d, :w]
 
   @doc false
   @spec __fields__(atom) :: keyword

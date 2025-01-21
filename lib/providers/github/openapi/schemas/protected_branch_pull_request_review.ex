@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ProtectedBranchPullRequestReview do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           bypass_pull_request_allowances:
             GitHubOpenAPI.ProtectedBranchPullRequestReviewBypassPullRequestAllowances.t() | nil,
           dismiss_stale_reviews: boolean,
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.ProtectedBranchPullRequestReview do
 
   defstruct [
     :__info__,
+    :__joins__,
     :bypass_pull_request_allowances,
     :dismiss_stale_reviews,
     :dismissal_restrictions,

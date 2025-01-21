@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ArtifactWorkflowRun do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           head_branch: String.t() | nil,
           head_repository_id: integer | nil,
           head_sha: String.t() | nil,
@@ -13,7 +14,15 @@ defmodule GitHubOpenAPI.ArtifactWorkflowRun do
           repository_id: integer | nil
         }
 
-  defstruct [:__info__, :head_branch, :head_repository_id, :head_sha, :id, :repository_id]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :head_branch,
+    :head_repository_id,
+    :head_sha,
+    :id,
+    :repository_id
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

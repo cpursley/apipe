@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.StatusCheckPolicy do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           checks: [GitHubOpenAPI.StatusCheckPolicyChecks.t()],
           contexts: [String.t()],
           contexts_url: String.t(),
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.StatusCheckPolicy do
           url: String.t()
         }
 
-  defstruct [:__info__, :checks, :contexts, :contexts_url, :strict, :url]
+  defstruct [:__info__, :__joins__, :checks, :contexts, :contexts_url, :strict, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

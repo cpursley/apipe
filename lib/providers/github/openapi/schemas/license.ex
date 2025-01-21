@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.License do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           body: String.t(),
           conditions: [String.t()],
           description: String.t(),
@@ -23,6 +24,7 @@ defmodule GitHubOpenAPI.License do
 
   defstruct [
     :__info__,
+    :__joins__,
     :body,
     :conditions,
     :description,

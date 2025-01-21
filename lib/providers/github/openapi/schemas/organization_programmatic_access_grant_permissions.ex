@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrganizationProgrammaticAccessGrantPermissions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           organization:
             GitHubOpenAPI.OrganizationProgrammaticAccessGrantPermissionsOrganization.t() | nil,
           other: GitHubOpenAPI.OrganizationProgrammaticAccessGrantPermissionsOther.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.OrganizationProgrammaticAccessGrantPermissions do
             GitHubOpenAPI.OrganizationProgrammaticAccessGrantPermissionsRepository.t() | nil
         }
 
-  defstruct [:__info__, :organization, :other, :repository]
+  defstruct [:__info__, :__joins__, :organization, :other, :repository]
 
   @doc false
   @spec __fields__(atom) :: keyword

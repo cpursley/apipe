@@ -6,10 +6,11 @@ defmodule GitHubOpenAPI.BillingUsageReport do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           usageItems: [GitHubOpenAPI.BillingUsageReportUsageItems.t()] | nil
         }
 
-  defstruct [:__info__, :usageItems]
+  defstruct [:__info__, :__joins__, :usageItems]
 
   @doc false
   @spec __fields__(atom) :: keyword

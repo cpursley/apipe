@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntries do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           canonicalizedBody: String.t() | nil,
           inclusionPromise:
             GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntriesInclusionPromise.t() | nil,
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntries do
 
   defstruct [
     :__info__,
+    :__joins__,
     :canonicalizedBody,
     :inclusionPromise,
     :inclusionProof,

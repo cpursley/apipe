@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.ParticipationStats do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, all: [integer], owner: [integer]}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, all: [integer], owner: [integer]}
 
-  defstruct [:__info__, :all, :owner]
+  defstruct [:__info__, :__joins__, :all, :owner]
 
   @doc false
   @spec __fields__(atom) :: keyword

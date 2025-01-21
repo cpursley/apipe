@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TimelineCommentEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor: GitHubOpenAPI.SimpleUser.t(),
           author_association: String.t(),
           body: String.t() | nil,
@@ -26,6 +27,7 @@ defmodule GitHubOpenAPI.TimelineCommentEvent do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actor,
     :author_association,
     :body,

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Project do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           body: String.t() | nil,
           columns_url: String.t(),
           created_at: DateTime.t(),
@@ -25,6 +26,7 @@ defmodule GitHubOpenAPI.Project do
 
   defstruct [
     :__info__,
+    :__joins__,
     :body,
     :columns_url,
     :created_at,

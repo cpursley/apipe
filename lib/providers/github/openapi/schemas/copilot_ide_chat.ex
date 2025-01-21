@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.CopilotIdeChat do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           editors: [GitHubOpenAPI.CopilotIdeChatEditors.t()] | nil,
           total_engaged_users: integer | nil
         }
 
-  defstruct [:__info__, :editors, :total_engaged_users]
+  defstruct [:__info__, :__joins__, :editors, :total_engaged_users]
 
   @doc false
   @spec __fields__(atom) :: keyword

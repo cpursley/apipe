@@ -1516,6 +1516,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type get_actions_cache_usage_by_repo_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repository_cache_usages: [GitHubOpenAPI.ActionsCacheUsageByRepository.t()],
           total_count: integer
         }
@@ -1937,6 +1938,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type get_hosted_runners_github_owned_images_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           images: [GitHubOpenAPI.ActionsHostedRunnerImage.t()],
           total_count: integer
         }
@@ -1995,6 +1997,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type get_hosted_runners_machine_specs_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           machine_specs: [GitHubOpenAPI.ActionsHostedRunnerMachineSpec.t()],
           total_count: integer
         }
@@ -2027,6 +2030,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type get_hosted_runners_partner_images_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           images: [GitHubOpenAPI.ActionsHostedRunnerImage.t()],
           total_count: integer
         }
@@ -2059,6 +2063,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type get_hosted_runners_platforms_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           platforms: [String.t()],
           total_count: integer
         }
@@ -2626,6 +2631,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_artifacts_for_repo_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           artifacts: [GitHubOpenAPI.Artifact.t()],
           total_count: integer
         }
@@ -2668,6 +2674,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_environment_secrets_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.ActionsSecret.t()],
           total_count: integer
         }
@@ -2711,6 +2718,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_environment_variables_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           total_count: integer,
           variables: [GitHubOpenAPI.ActionsVariable.t()]
         }
@@ -2753,6 +2761,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_github_hosted_runners_in_group_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           runners: [GitHubOpenAPI.ActionsHostedRunner.t()],
           total_count: number
         }
@@ -2795,6 +2804,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_hosted_runners_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           runners: [GitHubOpenAPI.ActionsHostedRunner.t()],
           total_count: integer
         }
@@ -2834,6 +2844,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_jobs_for_workflow_run_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           jobs: [GitHubOpenAPI.Job.t()],
           total_count: integer
         }
@@ -2878,6 +2889,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_jobs_for_workflow_run_attempt_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           jobs: [GitHubOpenAPI.Job.t()],
           total_count: integer
         }
@@ -2990,6 +3002,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_org_secrets_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.OrganizationActionsSecret.t()],
           total_count: integer
         }
@@ -3032,6 +3045,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_org_variables_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           total_count: integer,
           variables: [GitHubOpenAPI.OrganizationActionsVariable.t()]
         }
@@ -3073,6 +3087,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_repo_access_to_self_hosted_runner_group_in_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.MinimalRepository.t()],
           total_count: number
         }
@@ -3117,6 +3132,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_repo_organization_secrets_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.ActionsSecret.t()],
           total_count: integer
         }
@@ -3159,6 +3175,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_repo_organization_variables_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           total_count: integer,
           variables: [GitHubOpenAPI.ActionsVariable.t()]
         }
@@ -3200,6 +3217,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_repo_secrets_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.ActionsSecret.t()],
           total_count: integer
         }
@@ -3242,6 +3260,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_repo_variables_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           total_count: integer,
           variables: [GitHubOpenAPI.ActionsVariable.t()]
         }
@@ -3283,6 +3302,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_repo_workflows_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           total_count: integer,
           workflows: [GitHubOpenAPI.Workflow.t()]
         }
@@ -3382,6 +3402,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_selected_repos_for_org_secret_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.MinimalRepository.t()],
           total_count: integer
         }
@@ -3426,6 +3447,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_selected_repos_for_org_variable_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.MinimalRepository.t()],
           total_count: integer
         }
@@ -3472,6 +3494,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_selected_repositories_enabled_github_actions_organization_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.Repository.t()],
           total_count: number
         }
@@ -3517,6 +3540,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_self_hosted_runner_groups_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           runner_groups: [GitHubOpenAPI.RunnerGroupsOrg.t()],
           total_count: number
         }
@@ -3559,6 +3583,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_self_hosted_runners_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           runners: [GitHubOpenAPI.Runner.t()],
           total_count: integer
         }
@@ -3601,6 +3626,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_self_hosted_runners_for_repo_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           runners: [GitHubOpenAPI.Runner.t()],
           total_count: integer
         }
@@ -3643,6 +3669,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_self_hosted_runners_in_group_for_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           runners: [GitHubOpenAPI.Runner.t()],
           total_count: number
         }
@@ -3685,6 +3712,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_workflow_run_artifacts_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           artifacts: [GitHubOpenAPI.Artifact.t()],
           total_count: integer
         }
@@ -3728,6 +3756,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_workflow_runs_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           total_count: integer,
           workflow_runs: [GitHubOpenAPI.WorkflowRun.t()]
         }
@@ -3793,6 +3822,7 @@ defmodule GitHubOpenAPI.Actions do
 
   @type list_workflow_runs_for_repo_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           total_count: integer,
           workflow_runs: [GitHubOpenAPI.WorkflowRun.t()]
         }

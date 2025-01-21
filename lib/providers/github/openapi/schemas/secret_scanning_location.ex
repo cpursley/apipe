@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SecretScanningLocation do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           details:
             GitHubOpenAPI.SecretScanningLocationCommit.t()
             | GitHubOpenAPI.SecretScanningLocationDiscussionBody.t()
@@ -24,7 +25,7 @@ defmodule GitHubOpenAPI.SecretScanningLocation do
           type: String.t() | nil
         }
 
-  defstruct [:__info__, :details, :type]
+  defstruct [:__info__, :__joins__, :details, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

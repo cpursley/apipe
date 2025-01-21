@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ActionsPublicKey do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: String.t() | nil,
           id: integer | nil,
           key: String.t(),
@@ -14,7 +15,7 @@ defmodule GitHubOpenAPI.ActionsPublicKey do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :created_at, :id, :key, :key_id, :title, :url]
+  defstruct [:__info__, :__joins__, :created_at, :id, :key, :key_id, :title, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -4,9 +4,15 @@ defmodule GitHubOpenAPI.GitRefObject do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, sha: String.t(), type: String.t(), url: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          sha: String.t(),
+          type: String.t(),
+          url: String.t()
+        }
 
-  defstruct [:__info__, :sha, :type, :url]
+  defstruct [:__info__, :__joins__, :sha, :type, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

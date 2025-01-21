@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Tag do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           commit: GitHubOpenAPI.TagCommit.t(),
           name: String.t(),
           node_id: String.t(),
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.Tag do
           zipball_url: String.t()
         }
 
-  defstruct [:__info__, :commit, :name, :node_id, :tarball_url, :zipball_url]
+  defstruct [:__info__, :__joins__, :commit, :name, :node_id, :tarball_url, :zipball_url]
 
   @doc false
   @spec __fields__(atom) :: keyword

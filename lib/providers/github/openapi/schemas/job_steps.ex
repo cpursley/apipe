@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.JobSteps do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           completed_at: DateTime.t() | nil,
           conclusion: String.t() | nil,
           name: String.t(),
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.JobSteps do
           status: String.t()
         }
 
-  defstruct [:__info__, :completed_at, :conclusion, :name, :number, :started_at, :status]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :completed_at,
+    :conclusion,
+    :name,
+    :number,
+    :started_at,
+    :status
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.PagesHttpsCertificate do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           description: String.t(),
           domains: [String.t()],
           expires_at: Date.t() | nil,
           state: String.t()
         }
 
-  defstruct [:__info__, :description, :domains, :expires_at, :state]
+  defstruct [:__info__, :__joins__, :description, :domains, :expires_at, :state]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -840,7 +840,11 @@ defmodule GitHubOpenAPI.Activity do
     })
   end
 
-  @type mark_notifications_as_read_202_json_resp :: %{__info__: map, message: String.t() | nil}
+  @type mark_notifications_as_read_202_json_resp :: %{
+          __info__: map,
+          __joins__: map,
+          message: String.t() | nil
+        }
 
   @doc """
   Mark notifications as read
@@ -877,6 +881,7 @@ defmodule GitHubOpenAPI.Activity do
 
   @type mark_repo_notifications_as_read_202_json_resp :: %{
           __info__: map,
+          __joins__: map,
           message: String.t() | nil,
           url: String.t() | nil
         }
@@ -1086,6 +1091,7 @@ defmodule GitHubOpenAPI.Activity do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           activity_type: String.t(),
           actor: GitHubOpenAPI.SimpleUser.t() | nil,
           after: String.t(),
@@ -1096,7 +1102,18 @@ defmodule GitHubOpenAPI.Activity do
           timestamp: DateTime.t()
         }
 
-  defstruct [:__info__, :activity_type, :actor, :after, :before, :id, :node_id, :ref, :timestamp]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :activity_type,
+    :actor,
+    :after,
+    :before,
+    :id,
+    :node_id,
+    :ref,
+    :timestamp
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

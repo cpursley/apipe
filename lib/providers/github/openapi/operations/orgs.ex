@@ -215,7 +215,7 @@ defmodule GitHubOpenAPI.Orgs do
     })
   end
 
-  @type convert_member_to_outside_collaborator_202_json_resp :: %{__info__: map}
+  @type convert_member_to_outside_collaborator_202_json_resp :: %{__info__: map, __joins__: map}
 
   @doc """
   Convert an organization member to outside collaborator
@@ -1207,6 +1207,7 @@ defmodule GitHubOpenAPI.Orgs do
 
   @type list_app_installations_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           installations: [GitHubOpenAPI.Installation.t()],
           total_count: integer
         }
@@ -1249,6 +1250,7 @@ defmodule GitHubOpenAPI.Orgs do
 
   @type list_attestations_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           attestations: [GitHubOpenAPI.OrgsAttestations.list_attestations_200_json_resp()] | nil
         }
 
@@ -1653,6 +1655,7 @@ defmodule GitHubOpenAPI.Orgs do
 
   @type list_org_roles_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           roles: [GitHubOpenAPI.OrganizationRole.t()] | nil,
           total_count: integer | nil
         }
@@ -2263,6 +2266,7 @@ defmodule GitHubOpenAPI.Orgs do
 
   @type remove_outside_collaborator_422_json_resp :: %{
           __info__: map,
+          __joins__: map,
           documentation_url: String.t() | nil,
           message: String.t() | nil
         }

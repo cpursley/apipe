@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CopilotUsageMetrics do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           breakdown: [map] | nil,
           day: Date.t(),
           total_acceptances_count: integer | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.CopilotUsageMetrics do
 
   defstruct [
     :__info__,
+    :__joins__,
     :breakdown,
     :day,
     :total_acceptances_count,

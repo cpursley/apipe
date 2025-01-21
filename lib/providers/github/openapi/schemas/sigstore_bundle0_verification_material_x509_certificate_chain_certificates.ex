@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialX509CertificateChainC
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, rawBytes: String.t() | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, rawBytes: String.t() | nil}
 
-  defstruct [:__info__, :rawBytes]
+  defstruct [:__info__, :__joins__, :rawBytes]
 
   @doc false
   @spec __fields__(atom) :: keyword

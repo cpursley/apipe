@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.RateLimitOverview do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           rate: GitHubOpenAPI.RateLimit.t(),
           resources: GitHubOpenAPI.RateLimitOverviewResources.t()
         }
 
-  defstruct [:__info__, :rate, :resources]
+  defstruct [:__info__, :__joins__, :rate, :resources]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.RenamedIssueEventRename do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, from: String.t(), to: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, from: String.t(), to: String.t()}
 
-  defstruct [:__info__, :from, :to]
+  defstruct [:__info__, :__joins__, :from, :to]
 
   @doc false
   @spec __fields__(atom) :: keyword

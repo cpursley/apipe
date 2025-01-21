@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.RepositoryRuleParamsWorkflowFileReference do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           path: String.t(),
           ref: String.t() | nil,
           repository_id: integer,
           sha: String.t() | nil
         }
 
-  defstruct [:__info__, :path, :ref, :repository_id, :sha]
+  defstruct [:__info__, :__joins__, :path, :ref, :repository_id, :sha]
 
   @doc false
   @spec __fields__(atom) :: keyword

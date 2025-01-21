@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RunnerApplication do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           architecture: String.t(),
           download_url: String.t(),
           filename: String.t(),
@@ -16,6 +17,7 @@ defmodule GitHubOpenAPI.RunnerApplication do
 
   defstruct [
     :__info__,
+    :__joins__,
     :architecture,
     :download_url,
     :filename,

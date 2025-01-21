@@ -9,10 +9,11 @@ defmodule GitHubOpenAPI.ApiOverviewSshKeyFingerprints do
           SHA256_ECDSA: String.t() | nil,
           SHA256_ED25519: String.t() | nil,
           SHA256_RSA: String.t() | nil,
-          __info__: map
+          __info__: map,
+          __joins__: map
         }
 
-  defstruct [:SHA256_DSA, :SHA256_ECDSA, :SHA256_ED25519, :SHA256_RSA, :__info__]
+  defstruct [:SHA256_DSA, :SHA256_ECDSA, :SHA256_ED25519, :SHA256_RSA, :__info__, :__joins__]
 
   @doc false
   @spec __fields__(atom) :: keyword

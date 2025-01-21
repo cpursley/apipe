@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SearchResultTextMatches do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           fragment: String.t() | nil,
           matches: [GitHubOpenAPI.SearchResultTextMatchesMatches.t()] | nil,
           object_type: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.SearchResultTextMatches do
           property: String.t() | nil
         }
 
-  defstruct [:__info__, :fragment, :matches, :object_type, :object_url, :property]
+  defstruct [:__info__, :__joins__, :fragment, :matches, :object_type, :object_url, :property]
 
   @doc false
   @spec __fields__(atom) :: keyword

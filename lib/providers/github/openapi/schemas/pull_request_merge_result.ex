@@ -4,9 +4,15 @@ defmodule GitHubOpenAPI.PullRequestMergeResult do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, merged: boolean, message: String.t(), sha: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          merged: boolean,
+          message: String.t(),
+          sha: String.t()
+        }
 
-  defstruct [:__info__, :merged, :message, :sha]
+  defstruct [:__info__, :__joins__, :merged, :message, :sha]
 
   @doc false
   @spec __fields__(atom) :: keyword

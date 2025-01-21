@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.RepositoryPropertyAndRefNameRepositoryProperty do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           exclude: [GitHubOpenAPI.RepositoryRulesetConditionsRepositoryPropertySpec.t()] | nil,
           include: [GitHubOpenAPI.RepositoryRulesetConditionsRepositoryPropertySpec.t()] | nil
         }
 
-  defstruct [:__info__, :exclude, :include]
+  defstruct [:__info__, :__joins__, :exclude, :include]
 
   @doc false
   @spec __fields__(atom) :: keyword

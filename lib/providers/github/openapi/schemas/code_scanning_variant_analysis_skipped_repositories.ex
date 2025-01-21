@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepositories do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           access_mismatch_repos: GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepoGroup.t(),
           no_codeql_db_repos: GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepoGroup.t(),
           not_found_repos:
@@ -15,6 +16,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepositories do
 
   defstruct [
     :__info__,
+    :__joins__,
     :access_mismatch_repos,
     :no_codeql_db_repos,
     :not_found_repos,

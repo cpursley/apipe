@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntriesInclusionP
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, signedEntryTimestamp: String.t() | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, signedEntryTimestamp: String.t() | nil}
 
-  defstruct [:__info__, :signedEntryTimestamp]
+  defstruct [:__info__, :__joins__, :signedEntryTimestamp]
 
   @doc false
   @spec __fields__(atom) :: keyword

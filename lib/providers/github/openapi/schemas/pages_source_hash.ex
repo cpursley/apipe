@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.PagesSourceHash do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, branch: String.t(), path: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, branch: String.t(), path: String.t()}
 
-  defstruct [:__info__, :branch, :path]
+  defstruct [:__info__, :__joins__, :branch, :path]
 
   @doc false
   @spec __fields__(atom) :: keyword

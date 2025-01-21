@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ShortBranch do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           commit: GitHubOpenAPI.ShortBranchCommit.t(),
           name: String.t(),
           protected: boolean,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.ShortBranch do
           protection_url: String.t() | nil
         }
 
-  defstruct [:__info__, :commit, :name, :protected, :protection, :protection_url]
+  defstruct [:__info__, :__joins__, :commit, :name, :protected, :protection, :protection_url]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.CodespacesUserPublicKey do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, key: String.t(), key_id: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, key: String.t(), key_id: String.t()}
 
-  defstruct [:__info__, :key, :key_id]
+  defstruct [:__info__, :__joins__, :key, :key_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

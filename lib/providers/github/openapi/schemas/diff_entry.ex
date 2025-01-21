@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.DiffEntry do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           additions: integer,
           blob_url: String.t(),
           changes: integer,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.DiffEntry do
 
   defstruct [
     :__info__,
+    :__joins__,
     :additions,
     :blob_url,
     :changes,

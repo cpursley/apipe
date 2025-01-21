@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TeamRoleAssignment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           assignment: String.t() | nil,
           description: String.t() | nil,
           html_url: String.t(),
@@ -25,6 +26,7 @@ defmodule GitHubOpenAPI.TeamRoleAssignment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :assignment,
     :description,
     :html_url,

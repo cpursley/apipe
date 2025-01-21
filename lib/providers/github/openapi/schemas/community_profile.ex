@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CommunityProfile do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           content_reports_enabled: boolean | nil,
           description: String.t() | nil,
           documentation: String.t() | nil,
@@ -16,6 +17,7 @@ defmodule GitHubOpenAPI.CommunityProfile do
 
   defstruct [
     :__info__,
+    :__joins__,
     :content_reports_enabled,
     :description,
     :documentation,

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ContentTree do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.ContentTreeLinks.t(),
           content: String.t() | nil,
           download_url: String.t() | nil,
@@ -22,6 +23,7 @@ defmodule GitHubOpenAPI.ContentTree do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :content,
     :download_url,

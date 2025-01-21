@@ -7,6 +7,7 @@ defmodule GitHubOpenAPI.DependencyGraphSpdxSbomSbomPackages do
   @type t :: %__MODULE__{
           SPDXID: String.t() | nil,
           __info__: map,
+          __joins__: map,
           copyrightText: String.t() | nil,
           downloadLocation: String.t() | nil,
           externalRefs: [GitHubOpenAPI.DependencyGraphSpdxSbomSbomPackagesExternalRefs.t()] | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.DependencyGraphSpdxSbomSbomPackages do
   defstruct [
     :SPDXID,
     :__info__,
+    :__joins__,
     :copyrightText,
     :downloadLocation,
     :externalRefs,

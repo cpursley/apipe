@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.EnvironmentApprovals do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           comment: String.t(),
           environments: [GitHubOpenAPI.EnvironmentApprovalsEnvironments.t()],
           state: String.t(),
           user: GitHubOpenAPI.SimpleUser.t()
         }
 
-  defstruct [:__info__, :comment, :environments, :state, :user]
+  defstruct [:__info__, :__joins__, :comment, :environments, :state, :user]
 
   @doc false
   @spec __fields__(atom) :: keyword

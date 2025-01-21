@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.RepositoryRuleParamsStatusCheckConfiguration do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, context: String.t(), integration_id: integer | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          context: String.t(),
+          integration_id: integer | nil
+        }
 
-  defstruct [:__info__, :context, :integration_id]
+  defstruct [:__info__, :__joins__, :context, :integration_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

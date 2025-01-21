@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.CheckSuitePreferencePreferencesAutoTriggerChecks do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, app_id: integer, setting: boolean}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, app_id: integer, setting: boolean}
 
-  defstruct [:__info__, :app_id, :setting]
+  defstruct [:__info__, :__joins__, :app_id, :setting]
 
   @doc false
   @spec __fields__(atom) :: keyword

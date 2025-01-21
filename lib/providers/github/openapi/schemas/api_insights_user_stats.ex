@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ApiInsightsUserStats do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor_id: integer | nil,
           actor_name: String.t() | nil,
           actor_type: String.t() | nil,
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.ApiInsightsUserStats do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actor_id,
     :actor_name,
     :actor_type,

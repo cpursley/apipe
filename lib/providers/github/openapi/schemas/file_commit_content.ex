@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.FileCommitContent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.FileCommitContentLinks.t() | nil,
           download_url: String.t() | nil,
           git_url: String.t() | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.FileCommitContent do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :download_url,
     :git_url,

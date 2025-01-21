@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.CodeScanningDefaultSetupOptions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           runner_label: String.t() | nil,
           runner_type: String.t() | nil
         }
 
-  defstruct [:__info__, :runner_label, :runner_type]
+  defstruct [:__info__, :__joins__, :runner_label, :runner_type]
 
   @doc false
   @spec __fields__(atom) :: keyword

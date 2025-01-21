@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.EnvironmentProtectionRules do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           id: integer,
           node_id: String.t(),
           prevent_self_review: boolean | nil,
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.EnvironmentProtectionRules do
           wait_timer: integer | nil
         }
 
-  defstruct [:__info__, :id, :node_id, :prevent_self_review, :reviewers, :type, :wait_timer]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :id,
+    :node_id,
+    :prevent_self_review,
+    :reviewers,
+    :type,
+    :wait_timer
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

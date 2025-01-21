@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.AppPermissions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actions: String.t() | nil,
           administration: String.t() | nil,
           checks: String.t() | nil,
@@ -58,6 +59,7 @@ defmodule GitHubOpenAPI.AppPermissions do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actions,
     :administration,
     :checks,

@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.CodeScanningAlertInstanceMessage do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, text: String.t() | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, text: String.t() | nil}
 
-  defstruct [:__info__, :text]
+  defstruct [:__info__, :__joins__, :text]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Collaborator do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           avatar_url: String.t(),
           email: String.t() | nil,
           events_url: String.t(),
@@ -33,6 +34,7 @@ defmodule GitHubOpenAPI.Collaborator do
 
   defstruct [
     :__info__,
+    :__joins__,
     :avatar_url,
     :email,
     :events_url,

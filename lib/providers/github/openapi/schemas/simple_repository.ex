@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SimpleRepository do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           archive_url: String.t(),
           assignees_url: String.t(),
           blobs_url: String.t(),
@@ -56,6 +57,7 @@ defmodule GitHubOpenAPI.SimpleRepository do
 
   defstruct [
     :__info__,
+    :__joins__,
     :archive_url,
     :assignees_url,
     :blobs_url,

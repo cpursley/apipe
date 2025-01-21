@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryCreate do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           credits: [map] | nil,
           cve_id: String.t() | nil,
           cvss_vector_string: String.t() | nil,
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryCreate do
 
   defstruct [
     :__info__,
+    :__joins__,
     :credits,
     :cve_id,
     :cvss_vector_string,

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.GitTag do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           message: String.t(),
           node_id: String.t(),
           object: GitHubOpenAPI.GitTagObject.t(),
@@ -16,7 +17,18 @@ defmodule GitHubOpenAPI.GitTag do
           verification: GitHubOpenAPI.Verification.t() | nil
         }
 
-  defstruct [:__info__, :message, :node_id, :object, :sha, :tag, :tagger, :url, :verification]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :message,
+    :node_id,
+    :object,
+    :sha,
+    :tag,
+    :tagger,
+    :url,
+    :verification
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

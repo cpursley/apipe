@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.SecretScanningPushProtectionBypass do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           expire_at: DateTime.t() | nil,
           reason: String.t() | nil,
           token_type: String.t() | nil
         }
 
-  defstruct [:__info__, :expire_at, :reason, :token_type]
+  defstruct [:__info__, :__joins__, :expire_at, :reason, :token_type]
 
   @doc false
   @spec __fields__(atom) :: keyword

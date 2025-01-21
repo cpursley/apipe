@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.StaticPublicIPLimitsForGitHubHostedHostedRunners do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, current_usage: integer, maximum: integer}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, current_usage: integer, maximum: integer}
 
-  defstruct [:__info__, :current_usage, :maximum]
+  defstruct [:__info__, :__joins__, :current_usage, :maximum]
 
   @doc false
   @spec __fields__(atom) :: keyword

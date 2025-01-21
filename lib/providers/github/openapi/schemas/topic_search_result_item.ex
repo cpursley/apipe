@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TopicSearchResultItem do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           aliases: [map] | nil,
           created_at: DateTime.t(),
           created_by: String.t() | nil,
@@ -26,6 +27,7 @@ defmodule GitHubOpenAPI.TopicSearchResultItem do
 
   defstruct [
     :__info__,
+    :__joins__,
     :aliases,
     :created_at,
     :created_by,

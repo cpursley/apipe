@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TimelineReviewedEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.TimelineReviewedEventLinks.t(),
           author_association: String.t(),
           body: String.t() | nil,
@@ -24,6 +25,7 @@ defmodule GitHubOpenAPI.TimelineReviewedEvent do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :author_association,
     :body,

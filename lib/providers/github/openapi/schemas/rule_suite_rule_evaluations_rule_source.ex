@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.RuleSuiteRuleEvaluationsRuleSource do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           id: integer | nil,
           name: String.t() | nil,
           type: String.t() | nil
         }
 
-  defstruct [:__info__, :id, :name, :type]
+  defstruct [:__info__, :__joins__, :id, :name, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

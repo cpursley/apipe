@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SecretScanningScanHistory do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           backfill_scans: [GitHubOpenAPI.SecretScanningScan.t()] | nil,
           custom_pattern_backfill_scans:
             [GitHubOpenAPI.SecretScanningScanHistoryCustomPatternBackfillScans.t()] | nil,
@@ -15,6 +16,7 @@ defmodule GitHubOpenAPI.SecretScanningScanHistory do
 
   defstruct [
     :__info__,
+    :__joins__,
     :backfill_scans,
     :custom_pattern_backfill_scans,
     :incremental_scans,

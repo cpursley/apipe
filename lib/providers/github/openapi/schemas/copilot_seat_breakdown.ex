@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CopilotSeatBreakdown do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           active_this_cycle: integer | nil,
           added_this_cycle: integer | nil,
           inactive_this_cycle: integer | nil,
@@ -16,6 +17,7 @@ defmodule GitHubOpenAPI.CopilotSeatBreakdown do
 
   defstruct [
     :__info__,
+    :__joins__,
     :active_this_cycle,
     :added_this_cycle,
     :inactive_this_cycle,

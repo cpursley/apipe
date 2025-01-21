@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Gist do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           comments: integer,
           comments_enabled: boolean | nil,
           comments_url: String.t(),
@@ -31,6 +32,7 @@ defmodule GitHubOpenAPI.Gist do
 
   defstruct [
     :__info__,
+    :__joins__,
     :comments,
     :comments_enabled,
     :comments_url,

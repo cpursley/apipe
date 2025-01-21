@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RemovedFromProjectIssueEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor: GitHubOpenAPI.SimpleUser.t(),
           commit_id: String.t() | nil,
           commit_url: String.t() | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.RemovedFromProjectIssueEvent do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actor,
     :commit_id,
     :commit_url,

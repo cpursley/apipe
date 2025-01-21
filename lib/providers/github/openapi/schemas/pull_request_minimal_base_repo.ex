@@ -4,9 +4,15 @@ defmodule GitHubOpenAPI.PullRequestMinimalBaseRepo do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, id: integer, name: String.t(), url: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          id: integer,
+          name: String.t(),
+          url: String.t()
+        }
 
-  defstruct [:__info__, :id, :name, :url]
+  defstruct [:__info__, :__joins__, :id, :name, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

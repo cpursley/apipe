@@ -4,9 +4,15 @@ defmodule GitHubOpenAPI.TeamProjectPermissions do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, admin: boolean, read: boolean, write: boolean}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          admin: boolean,
+          read: boolean,
+          write: boolean
+        }
 
-  defstruct [:__info__, :admin, :read, :write]
+  defstruct [:__info__, :__joins__, :admin, :read, :write]
 
   @doc false
   @spec __fields__(atom) :: keyword

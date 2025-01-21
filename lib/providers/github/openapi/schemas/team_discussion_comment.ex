@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TeamDiscussionComment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: GitHubOpenAPI.SimpleUser.t() | nil,
           body: String.t(),
           body_html: String.t(),
@@ -23,6 +24,7 @@ defmodule GitHubOpenAPI.TeamDiscussionComment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author,
     :body,
     :body_html,

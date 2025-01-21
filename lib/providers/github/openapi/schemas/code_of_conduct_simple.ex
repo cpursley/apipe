@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.CodeOfConductSimple do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           html_url: String.t() | nil,
           key: String.t(),
           name: String.t(),
           url: String.t()
         }
 
-  defstruct [:__info__, :html_url, :key, :name, :url]
+  defstruct [:__info__, :__joins__, :html_url, :key, :name, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

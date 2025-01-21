@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrganizationProgrammaticAccessGrantRequest do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: String.t(),
           id: integer,
           owner: GitHubOpenAPI.SimpleUser.t(),
@@ -22,6 +23,7 @@ defmodule GitHubOpenAPI.OrganizationProgrammaticAccessGrantRequest do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :id,
     :owner,

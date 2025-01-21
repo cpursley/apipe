@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningAlertLocation do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           end_column: integer | nil,
           end_line: integer | nil,
           path: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.CodeScanningAlertLocation do
           start_line: integer | nil
         }
 
-  defstruct [:__info__, :end_column, :end_line, :path, :start_column, :start_line]
+  defstruct [:__info__, :__joins__, :end_column, :end_line, :path, :start_column, :start_line]
 
   @doc false
   @spec __fields__(atom) :: keyword

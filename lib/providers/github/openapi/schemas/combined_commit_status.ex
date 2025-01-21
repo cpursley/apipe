@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CombinedCommitStatus do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           commit_url: String.t(),
           repository: GitHubOpenAPI.MinimalRepository.t(),
           sha: String.t(),
@@ -15,7 +16,17 @@ defmodule GitHubOpenAPI.CombinedCommitStatus do
           url: String.t()
         }
 
-  defstruct [:__info__, :commit_url, :repository, :sha, :state, :statuses, :total_count, :url]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :commit_url,
+    :repository,
+    :sha,
+    :state,
+    :statuses,
+    :total_count,
+    :url
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

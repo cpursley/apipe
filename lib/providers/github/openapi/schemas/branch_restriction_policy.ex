@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.BranchRestrictionPolicy do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           apps: [GitHubOpenAPI.BranchRestrictionPolicyApps.t()],
           apps_url: String.t(),
           teams: [GitHubOpenAPI.BranchRestrictionPolicyTeams.t()],
@@ -15,7 +16,17 @@ defmodule GitHubOpenAPI.BranchRestrictionPolicy do
           users_url: String.t()
         }
 
-  defstruct [:__info__, :apps, :apps_url, :teams, :teams_url, :url, :users, :users_url]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :apps,
+    :apps_url,
+    :teams,
+    :teams_url,
+    :url,
+    :users,
+    :users_url
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

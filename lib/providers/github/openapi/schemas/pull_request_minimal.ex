@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PullRequestMinimal do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           base: GitHubOpenAPI.PullRequestMinimalBase.t(),
           head: GitHubOpenAPI.PullRequestMinimalHead.t(),
           id: integer,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.PullRequestMinimal do
           url: String.t()
         }
 
-  defstruct [:__info__, :base, :head, :id, :number, :url]
+  defstruct [:__info__, :__joins__, :base, :head, :id, :number, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

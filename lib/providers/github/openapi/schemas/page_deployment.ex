@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.PageDeployment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           id: integer | String.t(),
           page_url: String.t(),
           preview_url: String.t() | nil,
           status_url: String.t()
         }
 
-  defstruct [:__info__, :id, :page_url, :preview_url, :status_url]
+  defstruct [:__info__, :__joins__, :id, :page_url, :preview_url, :status_url]
 
   @doc false
   @spec __fields__(atom) :: keyword

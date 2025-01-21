@@ -52,13 +52,14 @@ defmodule GitHubOpenAPI.RateLimit do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           limit: integer,
           remaining: integer,
           reset: integer,
           used: integer
         }
 
-  defstruct [:__info__, :limit, :remaining, :reset, :used]
+  defstruct [:__info__, :__joins__, :limit, :remaining, :reset, :used]
 
   @doc false
   @spec __fields__(atom) :: keyword

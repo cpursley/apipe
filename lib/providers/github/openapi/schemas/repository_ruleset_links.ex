@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.RepositoryRulesetLinks do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           html: GitHubOpenAPI.RepositoryRulesetLinksHtml.t() | nil,
           self: GitHubOpenAPI.RepositoryRulesetLinksSelf.t() | nil
         }
 
-  defstruct [:__info__, :html, :self]
+  defstruct [:__info__, :__joins__, :html, :self]
 
   @doc false
   @spec __fields__(atom) :: keyword

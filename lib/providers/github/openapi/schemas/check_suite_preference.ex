@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.CheckSuitePreference do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           preferences: GitHubOpenAPI.CheckSuitePreferencePreferences.t(),
           repository: GitHubOpenAPI.MinimalRepository.t()
         }
 
-  defstruct [:__info__, :preferences, :repository]
+  defstruct [:__info__, :__joins__, :preferences, :repository]
 
   @doc false
   @spec __fields__(atom) :: keyword

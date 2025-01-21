@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.PagesHealthCheck do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           alt_domain: GitHubOpenAPI.PagesHealthCheckAltDomain.t() | nil,
           domain: GitHubOpenAPI.PagesHealthCheckDomain.t() | nil
         }
 
-  defstruct [:__info__, :alt_domain, :domain]
+  defstruct [:__info__, :__joins__, :alt_domain, :domain]
 
   @doc false
   @spec __fields__(atom) :: keyword

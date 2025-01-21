@@ -7,6 +7,7 @@ defmodule GitHubOpenAPI.DependencyGraph do
 
   @type create_repository_snapshot_201_json_resp :: %{
           __info__: map,
+          __joins__: map,
           created_at: String.t(),
           id: integer,
           message: String.t(),

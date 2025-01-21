@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.CustomPropertyValue do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           property_name: String.t(),
           value: String.t() | [String.t()]
         }
 
-  defstruct [:__info__, :property_name, :value]
+  defstruct [:__info__, :__joins__, :property_name, :value]
 
   @doc false
   @spec __fields__(atom) :: keyword

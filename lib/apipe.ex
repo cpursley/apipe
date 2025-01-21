@@ -462,6 +462,8 @@ defmodule Apipe do
   The join function receives a query function that will be called for each item in the result set.
   The query function should return a new Apipe query that will be executed to fetch the related data.
 
+  The joined data will be stored in the `__joins__` field of the response structs.
+
   ## Options
     * `:max_concurrency` - Maximum number of concurrent requests (defaults to provider setting)
     * `:join_strategy` - Either `:async` or `:sync` (defaults to provider setting)
@@ -487,5 +489,118 @@ defmodule Apipe do
     }
 
     %Query{query | joins: query.joins ++ [join_spec]}
+  end
+
+  @doc """
+  Applies join operations to the query results.
+
+  This function processes the joins defined in the query and executes them against each item
+  in the result set. The joined data is stored in the `__joins__` field of each item.
+
+  ## Parameters
+    * `response` - The initial response tuple from the query execution
+    * `joins` - List of join specifications to apply
+    * `settings` - Settings map containing join configuration:
+      * `:join_strategy` - Either `:async` or `:sync`
+      * `:max_concurrency` - Maximum number of concurrent requests for async joins
+
+  ## Returns
+    * `{:ok, data}` - The data with joins applied
+    * Original response if no joins to apply
+
+  ## Examples
+
+      iex> response = {:ok, [%{id: 1, name: "repo"}]}
+      iex> joins = [%{field: :issues, query_fn: fn _ -> Apipe.new(GitHub) end}]
+      iex> settings = %{join_strategy: :sync}
+      iex> {:ok, [%{id: 1, name: "repo", __joins__: %{issues: []}}]} = Apipe.apply_joins(response, joins, settings)
+  """
+  def apply_joins({:ok, data}, joins, %{join_strategy: :async} = settings)
+      when length(joins) > 0 do
+    Logger.debug("Applying async joins: #{inspect(joins)}")
+
+    case data do
+      items when is_list(items) ->
+        {results, _} =
+          Task.async_stream(
+            items,
+            &apply_joins_to_item(&1, joins),
+            max_concurrency: settings.max_concurrency,
+            ordered: true
+          )
+          |> Enum.map_reduce([], fn {:ok, result}, acc -> {result, acc} end)
+
+        {:ok, results}
+
+      {items, meta} when is_list(items) ->
+        {results, _} =
+          Task.async_stream(
+            items,
+            &apply_joins_to_item(&1, joins),
+            max_concurrency: settings.max_concurrency,
+            ordered: true
+          )
+          |> Enum.map_reduce([], fn {:ok, result}, acc -> {result, acc} end)
+
+        {:ok, {results, meta}}
+
+      item when is_map(item) ->
+        {:ok, apply_joins_to_item(item, joins)}
+    end
+  end
+
+  def apply_joins({:ok, data}, joins, _settings) when length(joins) > 0 do
+    Logger.debug("Applying sync joins: #{inspect(joins)}")
+
+    case data do
+      items when is_list(items) ->
+        results = Enum.map(items, &apply_joins_to_item(&1, joins))
+        {:ok, results}
+
+      {items, meta} when is_list(items) ->
+        results = Enum.map(items, &apply_joins_to_item(&1, joins))
+        {:ok, {results, meta}}
+
+      item when is_map(item) ->
+        {:ok, apply_joins_to_item(item, joins)}
+    end
+  end
+
+  def apply_joins(response, _, _), do: response
+
+  defp apply_joins_to_item(item, joins) do
+    Logger.debug("Applying joins to item: #{inspect(item)}")
+
+    joined_data =
+      Enum.reduce(joins, %{}, fn join, acc ->
+        Logger.debug("Executing join for field: #{inspect(join.field)} on item: #{inspect(item)}")
+
+        case join.query_fn.(item) do
+          %Query{provider_opts: opts} = query ->
+            case execute(query, opts) do
+              %{data: joined_data} ->
+                Map.put(acc, join.field, joined_data)
+
+              _ ->
+                acc
+            end
+
+          query ->
+            case execute(query) do
+              %{data: joined_data} ->
+                Map.put(acc, join.field, joined_data)
+
+              _ ->
+                acc
+            end
+        end
+      end)
+
+    # Store joined data in __joins__ field if the item is a struct
+    if is_struct(item) do
+      Map.put(item, :__joins__, joined_data)
+    else
+      Map.put(item, "__joins__", joined_data)
+    end
   end
 end

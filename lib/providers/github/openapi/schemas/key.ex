@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Key do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           id: integer,
           key: String.t(),
@@ -15,7 +16,7 @@ defmodule GitHubOpenAPI.Key do
           verified: boolean
         }
 
-  defstruct [:__info__, :created_at, :id, :key, :read_only, :title, :url, :verified]
+  defstruct [:__info__, :__joins__, :created_at, :id, :key, :read_only, :title, :url, :verified]
 
   @doc false
   @spec __fields__(atom) :: keyword

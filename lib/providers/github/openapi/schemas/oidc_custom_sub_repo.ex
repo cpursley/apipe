@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.OidcCustomSubRepo do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           include_claim_keys: [String.t()] | nil,
           use_default: boolean
         }
 
-  defstruct [:__info__, :include_claim_keys, :use_default]
+  defstruct [:__info__, :__joins__, :include_claim_keys, :use_default]
 
   @doc false
   @spec __fields__(atom) :: keyword

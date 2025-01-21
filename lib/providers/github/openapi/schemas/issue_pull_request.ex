@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.IssuePullRequest do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           diff_url: String.t() | nil,
           html_url: String.t() | nil,
           merged_at: DateTime.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.IssuePullRequest do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :diff_url, :html_url, :merged_at, :patch_url, :url]
+  defstruct [:__info__, :__joins__, :diff_url, :html_url, :merged_at, :patch_url, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

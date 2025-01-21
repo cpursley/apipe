@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PendingDeploymentEnvironment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           html_url: String.t() | nil,
           id: integer | nil,
           name: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.PendingDeploymentEnvironment do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :html_url, :id, :name, :node_id, :url]
+  defstruct [:__info__, :__joins__, :html_url, :id, :name, :node_id, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

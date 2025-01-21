@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SecretScanningLocationCommit do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           blob_sha: String.t(),
           blob_url: String.t(),
           commit_sha: String.t(),
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.SecretScanningLocationCommit do
 
   defstruct [
     :__info__,
+    :__joins__,
     :blob_sha,
     :blob_url,
     :commit_sha,

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PullRequestLinks do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           comments: GitHubOpenAPI.Link.t(),
           commits: GitHubOpenAPI.Link.t(),
           html: GitHubOpenAPI.Link.t(),
@@ -18,6 +19,7 @@ defmodule GitHubOpenAPI.PullRequestLinks do
 
   defstruct [
     :__info__,
+    :__joins__,
     :comments,
     :commits,
     :html,

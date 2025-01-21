@@ -5,7 +5,11 @@ defmodule GitHubOpenAPI.Copilot do
 
   @default_client GitHubOpenAPI.Client
 
-  @type add_copilot_seats_for_teams_201_json_resp :: %{__info__: map, seats_created: integer}
+  @type add_copilot_seats_for_teams_201_json_resp :: %{
+          __info__: map,
+          __joins__: map,
+          seats_created: integer
+        }
 
   @doc """
   Add teams to the Copilot subscription for an organization
@@ -53,7 +57,11 @@ defmodule GitHubOpenAPI.Copilot do
     })
   end
 
-  @type add_copilot_seats_for_users_201_json_resp :: %{__info__: map, seats_created: integer}
+  @type add_copilot_seats_for_users_201_json_resp :: %{
+          __info__: map,
+          __joins__: map,
+          seats_created: integer
+        }
 
   @doc """
   Add users to the Copilot subscription for an organization
@@ -103,6 +111,7 @@ defmodule GitHubOpenAPI.Copilot do
 
   @type cancel_copilot_seat_assignment_for_teams_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           seats_cancelled: integer
         }
 
@@ -153,6 +162,7 @@ defmodule GitHubOpenAPI.Copilot do
 
   @type cancel_copilot_seat_assignment_for_users_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           seats_cancelled: integer
         }
 
@@ -393,6 +403,7 @@ defmodule GitHubOpenAPI.Copilot do
 
   @type list_copilot_seats_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           seats: [GitHubOpenAPI.CopilotSeatDetails.t()] | nil,
           total_seats: integer | nil
         }

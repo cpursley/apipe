@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.CommitSearchResultItemParents do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           html_url: String.t() | nil,
           sha: String.t() | nil,
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :html_url, :sha, :url]
+  defstruct [:__info__, :__joins__, :html_url, :sha, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

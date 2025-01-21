@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PageBuild do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           commit: String.t(),
           created_at: DateTime.t(),
           duration: integer,
@@ -18,6 +19,7 @@ defmodule GitHubOpenAPI.PageBuild do
 
   defstruct [
     :__info__,
+    :__joins__,
     :commit,
     :created_at,
     :duration,

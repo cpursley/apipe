@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.BranchShort do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           commit: GitHubOpenAPI.BranchShortCommit.t(),
           name: String.t(),
           protected: boolean
         }
 
-  defstruct [:__info__, :commit, :name, :protected]
+  defstruct [:__info__, :__joins__, :commit, :name, :protected]
 
   @doc false
   @spec __fields__(atom) :: keyword

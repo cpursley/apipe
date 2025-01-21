@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrganizationInvitation do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: String.t(),
           email: String.t() | nil,
           failed_at: String.t() | nil,
@@ -22,6 +23,7 @@ defmodule GitHubOpenAPI.OrganizationInvitation do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :email,
     :failed_at,

@@ -4,9 +4,13 @@ defmodule GitHubOpenAPI.Hovercard do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, contexts: [GitHubOpenAPI.HovercardContexts.t()]}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          contexts: [GitHubOpenAPI.HovercardContexts.t()]
+        }
 
-  defstruct [:__info__, :contexts]
+  defstruct [:__info__, :__joins__, :contexts]
 
   @doc false
   @spec __fields__(atom) :: keyword

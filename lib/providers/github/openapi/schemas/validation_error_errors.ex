@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ValidationErrorErrors do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           code: String.t(),
           field: String.t() | nil,
           index: integer | nil,
@@ -14,7 +15,7 @@ defmodule GitHubOpenAPI.ValidationErrorErrors do
           value: integer | String.t() | [String.t()] | nil
         }
 
-  defstruct [:__info__, :code, :field, :index, :message, :resource, :value]
+  defstruct [:__info__, :__joins__, :code, :field, :index, :message, :resource, :value]
 
   @doc false
   @spec __fields__(atom) :: keyword

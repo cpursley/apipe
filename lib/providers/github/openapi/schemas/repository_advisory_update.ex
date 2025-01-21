@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryUpdate do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           collaborating_teams: [String.t()] | nil,
           collaborating_users: [String.t()] | nil,
           credits: [map] | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryUpdate do
 
   defstruct [
     :__info__,
+    :__joins__,
     :collaborating_teams,
     :collaborating_users,
     :credits,

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Runner do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           busy: boolean,
           id: integer,
           labels: [GitHubOpenAPI.RunnerLabel.t()],
@@ -15,7 +16,7 @@ defmodule GitHubOpenAPI.Runner do
           status: String.t()
         }
 
-  defstruct [:__info__, :busy, :id, :labels, :name, :os, :runner_group_id, :status]
+  defstruct [:__info__, :__joins__, :busy, :id, :labels, :name, :os, :runner_group_id, :status]
 
   @doc false
   @spec __fields__(atom) :: keyword

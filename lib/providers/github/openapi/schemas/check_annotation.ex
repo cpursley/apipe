@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CheckAnnotation do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           annotation_level: String.t() | nil,
           blob_href: String.t(),
           end_column: integer | nil,
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.CheckAnnotation do
 
   defstruct [
     :__info__,
+    :__joins__,
     :annotation_level,
     :blob_href,
     :end_column,

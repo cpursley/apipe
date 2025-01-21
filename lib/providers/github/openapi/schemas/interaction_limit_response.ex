@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.InteractionLimitResponse do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           expires_at: DateTime.t(),
           limit: String.t(),
           origin: String.t()
         }
 
-  defstruct [:__info__, :expires_at, :limit, :origin]
+  defstruct [:__info__, :__joins__, :expires_at, :limit, :origin]
 
   @doc false
   @spec __fields__(atom) :: keyword

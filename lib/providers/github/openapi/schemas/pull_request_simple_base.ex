@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PullRequestSimpleBase do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           label: String.t(),
           ref: String.t(),
           repo: GitHubOpenAPI.Repository.t(),
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.PullRequestSimpleBase do
           user: GitHubOpenAPI.SimpleUser.t() | nil
         }
 
-  defstruct [:__info__, :label, :ref, :repo, :sha, :user]
+  defstruct [:__info__, :__joins__, :label, :ref, :repo, :sha, :user]
 
   @doc false
   @spec __fields__(atom) :: keyword

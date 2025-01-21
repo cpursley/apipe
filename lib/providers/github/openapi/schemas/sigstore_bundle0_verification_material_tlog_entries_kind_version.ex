@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntriesKindVersio
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, kind: String.t() | nil, version: String.t() | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          kind: String.t() | nil,
+          version: String.t() | nil
+        }
 
-  defstruct [:__info__, :kind, :version]
+  defstruct [:__info__, :__joins__, :kind, :version]
 
   @doc false
   @spec __fields__(atom) :: keyword

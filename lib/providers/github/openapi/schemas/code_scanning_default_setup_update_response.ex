@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.CodeScanningDefaultSetupUpdateResponse do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, run_id: integer | nil, run_url: String.t() | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          run_id: integer | nil,
+          run_url: String.t() | nil
+        }
 
-  defstruct [:__info__, :run_id, :run_url]
+  defstruct [:__info__, :__joins__, :run_id, :run_url]
 
   @doc false
   @spec __fields__(atom) :: keyword

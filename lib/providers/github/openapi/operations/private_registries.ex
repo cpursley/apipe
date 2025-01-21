@@ -110,7 +110,12 @@ defmodule GitHubOpenAPI.PrivateRegistries do
     })
   end
 
-  @type get_org_public_key_200_json_resp :: %{__info__: map, key: String.t(), key_id: String.t()}
+  @type get_org_public_key_200_json_resp :: %{
+          __info__: map,
+          __joins__: map,
+          key: String.t(),
+          key_id: String.t()
+        }
 
   @doc """
   Get private registries public key for an organization
@@ -147,6 +152,7 @@ defmodule GitHubOpenAPI.PrivateRegistries do
 
   @type list_org_private_registries_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           configurations: [GitHubOpenAPI.OrgPrivateRegistryConfiguration.t()],
           total_count: integer
         }

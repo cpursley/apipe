@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CommitComment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author_association: String.t(),
           body: String.t(),
           commit_id: String.t(),
@@ -24,6 +25,7 @@ defmodule GitHubOpenAPI.CommitComment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author_association,
     :body,
     :commit_id,

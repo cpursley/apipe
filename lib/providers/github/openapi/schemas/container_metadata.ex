@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.ContainerMetadata do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, tags: [String.t()]}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, tags: [String.t()]}
 
-  defstruct [:__info__, :tags]
+  defstruct [:__info__, :__joins__, :tags]
 
   @doc false
   @spec __fields__(atom) :: keyword

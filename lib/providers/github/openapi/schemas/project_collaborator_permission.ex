@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.ProjectCollaboratorPermission do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           permission: String.t(),
           user: GitHubOpenAPI.SimpleUser.t() | nil
         }
 
-  defstruct [:__info__, :permission, :user]
+  defstruct [:__info__, :__joins__, :permission, :user]
 
   @doc false
   @spec __fields__(atom) :: keyword

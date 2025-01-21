@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TagProtection do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: String.t() | nil,
           enabled: boolean | nil,
           id: integer | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.TagProtection do
           updated_at: String.t() | nil
         }
 
-  defstruct [:__info__, :created_at, :enabled, :id, :pattern, :updated_at]
+  defstruct [:__info__, :__joins__, :created_at, :enabled, :id, :pattern, :updated_at]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ReleaseAsset do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           browser_download_url: String.t(),
           content_type: String.t(),
           created_at: DateTime.t(),
@@ -23,6 +24,7 @@ defmodule GitHubOpenAPI.ReleaseAsset do
 
   defstruct [
     :__info__,
+    :__joins__,
     :browser_download_url,
     :content_type,
     :created_at,

@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.BranchProtectionRequiredConversationResolution do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, enabled: boolean | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, enabled: boolean | nil}
 
-  defstruct [:__info__, :enabled]
+  defstruct [:__info__, :__joins__, :enabled]
 
   @doc false
   @spec __fields__(atom) :: keyword

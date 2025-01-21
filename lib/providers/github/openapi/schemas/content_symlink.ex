@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ContentSymlink do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.ContentSymlinkLinks.t(),
           download_url: String.t() | nil,
           git_url: String.t() | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.ContentSymlink do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :download_url,
     :git_url,

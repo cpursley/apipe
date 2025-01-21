@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CheckRun do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           app: GitHubOpenAPI.Integration.t() | nil,
           check_suite: GitHubOpenAPI.CheckRunCheckSuite.t() | nil,
           completed_at: DateTime.t() | nil,
@@ -27,6 +28,7 @@ defmodule GitHubOpenAPI.CheckRun do
 
   defstruct [
     :__info__,
+    :__joins__,
     :app,
     :check_suite,
     :completed_at,

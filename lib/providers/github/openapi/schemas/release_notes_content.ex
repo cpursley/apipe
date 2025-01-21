@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.ReleaseNotesContent do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, body: String.t(), name: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, body: String.t(), name: String.t()}
 
-  defstruct [:__info__, :body, :name]
+  defstruct [:__info__, :__joins__, :body, :name]
 
   @doc false
   @spec __fields__(atom) :: keyword

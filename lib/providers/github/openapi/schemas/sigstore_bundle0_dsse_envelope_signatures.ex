@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.SigstoreBundle0DsseEnvelopeSignatures do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, keyid: String.t() | nil, sig: String.t() | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          keyid: String.t() | nil,
+          sig: String.t() | nil
+        }
 
-  defstruct [:__info__, :keyid, :sig]
+  defstruct [:__info__, :__joins__, :keyid, :sig]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.CodeScanningAutofixCommits do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, message: String.t() | nil, target_ref: String.t() | nil}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          message: String.t() | nil,
+          target_ref: String.t() | nil
+        }
 
-  defstruct [:__info__, :message, :target_ref]
+  defstruct [:__info__, :__joins__, :message, :target_ref]
 
   @doc false
   @spec __fields__(atom) :: keyword

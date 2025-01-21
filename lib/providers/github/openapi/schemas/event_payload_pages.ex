@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.EventPayloadPages do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           action: String.t() | nil,
           html_url: String.t() | nil,
           page_name: String.t() | nil,
@@ -14,7 +15,7 @@ defmodule GitHubOpenAPI.EventPayloadPages do
           title: String.t() | nil
         }
 
-  defstruct [:__info__, :action, :html_url, :page_name, :sha, :summary, :title]
+  defstruct [:__info__, :__joins__, :action, :html_url, :page_name, :sha, :summary, :title]
 
   @doc false
   @spec __fields__(atom) :: keyword

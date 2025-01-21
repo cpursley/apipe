@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SimpleCommit do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: GitHubOpenAPI.SimpleCommitAuthor.t() | nil,
           committer: GitHubOpenAPI.SimpleCommitCommitter.t() | nil,
           id: String.t(),
@@ -14,7 +15,7 @@ defmodule GitHubOpenAPI.SimpleCommit do
           tree_id: String.t()
         }
 
-  defstruct [:__info__, :author, :committer, :id, :message, :timestamp, :tree_id]
+  defstruct [:__info__, :__joins__, :author, :committer, :id, :message, :timestamp, :tree_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

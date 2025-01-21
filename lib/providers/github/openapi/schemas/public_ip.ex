@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.PublicIp do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           enabled: boolean | nil,
           length: integer | nil,
           prefix: String.t() | nil
         }
 
-  defstruct [:__info__, :enabled, :length, :prefix]
+  defstruct [:__info__, :__joins__, :enabled, :length, :prefix]
 
   @doc false
   @spec __fields__(atom) :: keyword

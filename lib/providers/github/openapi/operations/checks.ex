@@ -166,6 +166,7 @@ defmodule GitHubOpenAPI.Checks do
 
   @type list_for_ref_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           check_runs: [GitHubOpenAPI.CheckRun.t()],
           total_count: integer
         }
@@ -214,6 +215,7 @@ defmodule GitHubOpenAPI.Checks do
 
   @type list_for_suite_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           check_runs: [GitHubOpenAPI.CheckRun.t()],
           total_count: integer
         }
@@ -259,6 +261,7 @@ defmodule GitHubOpenAPI.Checks do
 
   @type list_suites_for_ref_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           check_suites: [GitHubOpenAPI.CheckSuite.t()],
           total_count: integer
         }

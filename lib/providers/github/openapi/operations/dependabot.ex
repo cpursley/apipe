@@ -562,6 +562,7 @@ defmodule GitHubOpenAPI.Dependabot do
 
   @type list_org_secrets_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.OrganizationDependabotSecret.t()],
           total_count: integer
         }
@@ -602,6 +603,7 @@ defmodule GitHubOpenAPI.Dependabot do
 
   @type list_repo_secrets_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.DependabotSecret.t()],
           total_count: integer
         }
@@ -642,6 +644,7 @@ defmodule GitHubOpenAPI.Dependabot do
 
   @type list_selected_repos_for_org_secret_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.MinimalRepository.t()],
           total_count: integer
         }

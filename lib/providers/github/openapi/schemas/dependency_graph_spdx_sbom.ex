@@ -4,9 +4,13 @@ defmodule GitHubOpenAPI.DependencyGraphSpdxSbom do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, sbom: GitHubOpenAPI.DependencyGraphSpdxSbomSbom.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          sbom: GitHubOpenAPI.DependencyGraphSpdxSbomSbom.t()
+        }
 
-  defstruct [:__info__, :sbom]
+  defstruct [:__info__, :__joins__, :sbom]
 
   @doc false
   @spec __fields__(atom) :: keyword

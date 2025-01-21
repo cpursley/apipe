@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningCodeqlDatabase do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           commit_oid: String.t() | nil,
           content_type: String.t(),
           created_at: DateTime.t(),
@@ -20,6 +21,7 @@ defmodule GitHubOpenAPI.CodeScanningCodeqlDatabase do
 
   defstruct [
     :__info__,
+    :__joins__,
     :commit_oid,
     :content_type,
     :created_at,

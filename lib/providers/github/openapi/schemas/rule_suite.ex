@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RuleSuite do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor_id: integer | nil,
           actor_name: String.t() | nil,
           after_sha: String.t() | nil,
@@ -22,6 +23,7 @@ defmodule GitHubOpenAPI.RuleSuite do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actor_id,
     :actor_name,
     :after_sha,

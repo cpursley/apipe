@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.SigstoreBundle0DsseEnvelope do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           payload: String.t() | nil,
           payloadType: String.t() | nil,
           signatures: [GitHubOpenAPI.SigstoreBundle0DsseEnvelopeSignatures.t()] | nil
         }
 
-  defstruct [:__info__, :payload, :payloadType, :signatures]
+  defstruct [:__info__, :__joins__, :payload, :payloadType, :signatures]
 
   @doc false
   @spec __fields__(atom) :: keyword

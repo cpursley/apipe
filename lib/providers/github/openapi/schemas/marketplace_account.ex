@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.MarketplaceAccount do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           email: String.t() | nil,
           id: integer,
           login: String.t(),
@@ -15,7 +16,17 @@ defmodule GitHubOpenAPI.MarketplaceAccount do
           url: String.t()
         }
 
-  defstruct [:__info__, :email, :id, :login, :node_id, :organization_billing_email, :type, :url]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :email,
+    :id,
+    :login,
+    :node_id,
+    :organization_billing_email,
+    :type,
+    :url
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

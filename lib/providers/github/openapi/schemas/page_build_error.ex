@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.PageBuildError do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, message: String.t() | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, message: String.t() | nil}
 
-  defstruct [:__info__, :message]
+  defstruct [:__info__, :__joins__, :message]
 
   @doc false
   @spec __fields__(atom) :: keyword

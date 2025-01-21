@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.TimelineCrossReferencedEventSource do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           issue: GitHubOpenAPI.Issue.t() | nil,
           type: String.t() | nil
         }
 
-  defstruct [:__info__, :issue, :type]
+  defstruct [:__info__, :__joins__, :issue, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

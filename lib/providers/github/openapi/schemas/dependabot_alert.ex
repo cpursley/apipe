@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.DependabotAlert do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           auto_dismissed_at: DateTime.t() | nil,
           created_at: DateTime.t(),
           dependency: GitHubOpenAPI.DependabotAlertDependency.t(),
@@ -25,6 +26,7 @@ defmodule GitHubOpenAPI.DependabotAlert do
 
   defstruct [
     :__info__,
+    :__joins__,
     :auto_dismissed_at,
     :created_at,
     :dependency,

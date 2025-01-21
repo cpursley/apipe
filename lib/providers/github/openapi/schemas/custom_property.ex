@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CustomProperty do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           allowed_values: [String.t()] | nil,
           default_value: String.t() | [String.t()] | nil,
           description: String.t() | nil,
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.CustomProperty do
 
   defstruct [
     :__info__,
+    :__joins__,
     :allowed_values,
     :default_value,
     :description,

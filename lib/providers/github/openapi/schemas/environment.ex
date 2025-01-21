@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Environment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           deployment_branch_policy: GitHubOpenAPI.DeploymentBranchPolicySettings.t() | nil,
           html_url: String.t(),
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.Environment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :deployment_branch_policy,
     :html_url,

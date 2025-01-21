@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Job do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           check_run_url: String.t(),
           completed_at: DateTime.t() | nil,
           conclusion: String.t() | nil,
@@ -33,6 +34,7 @@ defmodule GitHubOpenAPI.Job do
 
   defstruct [
     :__info__,
+    :__joins__,
     :check_run_url,
     :completed_at,
     :conclusion,

@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.StatusCheckPolicyChecks do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, app_id: integer | nil, context: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          app_id: integer | nil,
+          context: String.t()
+        }
 
-  defstruct [:__info__, :app_id, :context]
+  defstruct [:__info__, :__joins__, :app_id, :context]
 
   @doc false
   @spec __fields__(atom) :: keyword

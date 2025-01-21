@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.ReviewCommentLinks do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           html: GitHubOpenAPI.Link.t(),
           pull_request: GitHubOpenAPI.Link.t(),
           self: GitHubOpenAPI.Link.t()
         }
 
-  defstruct [:__info__, :html, :pull_request, :self]
+  defstruct [:__info__, :__joins__, :html, :pull_request, :self]
 
   @doc false
   @spec __fields__(atom) :: keyword

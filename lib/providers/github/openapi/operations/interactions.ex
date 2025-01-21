@@ -5,7 +5,7 @@ defmodule GitHubOpenAPI.Interactions do
 
   @default_client GitHubOpenAPI.Client
 
-  @type get_restrictions_for_authenticated_user_200_json_resp :: %{__info__: map}
+  @type get_restrictions_for_authenticated_user_200_json_resp :: %{__info__: map, __joins__: map}
 
   @doc """
   Get interaction restrictions for your public repositories
@@ -40,7 +40,7 @@ defmodule GitHubOpenAPI.Interactions do
     })
   end
 
-  @type get_restrictions_for_org_200_json_resp :: %{__info__: map}
+  @type get_restrictions_for_org_200_json_resp :: %{__info__: map, __joins__: map}
 
   @doc """
   Get interaction restrictions for an organization
@@ -74,7 +74,7 @@ defmodule GitHubOpenAPI.Interactions do
     })
   end
 
-  @type get_restrictions_for_repo_200_json_resp :: %{__info__: map}
+  @type get_restrictions_for_repo_200_json_resp :: %{__info__: map, __joins__: map}
 
   @doc """
   Get interaction restrictions for a repository

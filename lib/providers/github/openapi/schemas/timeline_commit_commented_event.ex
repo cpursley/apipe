@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.TimelineCommitCommentedEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           comments: [GitHubOpenAPI.CommitComment.t()] | nil,
           commit_id: String.t() | nil,
           event: String.t() | nil,
           node_id: String.t() | nil
         }
 
-  defstruct [:__info__, :comments, :commit_id, :event, :node_id]
+  defstruct [:__info__, :__joins__, :comments, :commit_id, :event, :node_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

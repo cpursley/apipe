@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.InteractionLimit do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, expiry: String.t() | nil, limit: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          expiry: String.t() | nil,
+          limit: String.t()
+        }
 
-  defstruct [:__info__, :expiry, :limit]
+  defstruct [:__info__, :__joins__, :expiry, :limit]
 
   @doc false
   @spec __fields__(atom) :: keyword

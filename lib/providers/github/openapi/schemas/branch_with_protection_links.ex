@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.BranchWithProtectionLinks do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, html: String.t(), self: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, html: String.t(), self: String.t()}
 
-  defstruct [:__info__, :html, :self]
+  defstruct [:__info__, :__joins__, :html, :self]
 
   @doc false
   @spec __fields__(atom) :: keyword

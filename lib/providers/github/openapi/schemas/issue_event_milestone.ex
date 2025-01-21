@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.IssueEventMilestone do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, title: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, title: String.t()}
 
-  defstruct [:__info__, :title]
+  defstruct [:__info__, :__joins__, :title]
 
   @doc false
   @spec __fields__(atom) :: keyword

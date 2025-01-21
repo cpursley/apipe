@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Artifact do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           archive_download_url: String.t(),
           created_at: DateTime.t() | nil,
           expired: boolean,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.Artifact do
 
   defstruct [
     :__info__,
+    :__joins__,
     :archive_download_url,
     :created_at,
     :expired,

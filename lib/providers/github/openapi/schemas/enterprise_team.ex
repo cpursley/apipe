@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.EnterpriseTeam do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           group_id: String.t() | nil,
           group_name: String.t() | nil,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.EnterpriseTeam do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :group_id,
     :group_name,

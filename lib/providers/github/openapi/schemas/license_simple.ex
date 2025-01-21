@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.LicenseSimple do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           html_url: String.t() | nil,
           key: String.t(),
           name: String.t(),
@@ -14,7 +15,7 @@ defmodule GitHubOpenAPI.LicenseSimple do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :html_url, :key, :name, :node_id, :spdx_id, :url]
+  defstruct [:__info__, :__joins__, :html_url, :key, :name, :node_id, :spdx_id, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.ReviewCustomGatesStateRequired do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           comment: String.t() | nil,
           environment_name: String.t(),
           state: String.t()
         }
 
-  defstruct [:__info__, :comment, :environment_name, :state]
+  defstruct [:__info__, :__joins__, :comment, :environment_name, :state]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeScanningAlertRuleSummary do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           description: String.t() | nil,
           full_description: String.t() | nil,
           help: String.t() | nil,
@@ -19,6 +20,7 @@ defmodule GitHubOpenAPI.CodeScanningAlertRuleSummary do
 
   defstruct [
     :__info__,
+    :__joins__,
     :description,
     :full_description,
     :help,

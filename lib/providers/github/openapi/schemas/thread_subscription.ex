@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ThreadSubscription do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t() | nil,
           ignored: boolean,
           reason: String.t() | nil,
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.ThreadSubscription do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :ignored,
     :reason,

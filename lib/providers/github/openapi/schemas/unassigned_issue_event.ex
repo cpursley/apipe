@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.UnassignedIssueEvent do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actor: GitHubOpenAPI.SimpleUser.t(),
           assignee: GitHubOpenAPI.SimpleUser.t(),
           assigner: GitHubOpenAPI.SimpleUser.t(),
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.UnassignedIssueEvent do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actor,
     :assignee,
     :assigner,

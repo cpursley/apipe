@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ScimError do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           detail: String.t() | nil,
           documentation_url: String.t() | nil,
           message: String.t() | nil,
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.ScimError do
           status: integer | nil
         }
 
-  defstruct [:__info__, :detail, :documentation_url, :message, :schemas, :scimType, :status]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :detail,
+    :documentation_url,
+    :message,
+    :schemas,
+    :scimType,
+    :status
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

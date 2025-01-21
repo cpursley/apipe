@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.MaxFileSizeParameters do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, max_file_size: integer}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, max_file_size: integer}
 
-  defstruct [:__info__, :max_file_size]
+  defstruct [:__info__, :__joins__, :max_file_size]
 
   @doc false
   @spec __fields__(atom) :: keyword

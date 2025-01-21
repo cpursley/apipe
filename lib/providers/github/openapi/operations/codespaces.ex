@@ -118,6 +118,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type codespace_machines_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           machines: [GitHubOpenAPI.CodespaceMachine.t()],
           total_count: integer
         }
@@ -605,6 +606,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type get_codespaces_for_user_in_org_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           codespaces: [GitHubOpenAPI.Codespace.t()],
           total_count: integer
         }
@@ -882,6 +884,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_devcontainers_in_repository_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           devcontainers: [
             GitHubOpenAPI.CodespacesDevcontainers.list_devcontainers_in_repository_for_authenticated_user_200_json_resp()
           ],
@@ -934,6 +937,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           codespaces: [GitHubOpenAPI.Codespace.t()],
           total_count: integer
         }
@@ -982,6 +986,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_in_organization_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           codespaces: [GitHubOpenAPI.Codespace.t()],
           total_count: integer
         }
@@ -1029,6 +1034,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_in_repository_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           codespaces: [GitHubOpenAPI.Codespace.t()],
           total_count: integer
         }
@@ -1076,6 +1082,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_org_secrets_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.CodespacesOrgSecret.t()],
           total_count: integer
         }
@@ -1116,6 +1123,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_repo_secrets_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.RepoCodespacesSecret.t()],
           total_count: integer
         }
@@ -1156,6 +1164,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_repositories_for_secret_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.MinimalRepository.t()],
           total_count: integer
         }
@@ -1199,6 +1208,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_secrets_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           secrets: [GitHubOpenAPI.CodespacesSecret.t()],
           total_count: integer
         }
@@ -1243,6 +1253,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type list_selected_repos_for_org_secret_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           repositories: [GitHubOpenAPI.MinimalRepository.t()],
           total_count: integer
         }
@@ -1287,6 +1298,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type pre_flight_with_repo_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           billable_owner: GitHubOpenAPI.SimpleUser.t() | nil,
           defaults:
             GitHubOpenAPI.CodespacesDefaults.pre_flight_with_repo_for_authenticated_user_200_json_resp()
@@ -1444,6 +1456,7 @@ defmodule GitHubOpenAPI.Codespaces do
 
   @type repo_machines_for_authenticated_user_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           machines: [GitHubOpenAPI.CodespaceMachine.t()],
           total_count: integer
         }

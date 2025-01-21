@@ -4,9 +4,15 @@ defmodule GitHubOpenAPI.TimelineCommittedEventCommitter do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, date: DateTime.t(), email: String.t(), name: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          date: DateTime.t(),
+          email: String.t(),
+          name: String.t()
+        }
 
-  defstruct [:__info__, :date, :email, :name]
+  defstruct [:__info__, :__joins__, :date, :email, :name]
 
   @doc false
   @spec __fields__(atom) :: keyword

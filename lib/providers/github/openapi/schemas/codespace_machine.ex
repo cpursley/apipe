@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodespaceMachine do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           cpus: integer,
           display_name: String.t(),
           memory_in_bytes: integer,
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.CodespaceMachine do
 
   defstruct [
     :__info__,
+    :__joins__,
     :cpus,
     :display_name,
     :memory_in_bytes,

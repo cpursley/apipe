@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntriesLogId do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, keyId: String.t() | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, keyId: String.t() | nil}
 
-  defstruct [:__info__, :keyId]
+  defstruct [:__info__, :__joins__, :keyId]
 
   @doc false
   @spec __fields__(atom) :: keyword

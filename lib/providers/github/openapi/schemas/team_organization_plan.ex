@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TeamOrganizationPlan do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           filled_seats: integer | nil,
           name: String.t(),
           private_repos: integer,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.TeamOrganizationPlan do
           space: integer
         }
 
-  defstruct [:__info__, :filled_seats, :name, :private_repos, :seats, :space]
+  defstruct [:__info__, :__joins__, :filled_seats, :name, :private_repos, :seats, :space]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.WorkflowRunUsageBillableUBUNTU do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           job_runs: [GitHubOpenAPI.WorkflowRunUsageBillableUBUNTUJobRuns.t()] | nil,
           jobs: integer,
           total_ms: integer
         }
 
-  defstruct [:__info__, :job_runs, :jobs, :total_ms]
+  defstruct [:__info__, :__joins__, :job_runs, :jobs, :total_ms]
 
   @doc false
   @spec __fields__(atom) :: keyword

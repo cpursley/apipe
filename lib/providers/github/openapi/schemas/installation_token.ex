@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.InstallationToken do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           expires_at: String.t(),
           has_multiple_single_files: boolean | nil,
           permissions: GitHubOpenAPI.AppPermissions.t() | nil,
@@ -18,6 +19,7 @@ defmodule GitHubOpenAPI.InstallationToken do
 
   defstruct [
     :__info__,
+    :__joins__,
     :expires_at,
     :has_multiple_single_files,
     :permissions,

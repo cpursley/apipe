@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.DependencyGraphSpdxSbomSbomPackagesExternalRefs do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           referenceCategory: String.t(),
           referenceLocator: String.t(),
           referenceType: String.t()
         }
 
-  defstruct [:__info__, :referenceCategory, :referenceLocator, :referenceType]
+  defstruct [:__info__, :__joins__, :referenceCategory, :referenceLocator, :referenceType]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -4,9 +4,14 @@ defmodule GitHubOpenAPI.ReviewCustomGatesCommentRequired do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, comment: String.t(), environment_name: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          comment: String.t(),
+          environment_name: String.t()
+        }
 
-  defstruct [:__info__, :comment, :environment_name]
+  defstruct [:__info__, :__joins__, :comment, :environment_name]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Snapshot do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           detector: GitHubOpenAPI.SnapshotDetector.t(),
           job: GitHubOpenAPI.SnapshotJob.t(),
           manifests: GitHubOpenAPI.SnapshotManifests.t() | nil,
@@ -16,7 +17,18 @@ defmodule GitHubOpenAPI.Snapshot do
           version: integer
         }
 
-  defstruct [:__info__, :detector, :job, :manifests, :metadata, :ref, :scanned, :sha, :version]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :detector,
+    :job,
+    :manifests,
+    :metadata,
+    :ref,
+    :scanned,
+    :sha,
+    :version
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

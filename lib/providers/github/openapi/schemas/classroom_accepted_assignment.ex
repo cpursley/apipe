@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ClassroomAcceptedAssignment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           assignment: GitHubOpenAPI.SimpleClassroomAssignment.t(),
           commit_count: integer,
           grade: String.t(),
@@ -18,6 +19,7 @@ defmodule GitHubOpenAPI.ClassroomAcceptedAssignment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :assignment,
     :commit_count,
     :grade,

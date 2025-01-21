@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.HookDeliveryRequest do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, headers: map | nil, payload: map | nil}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, headers: map | nil, payload: map | nil}
 
-  defstruct [:__info__, :headers, :payload]
+  defstruct [:__info__, :__joins__, :headers, :payload]
 
   @doc false
   @spec __fields__(atom) :: keyword

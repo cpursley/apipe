@@ -7,6 +7,7 @@ defmodule GitHubOpenAPI.Search do
 
   @type code_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           incomplete_results: boolean,
           items: [GitHubOpenAPI.CodeSearchResultItem.t()],
           total_count: integer
@@ -78,6 +79,7 @@ defmodule GitHubOpenAPI.Search do
 
   @type commits_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           incomplete_results: boolean,
           items: [GitHubOpenAPI.CommitSearchResultItem.t()],
           total_count: integer
@@ -126,6 +128,7 @@ defmodule GitHubOpenAPI.Search do
 
   @type issues_and_pull_requests_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           incomplete_results: boolean,
           items: [GitHubOpenAPI.IssueSearchResultItem.t()],
           total_count: integer
@@ -190,6 +193,7 @@ defmodule GitHubOpenAPI.Search do
 
   @type labels_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           incomplete_results: boolean,
           items: [GitHubOpenAPI.LabelSearchResultItem.t()],
           total_count: integer
@@ -247,6 +251,7 @@ defmodule GitHubOpenAPI.Search do
 
   @type repos_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           incomplete_results: boolean,
           items: [GitHubOpenAPI.RepoSearchResultItem.t()],
           total_count: integer
@@ -304,6 +309,7 @@ defmodule GitHubOpenAPI.Search do
 
   @type topics_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           incomplete_results: boolean,
           items: [GitHubOpenAPI.TopicSearchResultItem.t()],
           total_count: integer
@@ -351,6 +357,7 @@ defmodule GitHubOpenAPI.Search do
 
   @type users_200_json_resp :: %{
           __info__: map,
+          __joins__: map,
           incomplete_results: boolean,
           items: [GitHubOpenAPI.UserSearchResultItem.t()],
           total_count: integer

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TeamOrganization do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           archived_at: DateTime.t() | nil,
           avatar_url: String.t(),
           billing_email: String.t() | nil,
@@ -59,6 +60,7 @@ defmodule GitHubOpenAPI.TeamOrganization do
 
   defstruct [
     :__info__,
+    :__joins__,
     :archived_at,
     :avatar_url,
     :billing_email,

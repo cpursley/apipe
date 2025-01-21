@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Status do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           avatar_url: String.t() | nil,
           context: String.t(),
           created_at: String.t(),
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.Status do
 
   defstruct [
     :__info__,
+    :__joins__,
     :avatar_url,
     :context,
     :created_at,

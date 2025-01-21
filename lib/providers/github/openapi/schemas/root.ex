@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Root do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           authorizations_url: String.t(),
           code_search_url: String.t(),
           commit_search_url: String.t(),
@@ -43,6 +44,7 @@ defmodule GitHubOpenAPI.Root do
 
   defstruct [
     :__info__,
+    :__joins__,
     :authorizations_url,
     :code_search_url,
     :commit_search_url,

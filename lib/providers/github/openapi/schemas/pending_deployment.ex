@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PendingDeployment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           current_user_can_approve: boolean,
           environment: GitHubOpenAPI.PendingDeploymentEnvironment.t(),
           reviewers: [GitHubOpenAPI.PendingDeploymentReviewers.t()],
@@ -15,6 +16,7 @@ defmodule GitHubOpenAPI.PendingDeployment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :current_user_can_approve,
     :environment,
     :reviewers,

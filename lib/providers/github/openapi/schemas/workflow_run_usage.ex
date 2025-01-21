@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.WorkflowRunUsage do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           billable: GitHubOpenAPI.WorkflowRunUsageBillable.t(),
           run_duration_ms: integer | nil
         }
 
-  defstruct [:__info__, :billable, :run_duration_ms]
+  defstruct [:__info__, :__joins__, :billable, :run_duration_ms]
 
   @doc false
   @spec __fields__(atom) :: keyword

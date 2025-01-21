@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Contributor do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           avatar_url: String.t() | nil,
           contributions: integer,
           email: String.t() | nil,
@@ -32,6 +33,7 @@ defmodule GitHubOpenAPI.Contributor do
 
   defstruct [
     :__info__,
+    :__joins__,
     :avatar_url,
     :contributions,
     :email,

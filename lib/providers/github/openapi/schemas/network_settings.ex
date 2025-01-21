@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.NetworkSettings do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           id: String.t(),
           name: String.t(),
           network_configuration_id: String.t() | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.NetworkSettings do
           subnet_id: String.t()
         }
 
-  defstruct [:__info__, :id, :name, :network_configuration_id, :region, :subnet_id]
+  defstruct [:__info__, :__joins__, :id, :name, :network_configuration_id, :region, :subnet_id]
 
   @doc false
   @spec __fields__(atom) :: keyword

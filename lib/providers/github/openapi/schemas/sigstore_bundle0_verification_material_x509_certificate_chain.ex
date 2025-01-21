@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialX509CertificateChain 
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           certificates:
             [
               GitHubOpenAPI.SigstoreBundle0VerificationMaterialX509CertificateChainCertificates.t()
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialX509CertificateChain 
             | nil
         }
 
-  defstruct [:__info__, :certificates]
+  defstruct [:__info__, :__joins__, :certificates]
 
   @doc false
   @spec __fields__(atom) :: keyword

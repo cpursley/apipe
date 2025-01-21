@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CommunityProfileFiles do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           code_of_conduct: GitHubOpenAPI.CodeOfConductSimple.t() | nil,
           code_of_conduct_file: GitHubOpenAPI.CommunityHealthFile.t() | nil,
           contributing: GitHubOpenAPI.CommunityHealthFile.t() | nil,
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.CommunityProfileFiles do
 
   defstruct [
     :__info__,
+    :__joins__,
     :code_of_conduct,
     :code_of_conduct_file,
     :contributing,

@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.ForbiddenGistBlock do
 
   @type json_resp :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: String.t() | nil,
           html_url: String.t() | nil,
           reason: String.t() | nil
         }
 
-  defstruct [:__info__, :created_at, :html_url, :reason]
+  defstruct [:__info__, :__joins__, :created_at, :html_url, :reason]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,13 +6,21 @@ defmodule GitHubOpenAPI.DependencyGraphDiffVulnerabilities do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           advisory_ghsa_id: String.t(),
           advisory_summary: String.t(),
           advisory_url: String.t(),
           severity: String.t()
         }
 
-  defstruct [:__info__, :advisory_ghsa_id, :advisory_summary, :advisory_url, :severity]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :advisory_ghsa_id,
+    :advisory_summary,
+    :advisory_url,
+    :severity
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

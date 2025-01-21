@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.CustomDeploymentRuleApp do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           id: integer,
           integration_url: String.t(),
           node_id: String.t(),
           slug: String.t()
         }
 
-  defstruct [:__info__, :id, :integration_url, :node_id, :slug]
+  defstruct [:__info__, :__joins__, :id, :integration_url, :node_id, :slug]
 
   @doc false
   @spec __fields__(atom) :: keyword

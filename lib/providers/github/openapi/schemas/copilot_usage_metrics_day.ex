@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CopilotUsageMetricsDay do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           copilot_dotcom_chat: GitHubOpenAPI.CopilotDotcomChat.t() | nil,
           copilot_dotcom_pull_requests: GitHubOpenAPI.CopilotDotcomPullRequests.t() | nil,
           copilot_ide_chat: GitHubOpenAPI.CopilotIdeChat.t() | nil,
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.CopilotUsageMetricsDay do
 
   defstruct [
     :__info__,
+    :__joins__,
     :copilot_dotcom_chat,
     :copilot_dotcom_pull_requests,
     :copilot_ide_chat,

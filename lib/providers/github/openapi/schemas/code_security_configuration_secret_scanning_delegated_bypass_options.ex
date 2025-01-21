@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeSecurityConfigurationSecretScanningDelegatedBypassOp
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           reviewers:
             [
               GitHubOpenAPI.CodeSecurityConfigurationSecretScanningDelegatedBypassOptionsReviewers.t()
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.CodeSecurityConfigurationSecretScanningDelegatedBypassOp
             | nil
         }
 
-  defstruct [:__info__, :reviewers]
+  defstruct [:__info__, :__joins__, :reviewers]
 
   @doc false
   @spec __fields__(atom) :: keyword

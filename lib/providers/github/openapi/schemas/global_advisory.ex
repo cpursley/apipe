@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.GlobalAdvisory do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           credits: [map] | nil,
           cve_id: String.t() | nil,
           cvss: GitHubOpenAPI.GlobalAdvisoryCvss.t() | nil,
@@ -33,6 +34,7 @@ defmodule GitHubOpenAPI.GlobalAdvisory do
 
   defstruct [
     :__info__,
+    :__joins__,
     :credits,
     :cve_id,
     :cvss,

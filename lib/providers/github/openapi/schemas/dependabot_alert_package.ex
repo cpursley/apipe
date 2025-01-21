@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.DependabotAlertPackage do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, ecosystem: String.t(), name: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, ecosystem: String.t(), name: String.t()}
 
-  defstruct [:__info__, :ecosystem, :name]
+  defstruct [:__info__, :__joins__, :ecosystem, :name]
 
   @doc false
   @spec __fields__(atom) :: keyword

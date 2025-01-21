@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ActionsHostedRunnerPoolImage do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           display_name: String.t(),
           id: String.t(),
           size_gb: integer,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.ActionsHostedRunnerPoolImage do
           version: String.t()
         }
 
-  defstruct [:__info__, :display_name, :id, :size_gb, :source, :version]
+  defstruct [:__info__, :__joins__, :display_name, :id, :size_gb, :source, :version]
 
   @doc false
   @spec __fields__(atom) :: keyword

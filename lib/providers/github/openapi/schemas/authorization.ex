@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Authorization do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           app: GitHubOpenAPI.AuthorizationApp.t(),
           created_at: DateTime.t(),
           expires_at: DateTime.t() | nil,
@@ -25,6 +26,7 @@ defmodule GitHubOpenAPI.Authorization do
 
   defstruct [
     :__info__,
+    :__joins__,
     :app,
     :created_at,
     :expires_at,

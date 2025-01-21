@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.EnvironmentProtectionRulesReviewers do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           reviewer: GitHubOpenAPI.SimpleUser.t() | GitHubOpenAPI.Team.t() | nil,
           type: String.t() | nil
         }
 
-  defstruct [:__info__, :reviewer, :type]
+  defstruct [:__info__, :__joins__, :reviewer, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

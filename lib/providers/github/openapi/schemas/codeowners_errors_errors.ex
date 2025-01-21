@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodeownersErrorsErrors do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           column: integer,
           kind: String.t(),
           line: integer,
@@ -15,7 +16,7 @@ defmodule GitHubOpenAPI.CodeownersErrorsErrors do
           suggestion: String.t() | nil
         }
 
-  defstruct [:__info__, :column, :kind, :line, :message, :path, :source, :suggestion]
+  defstruct [:__info__, :__joins__, :column, :kind, :line, :message, :path, :source, :suggestion]
 
   @doc false
   @spec __fields__(atom) :: keyword

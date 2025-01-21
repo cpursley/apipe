@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.TeamRepository do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           allow_auto_merge: boolean | nil,
           allow_forking: boolean | nil,
           allow_merge_commit: boolean | nil,
@@ -99,6 +100,7 @@ defmodule GitHubOpenAPI.TeamRepository do
 
   defstruct [
     :__info__,
+    :__joins__,
     :allow_auto_merge,
     :allow_forking,
     :allow_merge_commit,

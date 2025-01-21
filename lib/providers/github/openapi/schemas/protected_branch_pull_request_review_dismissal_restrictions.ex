@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ProtectedBranchPullRequestReviewDismissalRestrictions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           apps: [GitHubOpenAPI.Integration.t() | nil] | nil,
           teams: [GitHubOpenAPI.Team.t()] | nil,
           teams_url: String.t() | nil,
@@ -14,7 +15,7 @@ defmodule GitHubOpenAPI.ProtectedBranchPullRequestReviewDismissalRestrictions do
           users_url: String.t() | nil
         }
 
-  defstruct [:__info__, :apps, :teams, :teams_url, :url, :users, :users_url]
+  defstruct [:__info__, :__joins__, :apps, :teams, :teams_url, :url, :users, :users_url]
 
   @doc false
   @spec __fields__(atom) :: keyword

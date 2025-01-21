@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.CheckAutomatedSecurityFixes do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, enabled: boolean, paused: boolean}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, enabled: boolean, paused: boolean}
 
-  defstruct [:__info__, :enabled, :paused]
+  defstruct [:__info__, :__joins__, :enabled, :paused]
 
   @doc false
   @spec __fields__(atom) :: keyword

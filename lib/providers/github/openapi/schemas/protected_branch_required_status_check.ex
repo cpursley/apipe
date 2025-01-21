@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ProtectedBranchRequiredStatusCheck do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           checks: [GitHubOpenAPI.ProtectedBranchRequiredStatusCheckChecks.t()],
           contexts: [String.t()],
           contexts_url: String.t() | nil,
@@ -14,7 +15,16 @@ defmodule GitHubOpenAPI.ProtectedBranchRequiredStatusCheck do
           url: String.t() | nil
         }
 
-  defstruct [:__info__, :checks, :contexts, :contexts_url, :enforcement_level, :strict, :url]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :checks,
+    :contexts,
+    :contexts_url,
+    :enforcement_level,
+    :strict,
+    :url
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

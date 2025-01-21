@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CombinedBillingUsage do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           days_left_in_billing_cycle: integer,
           estimated_paid_storage_for_month: integer,
           estimated_storage_for_month: integer
@@ -13,6 +14,7 @@ defmodule GitHubOpenAPI.CombinedBillingUsage do
 
   defstruct [
     :__info__,
+    :__joins__,
     :days_left_in_billing_cycle,
     :estimated_paid_storage_for_month,
     :estimated_storage_for_month

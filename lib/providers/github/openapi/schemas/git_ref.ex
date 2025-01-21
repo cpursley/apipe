@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.GitRef do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           node_id: String.t(),
           object: GitHubOpenAPI.GitRefObject.t(),
           ref: String.t(),
           url: String.t()
         }
 
-  defstruct [:__info__, :node_id, :object, :ref, :url]
+  defstruct [:__info__, :__joins__, :node_id, :object, :ref, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

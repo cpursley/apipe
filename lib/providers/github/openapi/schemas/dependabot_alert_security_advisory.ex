@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.DependabotAlertSecurityAdvisory do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           cve_id: String.t() | nil,
           cvss: GitHubOpenAPI.DependabotAlertSecurityAdvisoryCvss.t(),
           cvss_severities: GitHubOpenAPI.CvssSeverities.t() | nil,
@@ -24,6 +25,7 @@ defmodule GitHubOpenAPI.DependabotAlertSecurityAdvisory do
 
   defstruct [
     :__info__,
+    :__joins__,
     :cve_id,
     :cvss,
     :cvss_severities,

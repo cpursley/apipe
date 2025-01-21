@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.UserRoleAssignment do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           assignment: String.t() | nil,
           avatar_url: String.t(),
           email: String.t() | nil,
@@ -34,6 +35,7 @@ defmodule GitHubOpenAPI.UserRoleAssignment do
 
   defstruct [
     :__info__,
+    :__joins__,
     :assignment,
     :avatar_url,
     :email,

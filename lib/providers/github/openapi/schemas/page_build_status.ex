@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.PageBuildStatus do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, status: String.t(), url: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, status: String.t(), url: String.t()}
 
-  defstruct [:__info__, :status, :url]
+  defstruct [:__info__, :__joins__, :status, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodespaceExportDetails do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           branch: String.t() | nil,
           completed_at: DateTime.t() | nil,
           export_url: String.t() | nil,
@@ -15,7 +16,17 @@ defmodule GitHubOpenAPI.CodespaceExportDetails do
           state: String.t() | nil
         }
 
-  defstruct [:__info__, :branch, :completed_at, :export_url, :html_url, :id, :sha, :state]
+  defstruct [
+    :__info__,
+    :__joins__,
+    :branch,
+    :completed_at,
+    :export_url,
+    :html_url,
+    :id,
+    :sha,
+    :state
+  ]
 
   @doc false
   @spec __fields__(atom) :: keyword

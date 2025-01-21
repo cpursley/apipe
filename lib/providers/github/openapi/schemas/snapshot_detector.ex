@@ -4,9 +4,15 @@ defmodule GitHubOpenAPI.SnapshotDetector do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, name: String.t(), url: String.t(), version: String.t()}
+  @type t :: %__MODULE__{
+          __info__: map,
+          __joins__: map,
+          name: String.t(),
+          url: String.t(),
+          version: String.t()
+        }
 
-  defstruct [:__info__, :name, :url, :version]
+  defstruct [:__info__, :__joins__, :name, :url, :version]
 
   @doc false
   @spec __fields__(atom) :: keyword

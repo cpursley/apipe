@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ActionsHostedRunnerImage do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           display_name: String.t(),
           id: String.t(),
           platform: String.t(),
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.ActionsHostedRunnerImage do
           source: String.t()
         }
 
-  defstruct [:__info__, :display_name, :id, :platform, :size_gb, :source]
+  defstruct [:__info__, :__joins__, :display_name, :id, :platform, :size_gb, :source]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RepoSearchResultItemPermissions do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           admin: boolean,
           maintain: boolean | nil,
           pull: boolean,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.RepoSearchResultItemPermissions do
           triage: boolean | nil
         }
 
-  defstruct [:__info__, :admin, :maintain, :pull, :push, :triage]
+  defstruct [:__info__, :__joins__, :admin, :maintain, :pull, :push, :triage]
 
   @doc false
   @spec __fields__(atom) :: keyword

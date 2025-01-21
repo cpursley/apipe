@@ -1,11 +1,15 @@
 import Config
 
 if config_env() == :dev do
+  # specific to GitHub
   config :oapi_generator,
     default: [
       output: [
         base_module: GitHubOpenAPI,
-        extra_fields: [__info__: :map],
+        extra_fields: [
+          __info__: :map,
+          __joins__: :map
+        ],
         location: "lib/providers/github/openapi",
         operation_subdirectory: "operations/",
         schema_subdirectory: "schemas/",

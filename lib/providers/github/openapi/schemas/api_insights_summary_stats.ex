@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.ApiInsightsSummaryStats do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           rate_limited_request_count: integer | nil,
           total_request_count: integer | nil
         }
 
-  defstruct [:__info__, :rate_limited_request_count, :total_request_count]
+  defstruct [:__info__, :__joins__, :rate_limited_request_count, :total_request_count]
 
   @doc false
   @spec __fields__(atom) :: keyword

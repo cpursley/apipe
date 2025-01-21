@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.ProtectedBranchRequiredPullRequestReviewsBypassPullReque
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           apps: [GitHubOpenAPI.Integration.t() | nil] | nil,
           teams: [GitHubOpenAPI.Team.t()],
           users: [GitHubOpenAPI.SimpleUser.t()]
         }
 
-  defstruct [:__info__, :apps, :teams, :users]
+  defstruct [:__info__, :__joins__, :apps, :teams, :users]
 
   @doc false
   @spec __fields__(atom) :: keyword

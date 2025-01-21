@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.RepositoryRuleRequiredLinearHistory do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, type: String.t()}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, type: String.t()}
 
-  defstruct [:__info__, :type]
+  defstruct [:__info__, :__joins__, :type]
 
   @doc false
   @spec __fields__(atom) :: keyword

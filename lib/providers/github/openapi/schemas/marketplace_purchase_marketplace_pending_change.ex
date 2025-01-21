@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.MarketplacePurchaseMarketplacePendingChange do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           effective_date: String.t() | nil,
           id: integer | nil,
           is_installed: boolean | nil,
@@ -13,7 +14,7 @@ defmodule GitHubOpenAPI.MarketplacePurchaseMarketplacePendingChange do
           unit_count: integer | nil
         }
 
-  defstruct [:__info__, :effective_date, :id, :is_installed, :plan, :unit_count]
+  defstruct [:__info__, :__joins__, :effective_date, :id, :is_installed, :plan, :unit_count]
 
   @doc false
   @spec __fields__(atom) :: keyword

@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrgHook do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           active: boolean,
           config: GitHubOpenAPI.OrgHookConfig.t(),
           created_at: DateTime.t(),
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.OrgHook do
 
   defstruct [
     :__info__,
+    :__joins__,
     :active,
     :config,
     :created_at,

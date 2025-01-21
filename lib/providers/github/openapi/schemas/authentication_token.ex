@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.AuthenticationToken do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           expires_at: DateTime.t(),
           permissions: map | nil,
           repositories: [GitHubOpenAPI.Repository.t()] | nil,
@@ -16,6 +17,7 @@ defmodule GitHubOpenAPI.AuthenticationToken do
 
   defstruct [
     :__info__,
+    :__joins__,
     :expires_at,
     :permissions,
     :repositories,

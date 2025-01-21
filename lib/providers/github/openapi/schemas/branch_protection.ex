@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.BranchProtection do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           allow_deletions: GitHubOpenAPI.BranchProtectionAllowDeletions.t() | nil,
           allow_force_pushes: GitHubOpenAPI.BranchProtectionAllowForcePushes.t() | nil,
           allow_fork_syncing: GitHubOpenAPI.BranchProtectionAllowForkSyncing.t() | nil,
@@ -27,6 +28,7 @@ defmodule GitHubOpenAPI.BranchProtection do
 
   defstruct [
     :__info__,
+    :__joins__,
     :allow_deletions,
     :allow_force_pushes,
     :allow_fork_syncing,

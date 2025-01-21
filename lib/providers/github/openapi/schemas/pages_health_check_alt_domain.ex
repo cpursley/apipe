@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.PagesHealthCheckAltDomain do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           caa_error: String.t() | nil,
           dns_resolves: boolean | nil,
           enforces_https: boolean | nil,
@@ -38,6 +39,7 @@ defmodule GitHubOpenAPI.PagesHealthCheckAltDomain do
 
   defstruct [
     :__info__,
+    :__joins__,
     :caa_error,
     :dns_resolves,
     :enforces_https,

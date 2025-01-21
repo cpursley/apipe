@@ -4,9 +4,9 @@ defmodule GitHubOpenAPI.CheckRunCheckSuite do
   """
   use Apipe.Providers.OpenAPIEncoder
 
-  @type t :: %__MODULE__{__info__: map, id: integer}
+  @type t :: %__MODULE__{__info__: map, __joins__: map, id: integer}
 
-  defstruct [:__info__, :id]
+  defstruct [:__info__, :__joins__, :id]
 
   @doc false
   @spec __fields__(atom) :: keyword

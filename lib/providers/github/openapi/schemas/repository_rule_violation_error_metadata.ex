@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.RepositoryRuleViolationErrorMetadata do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           secret_scanning:
             GitHubOpenAPI.RepositoryRuleViolationErrorMetadataSecretScanning.t() | nil
         }
 
-  defstruct [:__info__, :secret_scanning]
+  defstruct [:__info__, :__joins__, :secret_scanning]
 
   @doc false
   @spec __fields__(atom) :: keyword

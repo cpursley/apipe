@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.Package do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           created_at: DateTime.t(),
           html_url: String.t(),
           id: integer,
@@ -21,6 +22,7 @@ defmodule GitHubOpenAPI.Package do
 
   defstruct [
     :__info__,
+    :__joins__,
     :created_at,
     :html_url,
     :id,

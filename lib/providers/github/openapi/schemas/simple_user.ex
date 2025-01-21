@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.SimpleUser do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           avatar_url: String.t(),
           email: String.t() | nil,
           events_url: String.t(),
@@ -32,6 +33,7 @@ defmodule GitHubOpenAPI.SimpleUser do
 
   defstruct [
     :__info__,
+    :__joins__,
     :avatar_url,
     :email,
     :events_url,

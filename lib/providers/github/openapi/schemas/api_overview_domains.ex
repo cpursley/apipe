@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.ApiOverviewDomains do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           actions: [String.t()] | nil,
           actions_inbound: GitHubOpenAPI.ApiOverviewDomainsActionsInbound.t() | nil,
           artifact_attestations: GitHubOpenAPI.ApiOverviewDomainsArtifactAttestations.t() | nil,
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.ApiOverviewDomains do
 
   defstruct [
     :__info__,
+    :__joins__,
     :actions,
     :actions_inbound,
     :artifact_attestations,

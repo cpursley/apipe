@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.OrgMembership do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           organization: GitHubOpenAPI.OrganizationSimple.t(),
           organization_url: String.t(),
           permissions: GitHubOpenAPI.OrgMembershipPermissions.t() | nil,
@@ -17,6 +18,7 @@ defmodule GitHubOpenAPI.OrgMembership do
 
   defstruct [
     :__info__,
+    :__joins__,
     :organization,
     :organization_url,
     :permissions,

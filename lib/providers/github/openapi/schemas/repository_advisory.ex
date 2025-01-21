@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisory do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           author: nil,
           closed_at: DateTime.t() | nil,
           collaborating_teams: [GitHubOpenAPI.Team.t()] | nil,
@@ -37,6 +38,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisory do
 
   defstruct [
     :__info__,
+    :__joins__,
     :author,
     :closed_at,
     :collaborating_teams,

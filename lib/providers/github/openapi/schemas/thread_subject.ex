@@ -6,13 +6,14 @@ defmodule GitHubOpenAPI.ThreadSubject do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           latest_comment_url: String.t(),
           title: String.t(),
           type: String.t(),
           url: String.t()
         }
 
-  defstruct [:__info__, :latest_comment_url, :title, :type, :url]
+  defstruct [:__info__, :__joins__, :latest_comment_url, :title, :type, :url]
 
   @doc false
   @spec __fields__(atom) :: keyword

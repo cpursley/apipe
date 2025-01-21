@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.CodespaceWithFullRepository do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           billable_owner: GitHubOpenAPI.SimpleUser.t(),
           created_at: DateTime.t(),
           devcontainer_path: String.t() | nil,
@@ -42,6 +43,7 @@ defmodule GitHubOpenAPI.CodespaceWithFullRepository do
 
   defstruct [
     :__info__,
+    :__joins__,
     :billable_owner,
     :created_at,
     :devcontainer_path,

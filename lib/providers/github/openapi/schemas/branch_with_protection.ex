@@ -6,6 +6,7 @@ defmodule GitHubOpenAPI.BranchWithProtection do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           _links: GitHubOpenAPI.BranchWithProtectionLinks.t(),
           commit: GitHubOpenAPI.Commit.t(),
           name: String.t(),
@@ -18,6 +19,7 @@ defmodule GitHubOpenAPI.BranchWithProtection do
 
   defstruct [
     :__info__,
+    :__joins__,
     :_links,
     :commit,
     :name,

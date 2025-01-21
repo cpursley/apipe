@@ -6,12 +6,13 @@ defmodule GitHubOpenAPI.ViewTraffic do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           count: integer,
           uniques: integer,
           views: [GitHubOpenAPI.Traffic.t()]
         }
 
-  defstruct [:__info__, :count, :uniques, :views]
+  defstruct [:__info__, :__joins__, :count, :uniques, :views]
 
   @doc false
   @spec __fields__(atom) :: keyword

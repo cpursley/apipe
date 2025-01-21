@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.PullRequestReviewRequest do
 
   @type t :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           teams: [GitHubOpenAPI.Team.t()],
           users: [GitHubOpenAPI.SimpleUser.t()]
         }
 
-  defstruct [:__info__, :teams, :users]
+  defstruct [:__info__, :__joins__, :teams, :users]
 
   @doc false
   @spec __fields__(atom) :: keyword

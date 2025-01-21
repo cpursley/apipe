@@ -6,11 +6,12 @@ defmodule GitHubOpenAPI.ActionsRunnerLabels do
 
   @type json_resp :: %__MODULE__{
           __info__: map,
+          __joins__: map,
           labels: [GitHubOpenAPI.RunnerLabel.t()],
           total_count: integer
         }
 
-  defstruct [:__info__, :labels, :total_count]
+  defstruct [:__info__, :__joins__, :labels, :total_count]
 
   @doc false
   @spec __fields__(atom) :: keyword
