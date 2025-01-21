@@ -50,20 +50,16 @@ defmodule Apipe.Providers.GitHub do
   require Logger
   alias Apipe.{PostProcess, Providers.Settings}
 
+  # Make the routes module optional at compile time
+  @compile {:no_warn_undefined, Apipe.Providers.GitHub.Routes}
+
+  alias Apipe.Providers.GitHub.Routes
+
   @default_settings %Settings{
     max_concurrency: 3,
     join_strategy: :async,
     retry: :safe_transient
   }
-
-  @supported_search_endpoints ~w(
-    search/repositories
-    search/users
-    search/code
-    search/issues
-    search/commits
-    search/topics
-  )
 
   @doc false
   def should_retry?(_req, resp) do
@@ -98,8 +94,9 @@ defmodule Apipe.Providers.GitHub do
       |> Apipe.execute()
   """
   def execute(query, opts \\ []) do
-    with {:ok, query} <- validate_endpoint(query),
-         {:ok, query} <- Apipe.Query.validate(query) do
+    with {:ok, query} <- validate_query(query),
+         {:ok, _route} <- Routes.match_route(query.from),
+         {:ok, schema} <- Routes.get_schema(query.from) do
       settings = Map.merge(@default_settings, Keyword.get(opts, :settings, %{}))
 
       # Allow test_response to bypass HTTP call
@@ -123,23 +120,40 @@ defmodule Apipe.Providers.GitHub do
         {:ok, response} ->
           response
           |> process_response(query)
-          |> apply_transforms(query.transforms)
           |> Apipe.apply_joins(query.joins, settings)
           |> case do
             {:ok, {data, meta}} when is_list(data) ->
               # Handle search results or list data with metadata
               filtered_data = PostProcess.filter_fields(data, query)
-              wrap_response({:ok, {filtered_data, meta}}, response, query, opts)
+
+              wrap_response(
+                {:ok, {filtered_data, meta}},
+                response,
+                query,
+                Map.new(opts) |> Map.put(:schema, schema)
+              )
 
             {:ok, {data, meta}} ->
               # Handle single item with metadata
               filtered_data = PostProcess.filter_fields(data, query)
-              wrap_response({:ok, {filtered_data, meta}}, response, query, opts)
+
+              wrap_response(
+                {:ok, {filtered_data, meta}},
+                response,
+                query,
+                Map.new(opts) |> Map.put(:schema, schema)
+              )
 
             {:ok, data} ->
               # Handle data without metadata
               filtered_data = PostProcess.filter_fields(data, query)
-              wrap_response({:ok, filtered_data}, response, query, opts)
+
+              wrap_response(
+                {:ok, filtered_data},
+                response,
+                query,
+                Map.new(opts) |> Map.put(:schema, schema)
+              )
 
             error ->
               error
@@ -151,50 +165,18 @@ defmodule Apipe.Providers.GitHub do
     end
   end
 
+  defp validate_query(query) do
+    with {:ok, query} <- Apipe.Query.validate(query) do
+      {:ok, query}
+    end
+  end
+
   defp build_headers(opts) do
     headers = [{"accept", "application/vnd.github.v3+json"}]
 
     case Keyword.get(opts, :token) do
       nil -> headers
       token -> [{"authorization", "Bearer #{token}"} | headers]
-    end
-  end
-
-  defp validate_endpoint(%{from: from} = query) do
-    cond do
-      from in @supported_search_endpoints ->
-        {:ok, query}
-
-      String.match?(from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+$/) ->
-        {:ok, query}
-
-      String.match?(
-        from,
-        ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/(issues|pulls|releases|contributors|commits|branches|tags)$/
-      ) ->
-        {:ok, query}
-
-      true ->
-        %Apipe.Error{
-          type: :provider_error,
-          message: "Unsupported endpoint",
-          details: %{
-            endpoint: from,
-            # Todo: don't do this here.
-            supported_endpoints:
-              @supported_search_endpoints ++
-                [
-                  "repos/{owner}/{repo}",
-                  "repos/{owner}/{repo}/issues",
-                  "repos/{owner}/{repo}/pulls",
-                  "repos/{owner}/{repo}/releases",
-                  "repos/{owner}/{repo}/contributors",
-                  "repos/{owner}/{repo}/commits",
-                  "repos/{owner}/{repo}/branches",
-                  "repos/{owner}/{repo}/tags"
-                ]
-          }
-        }
     end
   end
 
@@ -459,230 +441,69 @@ defmodule Apipe.Providers.GitHub do
     {rel, url}
   end
 
-  defp wrap_response({:ok, body}, response, query, opts) do
-    {response_data, search_meta} =
+  defp wrap_response({:ok, body}, response, _query, opts) do
+    {data, meta} =
       case body do
-        # Handle filtered data with metadata
         {data, meta} when is_map(meta) ->
           {data, meta}
 
-        # Handle data with join rate limits (legacy)
         {data, join_rate_limits} when is_list(join_rate_limits) ->
-          {data, nil}
+          {data, %{rate_limits: join_rate_limits}}
 
-        # Handle search results with join rate limits (legacy)
-        {items, meta, join_rate_limits} when is_list(join_rate_limits) ->
-          {items, meta}
-
-        # Handle non-search results without joins
         other ->
-          {other, nil}
+          {other, %{}}
       end
 
     # Cast the response after joins have been processed
-    response_data =
+    cast_data =
       if opts[:cast_response] do
-        cond do
-          String.starts_with?(query.from, "search/") ->
-            item_type =
-              case String.split(query.from, "/") do
-                ["search", "repositories" | _] ->
-                  GitHubOpenAPI.Repository
+        schema = opts[:schema]
 
-                ["search", "issues" | _] ->
-                  GitHubOpenAPI.Issue
+        case data do
+          items when is_list(items) ->
+            Enum.map(items, fn item ->
+              # Preserve any joined data before casting
+              joined_data =
+                Map.take(item, [
+                  :contributors,
+                  :issues,
+                  :pulls,
+                  :releases,
+                  :commits,
+                  :branches,
+                  :tags
+                ])
 
-                ["search", "users" | _] ->
-                  GitHubOpenAPI.SimpleUser
+              # Use the schema from the route
+              {:ok, cast_item} = schema.cast(item)
+              # Merge back the joined data after casting
+              Map.merge(cast_item, joined_data)
+            end)
 
-                ["search", "topics" | _] ->
-                  GitHubOpenAPI.Topic
+          item when is_map(item) ->
+            # Preserve any joined data before casting
+            joined_data =
+              Map.take(item, [
+                :contributors,
+                :issues,
+                :pulls,
+                :releases,
+                :commits,
+                :branches,
+                :tags
+              ])
 
-                _ ->
-                  nil
-              end
-
-            if item_type do
-              case response_data do
-                items when is_list(items) ->
-                  Enum.map(items, fn item ->
-                    # Preserve any joined data before casting
-                    joined_data =
-                      Map.take(item, [
-                        :contributors,
-                        :issues,
-                        :pulls,
-                        :releases,
-                        :commits,
-                        :branches,
-                        :tags
-                      ])
-
-                    # Use the OpenAPI generator's built-in casting
-                    {:ok, cast_item} = item_type.cast(item)
-                    # Merge back the joined data after casting
-                    Map.merge(cast_item, joined_data)
-                  end)
-
-                item when is_map(item) ->
-                  # Preserve any joined data before casting
-                  joined_data =
-                    Map.take(item, [
-                      :contributors,
-                      :issues,
-                      :pulls,
-                      :releases,
-                      :commits,
-                      :branches,
-                      :tags
-                    ])
-
-                  # Use the OpenAPI generator's built-in casting
-                  {:ok, cast_item} = item_type.cast(item)
-                  # Merge back the joined data after casting
-                  Map.merge(cast_item, joined_data)
-              end
-            else
-              response_data
-            end
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+$/) ->
-            case response_data do
-              items when is_list(items) ->
-                Enum.map(items, fn item ->
-                  {:ok, cast_item} = GitHubOpenAPI.Repository.cast(item)
-                  cast_item
-                end)
-
-              item when is_map(item) ->
-                {:ok, cast_item} = GitHubOpenAPI.Repository.cast(item)
-                cast_item
-
-              _ ->
-                response_data
-            end
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/issues$/) ->
-            case response_data do
-              items when is_list(items) ->
-                Enum.map(items, fn item ->
-                  {:ok, cast_item} = GitHubOpenAPI.Issue.cast(item)
-                  cast_item
-                end)
-
-              item when is_map(item) ->
-                {:ok, cast_item} = GitHubOpenAPI.Issue.cast(item)
-                cast_item
-
-              _ ->
-                response_data
-            end
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/pulls$/) ->
-            case response_data do
-              items when is_list(items) ->
-                Enum.map(items, fn item ->
-                  {:ok, cast_item} = GitHubOpenAPI.PullRequest.cast(item)
-                  cast_item
-                end)
-
-              item when is_map(item) ->
-                {:ok, cast_item} = GitHubOpenAPI.PullRequest.cast(item)
-                cast_item
-
-              _ ->
-                response_data
-            end
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/releases$/) ->
-            case response_data do
-              items when is_list(items) ->
-                Enum.map(items, fn item ->
-                  {:ok, cast_item} = GitHubOpenAPI.Release.cast(item)
-                  cast_item
-                end)
-
-              item when is_map(item) ->
-                {:ok, cast_item} = GitHubOpenAPI.Release.cast(item)
-                cast_item
-
-              _ ->
-                response_data
-            end
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/commits$/) ->
-            case response_data do
-              items when is_list(items) ->
-                Enum.map(items, fn item ->
-                  {:ok, cast_item} = GitHubOpenAPI.Commit.cast(item)
-                  cast_item
-                end)
-
-              item when is_map(item) ->
-                {:ok, cast_item} = GitHubOpenAPI.Commit.cast(item)
-                cast_item
-
-              _ ->
-                response_data
-            end
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/branches$/) ->
-            case response_data do
-              items when is_list(items) ->
-                Enum.map(items, fn item ->
-                  {:ok, cast_item} = GitHubOpenAPI.ShortBranch.cast(item)
-                  cast_item
-                end)
-
-              item when is_map(item) ->
-                {:ok, cast_item} = GitHubOpenAPI.ShortBranch.cast(item)
-                cast_item
-
-              _ ->
-                response_data
-            end
-
-          String.match?(query.from, ~r/^repos\/[\w\-\.]+\/[\w\-\.]+\/tags$/) ->
-            case response_data do
-              items when is_list(items) ->
-                Enum.map(items, fn item ->
-                  {:ok, cast_item} = GitHubOpenAPI.Tag.cast(item)
-                  cast_item
-                end)
-
-              item when is_map(item) ->
-                {:ok, cast_item} = GitHubOpenAPI.Tag.cast(item)
-                cast_item
-
-              _ ->
-                response_data
-            end
-
-          String.match?(query.from, ~r/^users\/[\w\-\.]+$/) ->
-            case response_data do
-              items when is_list(items) ->
-                Enum.map(items, fn item ->
-                  {:ok, cast_item} = GitHubOpenAPI.SimpleUser.cast(item)
-                  cast_item
-                end)
-
-              item when is_map(item) ->
-                {:ok, cast_item} = GitHubOpenAPI.SimpleUser.cast(item)
-                cast_item
-
-              _ ->
-                response_data
-            end
-
-          true ->
-            response_data
+            # Use the schema from the route
+            {:ok, cast_item} = schema.cast(item)
+            # Merge back the joined data after casting
+            Map.merge(cast_item, joined_data)
         end
       else
-        response_data
+        data
       end
 
     # Build rate limit metadata
-    meta =
+    response_meta =
       case response do
         %{headers: _headers} = resp ->
           # Extract rate limit headers and create RateLimit struct
@@ -711,64 +532,12 @@ defmodule Apipe.Providers.GitHub do
           %{}
       end
 
-    # Add search metadata if present
-    meta =
-      if search_meta do
-        Map.merge(meta, search_meta)
-      else
-        meta
-      end
-
-    # For search endpoints, extract items from the data structure
-    final_data =
-      if String.starts_with?(query.from, "search/") do
-        case response_data do
-          # Handle tuple format
-          {items, _meta} -> items
-          # Handle list format
-          items when is_list(items) -> items
-          # Handle single item
-          other -> [other]
-        end
-      else
-        response_data
-      end
+    # Merge response metadata with any existing metadata
+    final_meta = Map.merge(meta, response_meta)
 
     %Apipe.Response{
-      data: final_data,
-      meta: meta
+      data: cast_data,
+      meta: final_meta
     }
-  end
-
-  defp apply_transforms({:ok, data}, transforms) do
-    case data do
-      {items, meta} when is_list(items) ->
-        transformed =
-          Enum.reduce_while(transforms, {:ok, items}, fn transform, {:ok, acc} ->
-            try do
-              {:cont, {:ok, Enum.map(acc, transform)}}
-            rescue
-              e -> {:halt, {:error, e}}
-            end
-          end)
-
-        case transformed do
-          {:ok, items} -> {:ok, {items, meta}}
-          error -> error
-        end
-
-      items when is_list(items) ->
-        Enum.reduce_while(transforms, {:ok, items}, fn transform, {:ok, acc} ->
-          try do
-            transformed = Enum.map(acc, transform)
-            {:cont, {:ok, transformed}}
-          rescue
-            e -> {:halt, {:error, e}}
-          end
-        end)
-
-      _ ->
-        {:ok, data}
-    end
   end
 end

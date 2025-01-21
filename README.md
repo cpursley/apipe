@@ -140,6 +140,88 @@ Type casting is configured when creating a new client with the `cast_response: t
   - To access fields not defined in the type structs
   - Example: `repo["full_name"]`, `repo["stargazers_count"]`
 
+## Providers
+
+Apipe uses a provider-based architecture to support multiple API integrations. A provider is a module that implements the `Apipe.Provider` behaviour and handles the specifics of communicating with a particular API.
+
+### Overview
+
+Each provider is responsible for:
+- Route matching and validation
+- Schema resolution and type casting
+- Request building and execution
+- Response processing and transformation
+
+### OpenAPI Integration
+
+Apipe includes built-in support for generating providers from OpenAPI specifications. This process involves:
+
+1. Converting the OpenAPI spec to Elixir types using `oapi_generator`:
+```elixir
+# In config/config.exs
+config :oapi_generator,
+    github: [
+      output: [
+        base_module: GitHubOpenAPI,
+        extra_fields: [
+          __info__: :map,
+          # required for joins
+          __joins__: :map
+        ],
+        location: "lib/providers/github/openapi",
+        operation_subdirectory: "operations/",
+        schema_subdirectory: "schemas/",
+        schema_use: Apipe.Providers.OpenAPI.Encoder
+      ]
+    ]
+```
+
+2. Generating the provider's route module using the mix task:
+```bash
+mix apipe.gen.openapi.routes path/to/openapi-spec.yaml provider_name
+```
+
+This generates:
+- Route matching logic for API endpoints
+- Schema resolution for response types
+- Validation for paths and parameters
+
+### Creating a Provider
+
+To create a new provider:
+
+1. Add the OpenAPI specification to your project
+2. Configure `oapi_generator` for your provider
+3. Generate the types and routes:
+```bash
+# Generate types from OpenAPI spec
+mix oapi.gen path/to/openapi-spec.yaml
+
+# Generate routes
+mix apipe.gen.openapi.routes path/to/openapi-spec.yaml provider_name
+```
+
+4. Implement the provider module:
+```elixir
+defmodule Apipe.Providers.MyProvider do
+  @behaviour Apipe.Provider
+
+  alias Apipe.Providers.MyProvider.Routes
+
+  # Implement the required callbacks
+  def execute(query, opts \\ []) do
+    # Your implementation
+  end
+end
+```
+
+The provider can then be used with Apipe's query interface:
+```elixir
+Apipe.new(Apipe.Providers.MyProvider)
+|> Apipe.from("some/endpoint")
+|> Apipe.execute()
+```
+
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests.

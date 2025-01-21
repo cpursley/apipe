@@ -440,23 +440,6 @@ defmodule Apipe do
   end
 
   @doc """
-  Adds a transformation function to be applied to the response data.
-
-  The transform function receives the response data and should return the transformed data.
-  Transforms are applied in order, after the initial response is received but before joins.
-
-  ## Examples
-
-      iex> query = Apipe.new(Apipe.Providers.GitHub)
-      iex> query = Apipe.transform(query, fn repo -> Map.update(repo, "stars", 0, &String.to_integer/1) end)
-      iex> %Apipe.Query{transforms: [_]} = query
-  """
-  def transform(%Query{} = query, transform_fn) when is_function(transform_fn, 1) do
-    Logger.debug("Adding transform function")
-    %Query{query | transforms: query.transforms ++ [transform_fn]}
-  end
-
-  @doc """
   Adds a join operation to fetch related data.
 
   The join function receives a query function that will be called for each item in the result set.

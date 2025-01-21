@@ -8,24 +8,23 @@ defmodule Apipe.Query do
 
   @type transform :: (any() -> any())
   @type join :: %{
-    field: atom(),
-    query_fn: (any() -> t())
-  }
+          field: atom(),
+          query_fn: (any() -> t())
+        }
 
   @type t :: %__MODULE__{
-    provider: module(),
-    provider_opts: keyword(),
-    from: String.t(),
-    cast_type: module() | nil,
-    select: list(String.t()),
-    filters: list(filter()),
-    order_by: String.t() | nil,
-    order_direction: :asc | :desc | nil,
-    limit: pos_integer() | nil,
-    offset: non_neg_integer() | nil,
-    transforms: list(transform()),
-    joins: list(join())
-  }
+          provider: module(),
+          provider_opts: keyword(),
+          from: String.t(),
+          cast_type: module() | nil,
+          select: list(String.t()),
+          filters: list(filter()),
+          order_by: String.t() | nil,
+          order_direction: :asc | :desc | nil,
+          limit: pos_integer() | nil,
+          offset: non_neg_integer() | nil,
+          joins: list(join())
+        }
 
   @type filter :: {:eq | :gt | :lt | :gte | :lte | :like | :in, String.t(), any()}
 
@@ -40,7 +39,6 @@ defmodule Apipe.Query do
             order_direction: nil,
             limit: nil,
             offset: nil,
-            transforms: [],
             joins: []
 
   @doc """
@@ -62,8 +60,10 @@ defmodule Apipe.Query do
     cond do
       is_nil(query.from) ->
         {:error, %Apipe.Error{type: :invalid_query, message: "FROM clause is required"}}
+
       is_nil(query.provider) ->
         {:error, %Apipe.Error{type: :invalid_query, message: "Provider is required"}}
+
       true ->
         {:ok, query}
     end
