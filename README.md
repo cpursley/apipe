@@ -177,8 +177,13 @@ config :oapi_generator,
 ```
 
 2. Generating the provider's route module using the mix task:
+
 ```bash
-mix apipe.gen.openapi.routes path/to/openapi-spec.yaml provider_name
+# Local file
+mix apipe.gen.openapi.routes path/to/spec.yaml provider_name [--module-name NAME]
+
+# Remote file
+ mix apipe.gen.openapi.routes --url https://example.com/openapi.yaml provider_name [--module-name NAME]
 ```
 
 This generates:

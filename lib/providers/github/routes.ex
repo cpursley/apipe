@@ -61,11 +61,7 @@ defmodule Apipe.Providers.GitHub.Routes do
     end
 
     def match_route(path) do
-      %Apipe.Error{
-        type: :validation_error,
-        message: "Route not found",
-        details: %{path: path}
-      }
+      %Apipe.Error{type: :validation_error, message: "Route not found", details: %{path: path}}
     end
   )
 

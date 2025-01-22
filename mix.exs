@@ -24,13 +24,14 @@ defmodule Apipe.MixProject do
       {:plug, "~> 1.14"},
       {:plug_cowboy, "~> 2.6"},
       {:jason, "~> 1.4"},
-      {:req, "~> 0.5"},
+      {:req, "~> 0.4"},
 
       # Providers
       {:oapi_generator, "~> 0.2.0", only: :dev, runtime: false},
 
       # Dev
-      {:ex_doc, "~> 0.36.1"}
+      {:ex_doc, "~> 0.36.1", only: :dev},
+      {:yaml_elixir, "~> 2.9"}
     ]
   end
 end

@@ -6,6 +6,8 @@ defmodule Apipe.Providers.GitHub do
   This provider implements the GitHub REST API v3 interface, allowing you to query
   GitHub resources using Apipe's SQL-like syntax.
 
+  ## OpenAPI Config Source (last updated 2025-01-22): https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.yaml
+
   ## Rate Limiting
 
   GitHub API has rate limits that vary based on authentication:
