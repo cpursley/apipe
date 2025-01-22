@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.TeamDiscussion do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          author: GitHubOpenAPI.SimpleUser.t() | nil,
+          author: GitHubOpenAPI.NullableSimpleUser.t(),
           body: String.t(),
           body_html: String.t(),
           body_version: String.t(),
@@ -56,7 +56,7 @@ defmodule GitHubOpenAPI.TeamDiscussion do
 
   def __fields__(:t) do
     [
-      author: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      author: {GitHubOpenAPI.NullableSimpleUser, :t},
       body: {:string, :generic},
       body_html: {:string, :generic},
       body_version: {:string, :generic},
@@ -64,7 +64,7 @@ defmodule GitHubOpenAPI.TeamDiscussion do
       comments_url: {:string, :uri},
       created_at: {:string, :date_time},
       html_url: {:string, :uri},
-      last_edited_at: {:union, [{:string, :date_time}, :null]},
+      last_edited_at: {:string, :date_time},
       node_id: {:string, :generic},
       number: :integer,
       pinned: :boolean,

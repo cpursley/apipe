@@ -39,7 +39,7 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntries do
       canonicalizedBody: {:string, :generic},
       inclusionPromise:
         {GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntriesInclusionPromise, :t},
-      inclusionProof: {:union, [{:string, :generic}, :null]},
+      inclusionProof: {:string, :generic},
       integratedTime: {:string, :generic},
       kindVersion: {GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntriesKindVersion, :t},
       logId: {GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntriesLogId, :t},

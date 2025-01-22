@@ -50,11 +50,11 @@ defmodule GitHubOpenAPI.CodeScanningDefaultSetup do
         ]
       ],
       query_suite: {:enum, ["default", "extended"]},
-      runner_label: {:union, [{:string, :generic}, :null]},
-      runner_type: {:enum, ["standard", "labeled", nil]},
-      schedule: {:enum, ["weekly", nil]},
+      runner_label: {:string, :generic},
+      runner_type: {:enum, ["standard", "labeled"]},
+      schedule: {:const, "weekly"},
       state: {:enum, ["configured", "not-configured"]},
-      updated_at: {:union, [{:string, :date_time}, :null]}
+      updated_at: {:string, :date_time}
     ]
   end
 end

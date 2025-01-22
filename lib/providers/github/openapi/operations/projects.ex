@@ -15,7 +15,7 @@ defmodule GitHubOpenAPI.Projects do
     * [API method documentation](https://docs.github.com/rest/projects/collaborators#add-project-collaborator)
 
   """
-  @spec add_collaborator(integer, String.t(), map | nil, keyword) ::
+  @spec add_collaborator(integer, String.t(), map, keyword) ::
           :ok | {:error, GitHubOpenAPI.BasicError.t() | GitHubOpenAPI.ValidationError.t()}
   def add_collaborator(project_id, username, body, opts \\ []) do
     client = opts[:client] || @default_client
@@ -26,7 +26,7 @@ defmodule GitHubOpenAPI.Projects do
       url: "/projects/#{project_id}/collaborators/#{username}",
       body: body,
       method: :put,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {204, :null},
         {304, :null},

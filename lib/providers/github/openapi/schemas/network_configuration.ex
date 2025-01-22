@@ -31,7 +31,7 @@ defmodule GitHubOpenAPI.NetworkConfiguration do
   def __fields__(:t) do
     [
       compute_service: {:enum, ["none", "actions", "codespaces"]},
-      created_on: {:union, [{:string, :date_time}, :null]},
+      created_on: {:string, :date_time},
       id: {:string, :generic},
       name: {:string, :generic},
       network_settings_ids: [string: :generic]

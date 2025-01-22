@@ -22,11 +22,11 @@ defmodule GitHubOpenAPI.FileCommitCommitVerification do
 
   def __fields__(:t) do
     [
-      payload: {:union, [{:string, :generic}, :null]},
+      payload: {:string, :generic},
       reason: {:string, :generic},
-      signature: {:union, [{:string, :generic}, :null]},
+      signature: {:string, :generic},
       verified: :boolean,
-      verified_at: {:union, [{:string, :generic}, :null]}
+      verified_at: {:string, :generic}
     ]
   end
 end

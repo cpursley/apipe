@@ -40,13 +40,13 @@ defmodule GitHubOpenAPI.CodeScanningAlertRule do
     [
       description: {:string, :generic},
       full_description: {:string, :generic},
-      help: {:union, [{:string, :generic}, :null]},
-      help_uri: {:union, [{:string, :generic}, :null]},
-      id: {:union, [{:string, :generic}, :null]},
+      help: {:string, :generic},
+      help_uri: {:string, :generic},
+      id: {:string, :generic},
       name: {:string, :generic},
-      security_severity_level: {:enum, ["low", "medium", "high", "critical", nil]},
-      severity: {:enum, ["none", "note", "warning", "error", nil]},
-      tags: {:union, [[string: :generic], :null]}
+      security_severity_level: {:enum, ["low", "medium", "high", "critical"]},
+      severity: {:enum, ["none", "note", "warning", "error"]},
+      tags: [string: :generic]
     ]
   end
 end

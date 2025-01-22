@@ -641,7 +641,7 @@ defmodule GitHubOpenAPI.Gists do
     * [API method documentation](https://docs.github.com/rest/gists/gists#update-a-gist)
 
   """
-  @spec update(String.t(), map | nil, keyword) ::
+  @spec update(String.t(), map, keyword) ::
           {:ok, GitHubOpenAPI.GistSimple.t()}
           | {:error, GitHubOpenAPI.BasicError.t() | GitHubOpenAPI.ValidationError.t()}
   def update(gist_id, body, opts \\ []) do
@@ -653,7 +653,7 @@ defmodule GitHubOpenAPI.Gists do
       url: "/gists/#{gist_id}",
       body: body,
       method: :patch,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {200, {GitHubOpenAPI.GistSimple, :t}},
         {404, {GitHubOpenAPI.BasicError, :t}},

@@ -10,7 +10,7 @@ defmodule GitHubOpenAPI.GistCommit do
           change_status: GitHubOpenAPI.GistCommitChangeStatus.t(),
           committed_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil,
+          user: GitHubOpenAPI.NullableSimpleUser.t(),
           version: String.t()
         }
 
@@ -25,7 +25,7 @@ defmodule GitHubOpenAPI.GistCommit do
       change_status: {GitHubOpenAPI.GistCommitChangeStatus, :t},
       committed_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      user: {GitHubOpenAPI.NullableSimpleUser, :t},
       version: {:string, :generic}
     ]
   end

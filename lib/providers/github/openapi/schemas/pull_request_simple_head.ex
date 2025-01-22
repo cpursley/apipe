@@ -11,7 +11,7 @@ defmodule GitHubOpenAPI.PullRequestSimpleHead do
           ref: String.t(),
           repo: GitHubOpenAPI.Repository.t(),
           sha: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [:__info__, :__joins__, :label, :ref, :repo, :sha, :user]
@@ -26,7 +26,7 @@ defmodule GitHubOpenAPI.PullRequestSimpleHead do
       ref: {:string, :generic},
       repo: {GitHubOpenAPI.Repository, :t},
       sha: {:string, :generic},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

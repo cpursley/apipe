@@ -18,6 +18,6 @@ defmodule GitHubOpenAPI.DependabotAlertSecurityAdvisoryCvss do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [score: :number, vector_string: {:union, [{:string, :generic}, :null]}]
+    [score: :number, vector_string: {:string, :generic}]
   end
 end

@@ -25,7 +25,7 @@ defmodule GitHubOpenAPI.Actor do
     [
       avatar_url: {:string, :uri},
       display_login: {:string, :generic},
-      gravatar_id: {:union, [{:string, :generic}, :null]},
+      gravatar_id: {:string, :generic},
       id: :integer,
       login: {:string, :generic},
       url: {:string, :uri}

@@ -1093,7 +1093,7 @@ defmodule GitHubOpenAPI.Activity do
           __info__: map,
           __joins__: map,
           activity_type: String.t(),
-          actor: GitHubOpenAPI.SimpleUser.t() | nil,
+          actor: GitHubOpenAPI.NullableSimpleUser.t(),
           after: String.t(),
           before: String.t(),
           id: integer,
@@ -1139,7 +1139,7 @@ defmodule GitHubOpenAPI.Activity do
            "pr_merge",
            "merge_queue_merge"
          ]},
-      actor: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      actor: {GitHubOpenAPI.NullableSimpleUser, :t},
       after: {:string, :generic},
       before: {:string, :generic},
       id: :integer,

@@ -8,7 +8,7 @@ defmodule GitHubOpenAPI.IssueSearchResultItem do
           __info__: map,
           __joins__: map,
           active_lock_reason: String.t() | nil,
-          assignee: GitHubOpenAPI.SimpleUser.t() | nil,
+          assignee: GitHubOpenAPI.NullableSimpleUser.t(),
           assignees: [GitHubOpenAPI.SimpleUser.t()] | nil,
           author_association: String.t(),
           body: String.t() | nil,
@@ -25,10 +25,10 @@ defmodule GitHubOpenAPI.IssueSearchResultItem do
           labels: [GitHubOpenAPI.IssueSearchResultItemLabels.t()],
           labels_url: String.t(),
           locked: boolean,
-          milestone: GitHubOpenAPI.Milestone.t() | nil,
+          milestone: GitHubOpenAPI.NullableMilestone.t(),
           node_id: String.t(),
           number: integer,
-          performed_via_github_app: GitHubOpenAPI.Integration.t() | nil,
+          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t() | nil,
           pull_request: GitHubOpenAPI.IssueSearchResultItemPullRequest.t() | nil,
           reactions: GitHubOpenAPI.ReactionRollup.t() | nil,
           repository: GitHubOpenAPI.Repository.t() | nil,
@@ -42,7 +42,7 @@ defmodule GitHubOpenAPI.IssueSearchResultItem do
           title: String.t(),
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -92,9 +92,9 @@ defmodule GitHubOpenAPI.IssueSearchResultItem do
 
   def __fields__(:t) do
     [
-      active_lock_reason: {:union, [{:string, :generic}, :null]},
-      assignee: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
-      assignees: {:union, [[{GitHubOpenAPI.SimpleUser, :t}], :null]},
+      active_lock_reason: {:string, :generic},
+      assignee: {GitHubOpenAPI.NullableSimpleUser, :t},
+      assignees: [{GitHubOpenAPI.SimpleUser, :t}],
       author_association:
         {:enum,
          [
@@ -110,7 +110,7 @@ defmodule GitHubOpenAPI.IssueSearchResultItem do
       body: {:string, :generic},
       body_html: {:string, :generic},
       body_text: {:string, :generic},
-      closed_at: {:union, [{:string, :date_time}, :null]},
+      closed_at: {:string, :date_time},
       comments: :integer,
       comments_url: {:string, :uri},
       created_at: {:string, :date_time},
@@ -121,24 +121,24 @@ defmodule GitHubOpenAPI.IssueSearchResultItem do
       labels: [{GitHubOpenAPI.IssueSearchResultItemLabels, :t}],
       labels_url: {:string, :generic},
       locked: :boolean,
-      milestone: {:union, [{GitHubOpenAPI.Milestone, :t}, :null]},
+      milestone: {GitHubOpenAPI.NullableMilestone, :t},
       node_id: {:string, :generic},
       number: :integer,
-      performed_via_github_app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
+      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
       pull_request: {GitHubOpenAPI.IssueSearchResultItemPullRequest, :t},
       reactions: {GitHubOpenAPI.ReactionRollup, :t},
       repository: {GitHubOpenAPI.Repository, :t},
       repository_url: {:string, :uri},
       score: :number,
       state: {:string, :generic},
-      state_reason: {:union, [{:string, :generic}, :null]},
+      state_reason: {:string, :generic},
       sub_issues_summary: {GitHubOpenAPI.SubIssuesSummary, :t},
       text_matches: [{GitHubOpenAPI.SearchResultTextMatches, :t}],
       timeline_url: {:string, :uri},
       title: {:string, :generic},
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

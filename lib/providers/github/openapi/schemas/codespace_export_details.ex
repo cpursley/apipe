@@ -34,13 +34,13 @@ defmodule GitHubOpenAPI.CodespaceExportDetails do
 
   def __fields__(:t) do
     [
-      branch: {:union, [{:string, :generic}, :null]},
-      completed_at: {:union, [{:string, :date_time}, :null]},
+      branch: {:string, :generic},
+      completed_at: {:string, :date_time},
       export_url: {:string, :generic},
-      html_url: {:union, [{:string, :generic}, :null]},
+      html_url: {:string, :generic},
       id: {:string, :generic},
-      sha: {:union, [{:string, :generic}, :null]},
-      state: {:union, [{:string, :generic}, :null]}
+      sha: {:string, :generic},
+      state: {:string, :generic}
     ]
   end
 end

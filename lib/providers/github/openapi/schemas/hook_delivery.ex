@@ -50,20 +50,20 @@ defmodule GitHubOpenAPI.HookDelivery do
 
   def __fields__(:t) do
     [
-      action: {:union, [{:string, :generic}, :null]},
+      action: {:string, :generic},
       delivered_at: {:string, :date_time},
       duration: :number,
       event: {:string, :generic},
       guid: {:string, :generic},
       id: :integer,
-      installation_id: {:union, [:integer, :null]},
+      installation_id: :integer,
       redelivery: :boolean,
-      repository_id: {:union, [:integer, :null]},
+      repository_id: :integer,
       request: {GitHubOpenAPI.HookDeliveryRequest, :t},
       response: {GitHubOpenAPI.HookDeliveryResponse, :t},
       status: {:string, :generic},
       status_code: :integer,
-      throttled_at: {:union, [{:string, :date_time}, :null]},
+      throttled_at: {:string, :date_time},
       url: {:string, :generic}
     ]
   end

@@ -34,12 +34,10 @@ defmodule GitHubOpenAPI.CopilotUsageMetricsDay do
 
   def __fields__(:t) do
     [
-      copilot_dotcom_chat: {:union, [{GitHubOpenAPI.CopilotDotcomChat, :t}, :null]},
-      copilot_dotcom_pull_requests:
-        {:union, [{GitHubOpenAPI.CopilotDotcomPullRequests, :t}, :null]},
-      copilot_ide_chat: {:union, [{GitHubOpenAPI.CopilotIdeChat, :t}, :null]},
-      copilot_ide_code_completions:
-        {:union, [{GitHubOpenAPI.CopilotIdeCodeCompletions, :t}, :null]},
+      copilot_dotcom_chat: {GitHubOpenAPI.CopilotDotcomChat, :t},
+      copilot_dotcom_pull_requests: {GitHubOpenAPI.CopilotDotcomPullRequests, :t},
+      copilot_ide_chat: {GitHubOpenAPI.CopilotIdeChat, :t},
+      copilot_ide_code_completions: {GitHubOpenAPI.CopilotIdeCodeCompletions, :t},
       date: {:string, :date},
       total_active_users: :integer,
       total_engaged_users: :integer

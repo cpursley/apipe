@@ -8,7 +8,7 @@ defmodule GitHubOpenAPI.CheckSuite do
           __info__: map,
           __joins__: map,
           after: String.t() | nil,
-          app: GitHubOpenAPI.Integration.t() | nil,
+          app: GitHubOpenAPI.NullableIntegration.t(),
           before: String.t() | nil,
           check_runs_url: String.t(),
           conclusion: String.t() | nil,
@@ -58,9 +58,9 @@ defmodule GitHubOpenAPI.CheckSuite do
 
   def __fields__(:t) do
     [
-      after: {:union, [{:string, :generic}, :null]},
-      app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
-      before: {:union, [{:string, :generic}, :null]},
+      after: {:string, :generic},
+      app: {GitHubOpenAPI.NullableIntegration, :t},
+      before: {:string, :generic},
       check_runs_url: {:string, :generic},
       conclusion:
         {:enum,
@@ -76,21 +76,20 @@ defmodule GitHubOpenAPI.CheckSuite do
            "stale",
            nil
          ]},
-      created_at: {:union, [{:string, :date_time}, :null]},
-      head_branch: {:union, [{:string, :generic}, :null]},
+      created_at: {:string, :date_time},
+      head_branch: {:string, :generic},
       head_commit: {GitHubOpenAPI.SimpleCommit, :t},
       head_sha: {:string, :generic},
       id: :integer,
       latest_check_runs_count: :integer,
       node_id: {:string, :generic},
-      pull_requests: {:union, [[{GitHubOpenAPI.PullRequestMinimal, :t}], :null]},
+      pull_requests: [{GitHubOpenAPI.PullRequestMinimal, :t}],
       repository: {GitHubOpenAPI.MinimalRepository, :t},
       rerequestable: :boolean,
       runs_rerequestable: :boolean,
-      status:
-        {:enum, ["queued", "in_progress", "completed", "waiting", "requested", "pending", nil]},
-      updated_at: {:union, [{:string, :date_time}, :null]},
-      url: {:union, [{:string, :generic}, :null]}
+      status: {:enum, ["queued", "in_progress", "completed", "waiting", "requested", "pending"]},
+      updated_at: {:string, :date_time},
+      url: {:string, :generic}
     ]
   end
 end

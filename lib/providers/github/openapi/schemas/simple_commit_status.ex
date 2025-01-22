@@ -42,15 +42,15 @@ defmodule GitHubOpenAPI.SimpleCommitStatus do
 
   def __fields__(:t) do
     [
-      avatar_url: {:union, [{:string, :uri}, :null]},
+      avatar_url: {:string, :uri},
       context: {:string, :generic},
       created_at: {:string, :date_time},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       id: :integer,
       node_id: {:string, :generic},
-      required: {:union, [:boolean, :null]},
+      required: :boolean,
       state: {:string, :generic},
-      target_url: {:union, [{:string, :uri}, :null]},
+      target_url: {:string, :uri},
       updated_at: {:string, :date_time},
       url: {:string, :uri}
     ]

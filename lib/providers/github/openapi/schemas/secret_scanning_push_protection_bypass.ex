@@ -20,7 +20,7 @@ defmodule GitHubOpenAPI.SecretScanningPushProtectionBypass do
 
   def __fields__(:t) do
     [
-      expire_at: {:union, [{:string, :date_time}, :null]},
+      expire_at: {:string, :date_time},
       reason: {:enum, ["false_positive", "used_in_tests", "will_fix_later"]},
       token_type: {:string, :generic}
     ]

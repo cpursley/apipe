@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.CheckRun do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          app: GitHubOpenAPI.Integration.t() | nil,
+          app: GitHubOpenAPI.NullableIntegration.t(),
           check_suite: GitHubOpenAPI.CheckRunCheckSuite.t() | nil,
           completed_at: DateTime.t() | nil,
           conclusion: String.t() | nil,
@@ -54,32 +54,23 @@ defmodule GitHubOpenAPI.CheckRun do
 
   def __fields__(:t) do
     [
-      app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
-      check_suite: {:union, [{GitHubOpenAPI.CheckRunCheckSuite, :t}, :null]},
-      completed_at: {:union, [{:string, :date_time}, :null]},
+      app: {GitHubOpenAPI.NullableIntegration, :t},
+      check_suite: {GitHubOpenAPI.CheckRunCheckSuite, :t},
+      completed_at: {:string, :date_time},
       conclusion:
         {:enum,
-         [
-           "success",
-           "failure",
-           "neutral",
-           "cancelled",
-           "skipped",
-           "timed_out",
-           "action_required",
-           nil
-         ]},
+         ["success", "failure", "neutral", "cancelled", "skipped", "timed_out", "action_required"]},
       deployment: {GitHubOpenAPI.DeploymentSimple, :t},
-      details_url: {:union, [{:string, :generic}, :null]},
-      external_id: {:union, [{:string, :generic}, :null]},
+      details_url: {:string, :generic},
+      external_id: {:string, :generic},
       head_sha: {:string, :generic},
-      html_url: {:union, [{:string, :generic}, :null]},
+      html_url: {:string, :generic},
       id: :integer,
       name: {:string, :generic},
       node_id: {:string, :generic},
       output: {GitHubOpenAPI.CheckRunOutput, :t},
       pull_requests: [{GitHubOpenAPI.PullRequestMinimal, :t}],
-      started_at: {:union, [{:string, :date_time}, :null]},
+      started_at: {:string, :date_time},
       status: {:enum, ["queued", "in_progress", "completed", "waiting", "requested", "pending"]},
       url: {:string, :generic}
     ]

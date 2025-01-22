@@ -41,10 +41,10 @@ defmodule GitHubOpenAPI.ApiInsightsUserStats do
       actor_id: :integer,
       actor_name: {:string, :generic},
       actor_type: {:string, :generic},
-      integration_id: {:union, [:integer, :null]},
-      last_rate_limited_timestamp: {:union, [{:string, :generic}, :null]},
+      integration_id: :integer,
+      last_rate_limited_timestamp: {:string, :generic},
       last_request_timestamp: {:string, :generic},
-      oauth_application_id: {:union, [:integer, :null]},
+      oauth_application_id: :integer,
       rate_limited_request_count: :integer,
       total_request_count: :integer
     ]

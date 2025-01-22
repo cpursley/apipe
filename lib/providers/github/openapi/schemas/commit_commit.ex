@@ -7,9 +7,9 @@ defmodule GitHubOpenAPI.CommitCommit do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          author: GitHubOpenAPI.GitUser.t() | nil,
+          author: GitHubOpenAPI.NullableGitUser.t(),
           comment_count: integer,
-          committer: GitHubOpenAPI.GitUser.t() | nil,
+          committer: GitHubOpenAPI.NullableGitUser.t(),
           message: String.t(),
           tree: GitHubOpenAPI.CommitCommitTree.t(),
           url: String.t(),
@@ -34,9 +34,9 @@ defmodule GitHubOpenAPI.CommitCommit do
 
   def __fields__(:t) do
     [
-      author: {:union, [{GitHubOpenAPI.GitUser, :t}, :null]},
+      author: {GitHubOpenAPI.NullableGitUser, :t},
       comment_count: :integer,
-      committer: {:union, [{GitHubOpenAPI.GitUser, :t}, :null]},
+      committer: {GitHubOpenAPI.NullableGitUser, :t},
       message: {:string, :generic},
       tree: {GitHubOpenAPI.CommitCommitTree, :t},
       url: {:string, :uri},

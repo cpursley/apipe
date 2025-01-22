@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.ProtectedBranchPullRequestReviewBypassPullRequestAllowan
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          apps: [GitHubOpenAPI.Integration.t() | nil] | nil,
+          apps: [GitHubOpenAPI.Integration.t()] | nil,
           teams: [GitHubOpenAPI.Team.t()] | nil,
           users: [GitHubOpenAPI.SimpleUser.t()] | nil
         }
@@ -20,7 +20,7 @@ defmodule GitHubOpenAPI.ProtectedBranchPullRequestReviewBypassPullRequestAllowan
 
   def __fields__(:t) do
     [
-      apps: [union: [{GitHubOpenAPI.Integration, :t}, :null]],
+      apps: [{GitHubOpenAPI.Integration, :t}],
       teams: [{GitHubOpenAPI.Team, :t}],
       users: [{GitHubOpenAPI.SimpleUser, :t}]
     ]

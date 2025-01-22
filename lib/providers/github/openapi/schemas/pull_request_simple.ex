@@ -9,10 +9,10 @@ defmodule GitHubOpenAPI.PullRequestSimple do
           __joins__: map,
           _links: GitHubOpenAPI.PullRequestSimpleLinks.t(),
           active_lock_reason: String.t() | nil,
-          assignee: GitHubOpenAPI.SimpleUser.t() | nil,
+          assignee: GitHubOpenAPI.NullableSimpleUser.t(),
           assignees: [GitHubOpenAPI.SimpleUser.t()] | nil,
           author_association: String.t(),
-          auto_merge: GitHubOpenAPI.AutoMerge.t() | nil,
+          auto_merge: GitHubOpenAPI.AutoMerge.t(),
           base: GitHubOpenAPI.PullRequestSimpleBase.t(),
           body: String.t() | nil,
           closed_at: DateTime.t() | nil,
@@ -29,7 +29,7 @@ defmodule GitHubOpenAPI.PullRequestSimple do
           locked: boolean,
           merge_commit_sha: String.t() | nil,
           merged_at: DateTime.t() | nil,
-          milestone: GitHubOpenAPI.Milestone.t() | nil,
+          milestone: GitHubOpenAPI.NullableMilestone.t(),
           node_id: String.t(),
           number: integer,
           patch_url: String.t(),
@@ -42,7 +42,7 @@ defmodule GitHubOpenAPI.PullRequestSimple do
           title: String.t(),
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -93,9 +93,9 @@ defmodule GitHubOpenAPI.PullRequestSimple do
   def __fields__(:t) do
     [
       _links: {GitHubOpenAPI.PullRequestSimpleLinks, :t},
-      active_lock_reason: {:union, [{:string, :generic}, :null]},
-      assignee: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
-      assignees: {:union, [[{GitHubOpenAPI.SimpleUser, :t}], :null]},
+      active_lock_reason: {:string, :generic},
+      assignee: {GitHubOpenAPI.NullableSimpleUser, :t},
+      assignees: [{GitHubOpenAPI.SimpleUser, :t}],
       author_association:
         {:enum,
          [
@@ -108,10 +108,10 @@ defmodule GitHubOpenAPI.PullRequestSimple do
            "NONE",
            "OWNER"
          ]},
-      auto_merge: {:union, [{GitHubOpenAPI.AutoMerge, :t}, :null]},
+      auto_merge: {GitHubOpenAPI.AutoMerge, :t},
       base: {GitHubOpenAPI.PullRequestSimpleBase, :t},
-      body: {:union, [{:string, :generic}, :null]},
-      closed_at: {:union, [{:string, :date_time}, :null]},
+      body: {:string, :generic},
+      closed_at: {:string, :date_time},
       comments_url: {:string, :uri},
       commits_url: {:string, :uri},
       created_at: {:string, :date_time},
@@ -123,14 +123,14 @@ defmodule GitHubOpenAPI.PullRequestSimple do
       issue_url: {:string, :uri},
       labels: [{GitHubOpenAPI.PullRequestSimpleLabels, :t}],
       locked: :boolean,
-      merge_commit_sha: {:union, [{:string, :generic}, :null]},
-      merged_at: {:union, [{:string, :date_time}, :null]},
-      milestone: {:union, [{GitHubOpenAPI.Milestone, :t}, :null]},
+      merge_commit_sha: {:string, :generic},
+      merged_at: {:string, :date_time},
+      milestone: {GitHubOpenAPI.NullableMilestone, :t},
       node_id: {:string, :generic},
       number: :integer,
       patch_url: {:string, :uri},
-      requested_reviewers: {:union, [[{GitHubOpenAPI.SimpleUser, :t}], :null]},
-      requested_teams: {:union, [[{GitHubOpenAPI.Team, :t}], :null]},
+      requested_reviewers: [{GitHubOpenAPI.SimpleUser, :t}],
+      requested_teams: [{GitHubOpenAPI.Team, :t}],
       review_comment_url: {:string, :generic},
       review_comments_url: {:string, :uri},
       state: {:string, :generic},
@@ -138,7 +138,7 @@ defmodule GitHubOpenAPI.PullRequestSimple do
       title: {:string, :generic},
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

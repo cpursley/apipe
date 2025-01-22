@@ -34,7 +34,7 @@ defmodule GitHubOpenAPI.ApiInsightsRouteStats do
     [
       api_route: {:string, :generic},
       http_method: {:string, :generic},
-      last_rate_limited_timestamp: {:union, [{:string, :generic}, :null]},
+      last_rate_limited_timestamp: {:string, :generic},
       last_request_timestamp: {:string, :generic},
       rate_limited_request_count: :integer,
       total_request_count: :integer

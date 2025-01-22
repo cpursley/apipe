@@ -56,13 +56,13 @@ defmodule GitHubOpenAPI.GpgKey do
       can_sign: :boolean,
       created_at: {:string, :date_time},
       emails: [{GitHubOpenAPI.GpgKeyEmails, :t}],
-      expires_at: {:union, [{:string, :date_time}, :null]},
+      expires_at: {:string, :date_time},
       id: :integer,
       key_id: {:string, :generic},
-      name: {:union, [{:string, :generic}, :null]},
-      primary_key_id: {:union, [:integer, :null]},
+      name: {:string, :generic},
+      primary_key_id: :integer,
       public_key: {:string, :generic},
-      raw_key: {:union, [{:string, :generic}, :null]},
+      raw_key: {:string, :generic},
       revoked: :boolean,
       subkeys: [{GitHubOpenAPI.GpgKeySubkeys, :t}]
     ]

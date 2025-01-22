@@ -27,7 +27,7 @@ defmodule GitHubOpenAPI.SimpleClassroomOrganization do
       html_url: {:string, :uri},
       id: :integer,
       login: {:string, :generic},
-      name: {:union, [{:string, :generic}, :null]},
+      name: {:string, :generic},
       node_id: {:string, :generic}
     ]
   end

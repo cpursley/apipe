@@ -18,6 +18,6 @@ defmodule GitHubOpenAPI.HookDeliveryResponse do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [headers: {:union, [:map, :null]}, payload: {:union, [{:string, :generic}, :null]}]
+    [headers: :map, payload: {:string, :generic}]
   end
 end

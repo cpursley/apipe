@@ -96,7 +96,7 @@ defmodule Apipe.Providers.GitHub do
       |> Apipe.execute()
   """
   def execute(query, opts \\ []) do
-    with {:ok, query} <- validate_query(query),
+    with {:ok, query} <- Apipe.Query.validate(query),
          {:ok, _route} <- Routes.match_route(query.from),
          {:ok, schema} <- Routes.get_schema(query.from) do
       settings = Map.merge(@default_settings, Keyword.get(opts, :settings, %{}))
@@ -164,12 +164,6 @@ defmodule Apipe.Providers.GitHub do
         error ->
           error
       end
-    end
-  end
-
-  defp validate_query(query) do
-    with {:ok, query} <- Apipe.Query.validate(query) do
-      {:ok, query}
     end
   end
 
@@ -248,56 +242,60 @@ defmodule Apipe.Providers.GitHub do
       "elixir in:bio"
   """
   def build_search_query(query) do
-    filters = Enum.map(query.filters, &build_filter_expression(&1, query.from))
-    Enum.join(filters, " ")
+    query.filters
+    |> Enum.map(&build_filter_expression(&1, query.from))
+    |> Enum.join(" ")
   end
 
   # Build a filter expression based on the operator and whether it's a user search
-  defp build_filter_expression({operator, field, value}, from) do
-    cond do
-      String.starts_with?(from, "search/users") and
-          field in ["bio", "location", "name", "email", "company"] ->
-        "#{value} in:#{field}"
+  defp build_filter_expression({_operator, field, value}, "search/users/" <> _rest)
+       when field in ["bio", "location", "name", "email", "company"] do
+    "#{value} in:#{field}"
+  end
 
-      String.starts_with?(from, "search/commits") and field == "author" ->
-        "author:#{value}"
+  defp build_filter_expression({_operator, "author", value}, "search/commits/" <> _rest) do
+    "author:#{value}"
+  end
 
-      String.starts_with?(from, "search/commits") and field == "committer" ->
-        "committer:#{value}"
+  defp build_filter_expression({_operator, "committer", value}, "search/commits/" <> _rest) do
+    "committer:#{value}"
+  end
 
-      String.starts_with?(from, "search/issues") and field == "is" ->
-        "is:#{value}"
+  defp build_filter_expression({_operator, "is", value}, "search/issues/" <> _rest) do
+    "is:#{value}"
+  end
 
-      String.starts_with?(from, "search/issues") and field == "label" ->
-        "label:#{value}"
+  defp build_filter_expression({_operator, "label", value}, "search/issues/" <> _rest) do
+    "label:#{value}"
+  end
 
-      String.starts_with?(from, "search/topics") and field == "name" ->
-        # For topics, we just use the name directly without qualifiers
-        case operator do
-          :like -> String.trim(value, "%")
-          :ilike -> String.trim(value, "%")
-          _ -> value
-        end
-
-      String.starts_with?(from, "search/topics") and field == "featured" ->
-        "is:featured"
-
-      true ->
-        case operator do
-          :eq -> "#{field}:#{value}"
-          :neq -> "-#{field}:#{value}"
-          :gt -> "#{field}:>#{value}"
-          :gte -> "#{field}:>=#{value}"
-          :lt -> "#{field}:<#{value}"
-          :lte -> "#{field}:<=#{value}"
-          :in -> "#{field}:#{Enum.join(value, ",")}"
-          :nin -> "-#{field}:#{Enum.join(value, ",")}"
-          :like -> "#{field}:*#{String.trim(value, "%")}*"
-          :ilike -> "#{field}:*#{String.trim(value, "%")}*"
-          :nlike -> "-#{field}:*#{String.trim(value, "%")}*"
-        end
+  defp build_filter_expression({operator, "name", value}, "search/topics/" <> _rest) do
+    case operator do
+      :like -> String.trim(value, "%")
+      :ilike -> String.trim(value, "%")
+      _ -> value
     end
   end
+
+  defp build_filter_expression({_operator, "featured", _value}, "search/topics/" <> _rest) do
+    "is:featured"
+  end
+
+  defp build_filter_expression({operator, field, value}, _from) do
+    build_filter_operator(operator, field, value)
+  end
+
+  defp build_filter_operator(:eq, field, value), do: "#{field}:#{value}"
+  defp build_filter_operator(:neq, field, value), do: "-#{field}:#{value}"
+  defp build_filter_operator(:gt, field, value), do: "#{field}:>#{value}"
+  defp build_filter_operator(:gte, field, value), do: "#{field}:>=#{value}"
+  defp build_filter_operator(:lt, field, value), do: "#{field}:<#{value}"
+  defp build_filter_operator(:lte, field, value), do: "#{field}:<=#{value}"
+  defp build_filter_operator(:in, field, value), do: "#{field}:#{Enum.join(value, ",")}"
+  defp build_filter_operator(:nin, field, value), do: "-#{field}:#{Enum.join(value, ",")}"
+  defp build_filter_operator(:like, field, value), do: "#{field}:*#{String.trim(value, "%")}*"
+  defp build_filter_operator(:ilike, field, value), do: "#{field}:*#{String.trim(value, "%")}*"
+  defp build_filter_operator(:nlike, field, value), do: "-#{field}:*#{String.trim(value, "%")}*"
 
   @doc """
   Builds the request parameters for a GitHub API request.
@@ -325,7 +323,7 @@ defmodule Apipe.Providers.GitHub do
       if String.starts_with?(query.from, "search/") do
         search_terms = build_search_query(query)
         Logger.debug("Built search query: #{search_terms}")
-        Map.put(base_params, :q, search_terms)
+        Map.put(%{}, :q, search_terms)
       else
         base_params
       end
@@ -411,23 +409,27 @@ defmodule Apipe.Providers.GitHub do
   end
 
   defp get_header_value(response, header) do
-    value =
-      case get_in(response.headers, [header]) do
-        nil -> nil
-        value when is_list(value) -> hd(value)
-        value when is_binary(value) -> value
-      end
+    with {:ok, value} <- get_raw_header(response, header),
+         {:ok, parsed_value} <- parse_header_value(value, header) do
+      parsed_value
+    else
+      _ -> nil
+    end
+  end
 
-    case value do
-      nil ->
-        nil
+  defp get_raw_header(response, header) do
+    case get_in(response.headers, [header]) do
+      nil -> {:error, :not_found}
+      value when is_list(value) -> {:ok, hd(value)}
+      value when is_binary(value) -> {:ok, value}
+    end
+  end
 
-      value ->
-        if String.starts_with?(header, "x-ratelimit") do
-          String.to_integer(value)
-        else
-          value
-        end
+  defp parse_header_value(value, header) do
+    if String.starts_with?(header, "x-ratelimit") do
+      {:ok, String.to_integer(value)}
+    else
+      {:ok, value}
     end
   end
 
@@ -441,6 +443,64 @@ defmodule Apipe.Providers.GitHub do
   defp parse_link(link) do
     [_, url, rel] = Regex.run(~r/<(.+)>;\s*rel="(.+)"/, link)
     {rel, url}
+  end
+
+  defp extract_rate_limit(response) do
+    with headers when not is_nil(headers) <- response.headers,
+         rate_limit_data = %{
+           "limit" => get_header_value(response, "x-ratelimit-limit"),
+           "remaining" => get_header_value(response, "x-ratelimit-remaining"),
+           "reset" => get_header_value(response, "x-ratelimit-reset"),
+           "used" => get_header_value(response, "x-ratelimit-used")
+         },
+         {:ok, rate_limit} <- GitHubOpenAPI.RateLimit.cast(rate_limit_data) do
+      {:ok, rate_limit}
+    else
+      nil -> {:error, :no_headers}
+      {:error, reason} -> {:error, {:cast_failed, reason}}
+    end
+  end
+
+  defp build_response_meta(response) do
+    case response do
+      %{headers: _headers} = resp ->
+        rate_limit =
+          case extract_rate_limit(resp) do
+            {:ok, rate_limit} -> rate_limit
+            {:error, _reason} -> nil
+          end
+
+        pagination =
+          case get_header_value(resp, "link") do
+            nil -> nil
+            link_header -> parse_link_header(link_header)
+          end
+
+        [rate_limit: rate_limit, pagination: pagination]
+        |> Enum.reject(fn {_k, v} -> is_nil(v) or v == %{} end)
+        |> Map.new()
+
+      _ ->
+        %{}
+    end
+  end
+
+  defp cast_item(item, schema) do
+    with joined_data when is_map(joined_data) <- Map.get(item, "__joins__", %{}),
+         {:ok, cast_item} <- schema.cast(item) do
+      Map.merge(cast_item, joined_data)
+    else
+      # If no joins or casting fails, just return the original item
+      _error -> item
+    end
+  end
+
+  defp cast_data(data, schema) when is_list(data) do
+    Enum.map(data, &cast_item(&1, schema))
+  end
+
+  defp cast_data(data, schema) when is_map(data) do
+    cast_item(data, schema)
   end
 
   defp wrap_response({:ok, body}, response, _query, opts) do
@@ -458,83 +518,14 @@ defmodule Apipe.Providers.GitHub do
 
     # Cast the response after joins have been processed
     cast_data =
-      if opts[:cast_response] do
-        schema = opts[:schema]
-
-        case data do
-          items when is_list(items) ->
-            Enum.map(items, fn item ->
-              # Preserve any joined data before casting
-              joined_data =
-                Map.take(item, [
-                  :contributors,
-                  :issues,
-                  :pulls,
-                  :releases,
-                  :commits,
-                  :branches,
-                  :tags
-                ])
-
-              # Use the schema from the route
-              {:ok, cast_item} = schema.cast(item)
-              # Merge back the joined data after casting
-              Map.merge(cast_item, joined_data)
-            end)
-
-          item when is_map(item) ->
-            # Preserve any joined data before casting
-            joined_data =
-              Map.take(item, [
-                :contributors,
-                :issues,
-                :pulls,
-                :releases,
-                :commits,
-                :branches,
-                :tags
-              ])
-
-            # Use the schema from the route
-            {:ok, cast_item} = schema.cast(item)
-            # Merge back the joined data after casting
-            Map.merge(cast_item, joined_data)
-        end
+      if Map.get(opts, :cast_response, true) do
+        cast_data(data, opts[:schema])
       else
         data
       end
 
-    # Build rate limit metadata
-    response_meta =
-      case response do
-        %{headers: _headers} = resp ->
-          # Extract rate limit headers and create RateLimit struct
-          rate_limit_data = %{
-            "limit" => get_header_value(resp, "x-ratelimit-limit"),
-            "remaining" => get_header_value(resp, "x-ratelimit-remaining"),
-            "reset" => get_header_value(resp, "x-ratelimit-reset"),
-            "used" => get_header_value(resp, "x-ratelimit-used")
-          }
-
-          {:ok, rate_limit} = GitHubOpenAPI.RateLimit.cast(rate_limit_data)
-
-          # Extract pagination links if present
-          pagination =
-            case get_header_value(resp, "link") do
-              nil -> %{}
-              link_header -> parse_link_header(link_header)
-            end
-
-          Map.merge(
-            %{rate_limit: rate_limit},
-            if(pagination != %{}, do: %{pagination: pagination}, else: %{})
-          )
-
-        _ ->
-          %{}
-      end
-
-    # Merge response metadata with any existing metadata
+    # Build and merge metadata
+    response_meta = build_response_meta(response)
     final_meta = Map.merge(meta, response_meta)
 
     %Apipe.Response{

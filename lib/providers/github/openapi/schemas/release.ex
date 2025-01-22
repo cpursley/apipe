@@ -69,7 +69,7 @@ defmodule GitHubOpenAPI.Release do
       assets: [{GitHubOpenAPI.ReleaseAsset, :t}],
       assets_url: {:string, :uri},
       author: {GitHubOpenAPI.SimpleUser, :t},
-      body: {:union, [{:string, :generic}, :null]},
+      body: {:string, :generic},
       body_html: {:string, :generic},
       body_text: {:string, :generic},
       created_at: {:string, :date_time},
@@ -78,17 +78,17 @@ defmodule GitHubOpenAPI.Release do
       html_url: {:string, :uri},
       id: :integer,
       mentions_count: :integer,
-      name: {:union, [{:string, :generic}, :null]},
+      name: {:string, :generic},
       node_id: {:string, :generic},
       prerelease: :boolean,
-      published_at: {:union, [{:string, :date_time}, :null]},
+      published_at: {:string, :date_time},
       reactions: {GitHubOpenAPI.ReactionRollup, :t},
       tag_name: {:string, :generic},
-      tarball_url: {:union, [{:string, :uri}, :null]},
+      tarball_url: {:string, :uri},
       target_commitish: {:string, :generic},
       upload_url: {:string, :generic},
       url: {:string, :uri},
-      zipball_url: {:union, [{:string, :uri}, :null]}
+      zipball_url: {:string, :uri}
     ]
   end
 end

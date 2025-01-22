@@ -22,7 +22,7 @@ defmodule GitHubOpenAPI.RuleSuiteRuleEvaluations do
 
   def __fields__(:t) do
     [
-      details: {:union, [{:string, :generic}, :null]},
+      details: {:string, :generic},
       enforcement: {:enum, ["active", "evaluate", "deleted ruleset"]},
       result: {:enum, ["pass", "fail"]},
       rule_source: {GitHubOpenAPI.RuleSuiteRuleEvaluationsRuleSource, :t},

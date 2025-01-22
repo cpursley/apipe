@@ -12,7 +12,7 @@ defmodule GitHubOpenAPI.OrganizationRole do
           description: String.t() | nil,
           id: integer,
           name: String.t(),
-          organization: GitHubOpenAPI.SimpleUser.t() | nil,
+          organization: GitHubOpenAPI.NullableSimpleUser.t(),
           permissions: [String.t()],
           source: String.t() | nil,
           updated_at: DateTime.t()
@@ -38,14 +38,14 @@ defmodule GitHubOpenAPI.OrganizationRole do
 
   def __fields__(:t) do
     [
-      base_role: {:enum, ["read", "triage", "write", "maintain", "admin", nil]},
+      base_role: {:enum, ["read", "triage", "write", "maintain", "admin"]},
       created_at: {:string, :date_time},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       id: :integer,
       name: {:string, :generic},
-      organization: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      organization: {GitHubOpenAPI.NullableSimpleUser, :t},
       permissions: [string: :generic],
-      source: {:enum, ["Organization", "Enterprise", "Predefined", nil]},
+      source: {:enum, ["Organization", "Enterprise", "Predefined"]},
       updated_at: {:string, :date_time}
     ]
   end

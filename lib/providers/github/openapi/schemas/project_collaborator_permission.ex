@@ -8,7 +8,7 @@ defmodule GitHubOpenAPI.ProjectCollaboratorPermission do
           __info__: map,
           __joins__: map,
           permission: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [:__info__, :__joins__, :permission, :user]
@@ -18,6 +18,6 @@ defmodule GitHubOpenAPI.ProjectCollaboratorPermission do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [permission: {:string, :generic}, user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}]
+    [permission: {:string, :generic}, user: {GitHubOpenAPI.NullableSimpleUser, :t}]
   end
 end

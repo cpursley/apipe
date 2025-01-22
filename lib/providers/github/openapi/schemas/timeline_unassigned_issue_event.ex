@@ -15,7 +15,7 @@ defmodule GitHubOpenAPI.TimelineUnassignedIssueEvent do
           event: String.t(),
           id: integer,
           node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.Integration.t() | nil,
+          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t(),
           url: String.t()
         }
 
@@ -42,13 +42,13 @@ defmodule GitHubOpenAPI.TimelineUnassignedIssueEvent do
     [
       actor: {GitHubOpenAPI.SimpleUser, :t},
       assignee: {GitHubOpenAPI.SimpleUser, :t},
-      commit_id: {:union, [{:string, :generic}, :null]},
-      commit_url: {:union, [{:string, :generic}, :null]},
+      commit_id: {:string, :generic},
+      commit_url: {:string, :generic},
       created_at: {:string, :generic},
       event: {:string, :generic},
       id: :integer,
       node_id: {:string, :generic},
-      performed_via_github_app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
+      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
       url: {:string, :generic}
     ]
   end

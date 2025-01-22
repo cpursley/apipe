@@ -18,7 +18,7 @@ defmodule GitHubOpenAPI.TeamFull do
           node_id: String.t(),
           notification_setting: String.t() | nil,
           organization: GitHubOpenAPI.TeamOrganization.t(),
-          parent: GitHubOpenAPI.TeamSimple.t() | nil,
+          parent: GitHubOpenAPI.NullableTeamSimple.t() | nil,
           permission: String.t(),
           privacy: String.t() | nil,
           repos_count: integer,
@@ -59,7 +59,7 @@ defmodule GitHubOpenAPI.TeamFull do
   def __fields__(:t) do
     [
       created_at: {:string, :date_time},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       html_url: {:string, :uri},
       id: :integer,
       ldap_dn: {:string, :generic},
@@ -69,7 +69,7 @@ defmodule GitHubOpenAPI.TeamFull do
       node_id: {:string, :generic},
       notification_setting: {:enum, ["notifications_enabled", "notifications_disabled"]},
       organization: {GitHubOpenAPI.TeamOrganization, :t},
-      parent: {:union, [{GitHubOpenAPI.TeamSimple, :t}, :null]},
+      parent: {GitHubOpenAPI.NullableTeamSimple, :t},
       permission: {:string, :generic},
       privacy: {:enum, ["closed", "secret"]},
       repos_count: :integer,

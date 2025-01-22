@@ -14,7 +14,7 @@ defmodule GitHubOpenAPI.StateChangeIssueEvent do
           event: String.t(),
           id: integer,
           node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.Integration.t() | nil,
+          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t(),
           state_reason: String.t() | nil,
           url: String.t()
         }
@@ -41,14 +41,14 @@ defmodule GitHubOpenAPI.StateChangeIssueEvent do
   def __fields__(:t) do
     [
       actor: {GitHubOpenAPI.SimpleUser, :t},
-      commit_id: {:union, [{:string, :generic}, :null]},
-      commit_url: {:union, [{:string, :generic}, :null]},
+      commit_id: {:string, :generic},
+      commit_url: {:string, :generic},
       created_at: {:string, :generic},
       event: {:string, :generic},
       id: :integer,
       node_id: {:string, :generic},
-      performed_via_github_app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
-      state_reason: {:union, [{:string, :generic}, :null]},
+      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
+      state_reason: {:string, :generic},
       url: {:string, :generic}
     ]
   end

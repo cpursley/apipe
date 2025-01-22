@@ -11,7 +11,7 @@ defmodule GitHubOpenAPI.PageBuild do
           created_at: DateTime.t(),
           duration: integer,
           error: GitHubOpenAPI.PageBuildError.t(),
-          pusher: GitHubOpenAPI.SimpleUser.t() | nil,
+          pusher: GitHubOpenAPI.NullableSimpleUser.t(),
           status: String.t(),
           updated_at: DateTime.t(),
           url: String.t()
@@ -40,7 +40,7 @@ defmodule GitHubOpenAPI.PageBuild do
       created_at: {:string, :date_time},
       duration: :integer,
       error: {GitHubOpenAPI.PageBuildError, :t},
-      pusher: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      pusher: {GitHubOpenAPI.NullableSimpleUser, :t},
       status: {:string, :generic},
       updated_at: {:string, :date_time},
       url: {:string, :uri}

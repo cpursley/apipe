@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.ContributorActivity do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          author: GitHubOpenAPI.SimpleUser.t() | nil,
+          author: GitHubOpenAPI.NullableSimpleUser.t(),
           total: integer,
           weeks: [GitHubOpenAPI.ContributorActivityWeeks.t()]
         }
@@ -20,7 +20,7 @@ defmodule GitHubOpenAPI.ContributorActivity do
 
   def __fields__(:t) do
     [
-      author: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      author: {GitHubOpenAPI.NullableSimpleUser, :t},
       total: :integer,
       weeks: [{GitHubOpenAPI.ContributorActivityWeeks, :t}]
     ]

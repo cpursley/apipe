@@ -23,7 +23,7 @@ defmodule GitHubOpenAPI.CodeScanning do
           String.t(),
           String.t(),
           integer,
-          GitHubOpenAPI.CodeScanningAutofixCommits.t() | nil,
+          GitHubOpenAPI.CodeScanningAutofixCommits.t(),
           keyword
         ) ::
           {:ok, GitHubOpenAPI.CodeScanningAutofixCommitsResponse.t()}
@@ -37,9 +37,7 @@ defmodule GitHubOpenAPI.CodeScanning do
       url: "/repos/#{owner}/#{repo}/code-scanning/alerts/#{alert_number}/autofix/commits",
       body: body,
       method: :post,
-      request: [
-        {"application/json", {:union, [{GitHubOpenAPI.CodeScanningAutofixCommits, :t}, :null]}}
-      ],
+      request: [{"application/json", {GitHubOpenAPI.CodeScanningAutofixCommits, :t}}],
       response: [
         {201, {GitHubOpenAPI.CodeScanningAutofixCommitsResponse, :t}},
         {400, {GitHubOpenAPI.BasicError, :t}},

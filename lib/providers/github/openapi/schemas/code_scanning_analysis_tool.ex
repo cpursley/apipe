@@ -19,10 +19,6 @@ defmodule GitHubOpenAPI.CodeScanningAnalysisTool do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [
-      guid: {:union, [{:string, :generic}, :null]},
-      name: {:string, :generic},
-      version: {:union, [{:string, :generic}, :null]}
-    ]
+    [guid: {:string, :generic}, name: {:string, :generic}, version: {:string, :generic}]
   end
 end

@@ -7,17 +7,17 @@ defmodule GitHubOpenAPI.GlobalAdvisory do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          credits: [map] | nil,
+          credits: [GitHubOpenAPI.GlobalAdvisoryCredits.t()] | nil,
           cve_id: String.t() | nil,
           cvss: GitHubOpenAPI.GlobalAdvisoryCvss.t() | nil,
           cvss_severities: GitHubOpenAPI.CvssSeverities.t() | nil,
-          cwes: [map] | nil,
+          cwes: [GitHubOpenAPI.GlobalAdvisoryCwes.t()] | nil,
           description: String.t() | nil,
           epss: GitHubOpenAPI.GlobalAdvisoryEpss.t() | nil,
           ghsa_id: String.t(),
           github_reviewed_at: DateTime.t() | nil,
           html_url: String.t(),
-          identifiers: [map] | nil,
+          identifiers: [GitHubOpenAPI.GlobalAdvisoryIdentifiers.t()] | nil,
           nvd_published_at: DateTime.t() | nil,
           published_at: DateTime.t(),
           references: [String.t()] | nil,
@@ -28,7 +28,7 @@ defmodule GitHubOpenAPI.GlobalAdvisory do
           type: String.t(),
           updated_at: DateTime.t(),
           url: String.t(),
-          vulnerabilities: [map] | nil,
+          vulnerabilities: [GitHubOpenAPI.Vulnerability.t()] | nil,
           withdrawn_at: DateTime.t() | nil
         }
 
@@ -66,29 +66,29 @@ defmodule GitHubOpenAPI.GlobalAdvisory do
 
   def __fields__(:t) do
     [
-      credits: {:union, [[:map], :null]},
-      cve_id: {:union, [{:string, :generic}, :null]},
-      cvss: {:union, [{GitHubOpenAPI.GlobalAdvisoryCvss, :t}, :null]},
-      cvss_severities: {:union, [{GitHubOpenAPI.CvssSeverities, :t}, :null]},
-      cwes: {:union, [[:map], :null]},
-      description: {:union, [{:string, :generic}, :null]},
-      epss: {:union, [{GitHubOpenAPI.GlobalAdvisoryEpss, :t}, :null]},
+      credits: [{GitHubOpenAPI.GlobalAdvisoryCredits, :t}],
+      cve_id: {:string, :generic},
+      cvss: {GitHubOpenAPI.GlobalAdvisoryCvss, :t},
+      cvss_severities: {GitHubOpenAPI.CvssSeverities, :t},
+      cwes: [{GitHubOpenAPI.GlobalAdvisoryCwes, :t}],
+      description: {:string, :generic},
+      epss: {GitHubOpenAPI.GlobalAdvisoryEpss, :t},
       ghsa_id: {:string, :generic},
-      github_reviewed_at: {:union, [{:string, :date_time}, :null]},
+      github_reviewed_at: {:string, :date_time},
       html_url: {:string, :uri},
-      identifiers: {:union, [[:map], :null]},
-      nvd_published_at: {:union, [{:string, :date_time}, :null]},
+      identifiers: [{GitHubOpenAPI.GlobalAdvisoryIdentifiers, :t}],
+      nvd_published_at: {:string, :date_time},
       published_at: {:string, :date_time},
-      references: {:union, [[string: :generic], :null]},
-      repository_advisory_url: {:union, [{:string, :uri}, :null]},
+      references: [string: :generic],
+      repository_advisory_url: {:string, :uri},
       severity: {:enum, ["critical", "high", "medium", "low", "unknown"]},
-      source_code_location: {:union, [{:string, :uri}, :null]},
+      source_code_location: {:string, :uri},
       summary: {:string, :generic},
       type: {:enum, ["reviewed", "unreviewed", "malware"]},
       updated_at: {:string, :date_time},
       url: {:string, :generic},
-      vulnerabilities: {:union, [[:map], :null]},
-      withdrawn_at: {:union, [{:string, :date_time}, :null]}
+      vulnerabilities: [{GitHubOpenAPI.Vulnerability, :t}],
+      withdrawn_at: {:string, :date_time}
     ]
   end
 end

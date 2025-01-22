@@ -39,18 +39,18 @@ defmodule Apipe do
   ## Options
 
     * `:token` - Provider-specific authentication token
-    * `:cast_response` - Whether to cast responses to structs (default: false)
+    * `:cast_response` - Whether to cast responses to structs (default: true)
 
   ## Examples
 
-      # Without casting (raw JSON responses)
+      # With casting (default behavior)
       github = Apipe.new(GitHub)
 
-      # With casting (typed responses)
-      github = Apipe.new(GitHub, cast_response: true)
+      # Without casting (raw JSON responses)
+      github = Apipe.new(GitHub, cast_response: false)
 
       # With authentication
-      github = Apipe.new(GitHub, token: "github_pat_...", cast_response: true)
+      github = Apipe.new(GitHub, token: "github_pat_...")
   """
   def new(provider, opts \\ []) do
     %Query{

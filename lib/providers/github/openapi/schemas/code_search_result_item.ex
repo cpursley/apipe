@@ -49,7 +49,7 @@ defmodule GitHubOpenAPI.CodeSearchResultItem do
       file_size: :integer,
       git_url: {:string, :uri},
       html_url: {:string, :uri},
-      language: {:union, [{:string, :generic}, :null]},
+      language: {:string, :generic},
       last_modified_at: {:string, :date_time},
       line_numbers: [string: :generic],
       name: {:string, :generic},

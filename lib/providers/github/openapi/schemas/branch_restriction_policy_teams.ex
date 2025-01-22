@@ -46,14 +46,14 @@ defmodule GitHubOpenAPI.BranchRestrictionPolicyTeams do
 
   def __fields__(:t) do
     [
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       html_url: {:string, :generic},
       id: :integer,
       members_url: {:string, :generic},
       name: {:string, :generic},
       node_id: {:string, :generic},
       notification_setting: {:string, :generic},
-      parent: {:union, [{:string, :generic}, :null]},
+      parent: {:string, :generic},
       permission: {:string, :generic},
       privacy: {:string, :generic},
       repositories_url: {:string, :generic},

@@ -9,7 +9,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryUpdate do
           __joins__: map,
           collaborating_teams: [String.t()] | nil,
           collaborating_users: [String.t()] | nil,
-          credits: [map] | nil,
+          credits: [GitHubOpenAPI.RepositoryAdvisoryUpdateCredits.t()] | nil,
           cve_id: String.t() | nil,
           cvss_vector_string: String.t() | nil,
           cwe_ids: [String.t()] | nil,
@@ -42,14 +42,14 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryUpdate do
 
   def __fields__(:t) do
     [
-      collaborating_teams: {:union, [[string: :generic], :null]},
-      collaborating_users: {:union, [[string: :generic], :null]},
-      credits: {:union, [[:map], :null]},
-      cve_id: {:union, [{:string, :generic}, :null]},
-      cvss_vector_string: {:union, [{:string, :generic}, :null]},
-      cwe_ids: {:union, [[string: :generic], :null]},
+      collaborating_teams: [string: :generic],
+      collaborating_users: [string: :generic],
+      credits: [{GitHubOpenAPI.RepositoryAdvisoryUpdateCredits, :t}],
+      cve_id: {:string, :generic},
+      cvss_vector_string: {:string, :generic},
+      cwe_ids: [string: :generic],
       description: {:string, :generic},
-      severity: {:enum, ["critical", "high", "medium", "low", nil]},
+      severity: {:enum, ["critical", "high", "medium", "low"]},
       state: {:enum, ["published", "closed", "draft"]},
       summary: {:string, :generic},
       vulnerabilities: [{GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilities, :t}]

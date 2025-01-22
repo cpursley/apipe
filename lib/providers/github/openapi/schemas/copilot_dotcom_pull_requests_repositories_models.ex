@@ -30,7 +30,7 @@ defmodule GitHubOpenAPI.CopilotDotcomPullRequestsRepositoriesModels do
 
   def __fields__(:t) do
     [
-      custom_model_training_date: {:union, [{:string, :generic}, :null]},
+      custom_model_training_date: {:string, :generic},
       is_custom_model: :boolean,
       name: {:string, :generic},
       total_engaged_users: :integer,

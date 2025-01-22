@@ -18,9 +18,6 @@ defmodule GitHubOpenAPI.FileCommit do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [
-      commit: {GitHubOpenAPI.FileCommitCommit, :t},
-      content: {:union, [{GitHubOpenAPI.FileCommitContent, :t}, :null]}
-    ]
+    [commit: {GitHubOpenAPI.FileCommitCommit, :t}, content: {GitHubOpenAPI.FileCommitContent, :t}]
   end
 end

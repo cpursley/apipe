@@ -37,12 +37,12 @@ defmodule GitHubOpenAPI.MarketplacePurchaseMarketplacePurchase do
   def __fields__(:t) do
     [
       billing_cycle: {:string, :generic},
-      free_trial_ends_on: {:union, [{:string, :generic}, :null]},
+      free_trial_ends_on: {:string, :generic},
       is_installed: :boolean,
-      next_billing_date: {:union, [{:string, :generic}, :null]},
+      next_billing_date: {:string, :generic},
       on_free_trial: :boolean,
       plan: {GitHubOpenAPI.MarketplaceListingPlan, :t},
-      unit_count: {:union, [:integer, :null]},
+      unit_count: :integer,
       updated_at: {:string, :generic}
     ]
   end

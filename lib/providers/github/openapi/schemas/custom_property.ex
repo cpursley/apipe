@@ -38,15 +38,15 @@ defmodule GitHubOpenAPI.CustomProperty do
 
   def __fields__(:t) do
     [
-      allowed_values: {:union, [[string: :generic], :null]},
+      allowed_values: [string: :generic],
       default_value: {:union, [{:string, :generic}, [string: :generic]]},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       property_name: {:string, :generic},
       required: :boolean,
       source_type: {:enum, ["organization", "enterprise"]},
       url: {:string, :uri},
       value_type: {:enum, ["string", "single_select", "multi_select", "true_false"]},
-      values_editable_by: {:enum, ["org_actors", "org_and_repo_actors", nil]}
+      values_editable_by: {:enum, ["org_actors", "org_and_repo_actors"]}
     ]
   end
 end

@@ -19,7 +19,7 @@ defmodule GitHubOpenAPI.PagesHealthCheck do
 
   def __fields__(:t) do
     [
-      alt_domain: {:union, [{GitHubOpenAPI.PagesHealthCheckAltDomain, :t}, :null]},
+      alt_domain: {GitHubOpenAPI.PagesHealthCheckAltDomain, :t},
       domain: {GitHubOpenAPI.PagesHealthCheckDomain, :t}
     ]
   end

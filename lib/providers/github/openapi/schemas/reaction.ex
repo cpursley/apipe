@@ -11,7 +11,7 @@ defmodule GitHubOpenAPI.Reaction do
           created_at: DateTime.t(),
           id: integer,
           node_id: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [:__info__, :__joins__, :content, :created_at, :id, :node_id, :user]
@@ -26,7 +26,7 @@ defmodule GitHubOpenAPI.Reaction do
       created_at: {:string, :date_time},
       id: :integer,
       node_id: {:string, :generic},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

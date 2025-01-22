@@ -42,12 +42,12 @@ defmodule GitHubOpenAPI.DependencyGraphDiff do
     [
       change_type: {:enum, ["added", "removed"]},
       ecosystem: {:string, :generic},
-      license: {:union, [{:string, :generic}, :null]},
+      license: {:string, :generic},
       manifest: {:string, :generic},
       name: {:string, :generic},
-      package_url: {:union, [{:string, :generic}, :null]},
+      package_url: {:string, :generic},
       scope: {:enum, ["unknown", "runtime", "development"]},
-      source_repository_url: {:union, [{:string, :generic}, :null]},
+      source_repository_url: {:string, :generic},
       version: {:string, :generic},
       vulnerabilities: [{GitHubOpenAPI.DependencyGraphDiffVulnerabilities, :t}]
     ]

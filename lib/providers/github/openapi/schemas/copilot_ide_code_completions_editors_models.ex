@@ -30,7 +30,7 @@ defmodule GitHubOpenAPI.CopilotIdeCodeCompletionsEditorsModels do
 
   def __fields__(:t) do
     [
-      custom_model_training_date: {:union, [{:string, :generic}, :null]},
+      custom_model_training_date: {:string, :generic},
       is_custom_model: :boolean,
       languages: [{GitHubOpenAPI.CopilotIdeCodeCompletionsEditorsModelsLanguages, :t}],
       name: {:string, :generic},

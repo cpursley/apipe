@@ -41,15 +41,15 @@ defmodule GitHubOpenAPI.Enterprise do
   def __fields__(:t) do
     [
       avatar_url: {:string, :uri},
-      created_at: {:union, [{:string, :date_time}, :null]},
-      description: {:union, [{:string, :generic}, :null]},
+      created_at: {:string, :date_time},
+      description: {:string, :generic},
       html_url: {:string, :uri},
       id: :integer,
       name: {:string, :generic},
       node_id: {:string, :generic},
       slug: {:string, :generic},
-      updated_at: {:union, [{:string, :date_time}, :null]},
-      website_url: {:union, [{:string, :uri}, :null]}
+      updated_at: {:string, :date_time},
+      website_url: {:string, :uri}
     ]
   end
 end

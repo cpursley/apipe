@@ -37,11 +37,10 @@ defmodule GitHubOpenAPI.MarketplacePurchase do
 
   def __fields__(:t) do
     [
-      email: {:union, [{:string, :generic}, :null]},
+      email: {:string, :generic},
       id: :integer,
       login: {:string, :generic},
-      marketplace_pending_change:
-        {:union, [{GitHubOpenAPI.MarketplacePurchaseMarketplacePendingChange, :t}, :null]},
+      marketplace_pending_change: {GitHubOpenAPI.MarketplacePurchaseMarketplacePendingChange, :t},
       marketplace_purchase: {GitHubOpenAPI.MarketplacePurchaseMarketplacePurchase, :t},
       organization_billing_email: {:string, :generic},
       type: {:string, :generic},

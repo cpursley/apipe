@@ -19,10 +19,6 @@ defmodule GitHubOpenAPI.ContentSymlinkLinks do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [
-      git: {:union, [{:string, :uri}, :null]},
-      html: {:union, [{:string, :uri}, :null]},
-      self: {:string, :uri}
-    ]
+    [git: {:string, :uri}, html: {:string, :uri}, self: {:string, :uri}]
   end
 end

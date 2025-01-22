@@ -48,13 +48,13 @@ defmodule GitHubOpenAPI.OrganizationProgrammaticAccessGrantRequest do
       id: :integer,
       owner: {GitHubOpenAPI.SimpleUser, :t},
       permissions: {GitHubOpenAPI.OrganizationProgrammaticAccessGrantRequestPermissions, :t},
-      reason: {:union, [{:string, :generic}, :null]},
+      reason: {:string, :generic},
       repositories_url: {:string, :generic},
       repository_selection: {:enum, ["none", "all", "subset"]},
       token_expired: :boolean,
-      token_expires_at: {:union, [{:string, :generic}, :null]},
+      token_expires_at: {:string, :generic},
       token_id: :integer,
-      token_last_used_at: {:union, [{:string, :generic}, :null]},
+      token_last_used_at: {:string, :generic},
       token_name: {:string, :generic}
     ]
   end

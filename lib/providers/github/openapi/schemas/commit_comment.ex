@@ -20,7 +20,7 @@ defmodule GitHubOpenAPI.CommitComment do
           reactions: GitHubOpenAPI.ReactionRollup.t() | nil,
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -65,14 +65,14 @@ defmodule GitHubOpenAPI.CommitComment do
       created_at: {:string, :date_time},
       html_url: {:string, :uri},
       id: :integer,
-      line: {:union, [:integer, :null]},
+      line: :integer,
       node_id: {:string, :generic},
-      path: {:union, [{:string, :generic}, :null]},
-      position: {:union, [:integer, :null]},
+      path: {:string, :generic},
+      position: :integer,
       reactions: {GitHubOpenAPI.ReactionRollup, :t},
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

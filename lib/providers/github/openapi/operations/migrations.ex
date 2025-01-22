@@ -777,7 +777,7 @@ defmodule GitHubOpenAPI.Migrations do
     * [API method documentation](https://docs.github.com/rest/migrations/source-imports#update-an-import)
 
   """
-  @spec update_import(String.t(), String.t(), map | nil, keyword) ::
+  @spec update_import(String.t(), String.t(), map, keyword) ::
           {:ok, GitHubOpenAPI.Import.t()} | {:error, GitHubOpenAPI.BasicError.t()}
   def update_import(owner, repo, body, opts \\ []) do
     client = opts[:client] || @default_client
@@ -788,7 +788,7 @@ defmodule GitHubOpenAPI.Migrations do
       url: "/repos/#{owner}/#{repo}/import",
       body: body,
       method: :patch,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [{200, {GitHubOpenAPI.Import, :t}}, {503, {GitHubOpenAPI.BasicError, :t}}],
       opts: opts
     })

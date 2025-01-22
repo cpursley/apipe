@@ -48,9 +48,9 @@ defmodule GitHubOpenAPI.DependabotAlertSecurityAdvisory do
 
   def __fields__(:t) do
     [
-      cve_id: {:union, [{:string, :generic}, :null]},
+      cve_id: {:string, :generic},
       cvss: {GitHubOpenAPI.DependabotAlertSecurityAdvisoryCvss, :t},
-      cvss_severities: {:union, [{GitHubOpenAPI.CvssSeverities, :t}, :null]},
+      cvss_severities: {GitHubOpenAPI.CvssSeverities, :t},
       cwes: [{GitHubOpenAPI.DependabotAlertSecurityAdvisoryCwes, :t}],
       description: {:string, :generic},
       ghsa_id: {:string, :generic},
@@ -61,7 +61,7 @@ defmodule GitHubOpenAPI.DependabotAlertSecurityAdvisory do
       summary: {:string, :generic},
       updated_at: {:string, :date_time},
       vulnerabilities: [{GitHubOpenAPI.DependabotAlertSecurityVulnerability, :t}],
-      withdrawn_at: {:union, [{:string, :date_time}, :null]}
+      withdrawn_at: {:string, :date_time}
     ]
   end
 end

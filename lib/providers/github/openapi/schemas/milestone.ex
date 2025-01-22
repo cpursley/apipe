@@ -10,7 +10,7 @@ defmodule GitHubOpenAPI.Milestone do
           closed_at: DateTime.t() | nil,
           closed_issues: integer,
           created_at: DateTime.t(),
-          creator: GitHubOpenAPI.SimpleUser.t() | nil,
+          creator: GitHubOpenAPI.NullableSimpleUser.t(),
           description: String.t() | nil,
           due_on: DateTime.t() | nil,
           html_url: String.t(),
@@ -52,12 +52,12 @@ defmodule GitHubOpenAPI.Milestone do
 
   def __fields__(:t) do
     [
-      closed_at: {:union, [{:string, :date_time}, :null]},
+      closed_at: {:string, :date_time},
       closed_issues: :integer,
       created_at: {:string, :date_time},
-      creator: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
-      description: {:union, [{:string, :generic}, :null]},
-      due_on: {:union, [{:string, :date_time}, :null]},
+      creator: {GitHubOpenAPI.NullableSimpleUser, :t},
+      description: {:string, :generic},
+      due_on: {:string, :date_time},
       html_url: {:string, :uri},
       id: :integer,
       labels_url: {:string, :uri},

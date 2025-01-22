@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.CodeScanningAutofix do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          description: String.t() | nil,
+          description: String.t(),
           started_at: DateTime.t(),
           status: String.t()
         }
@@ -20,7 +20,7 @@ defmodule GitHubOpenAPI.CodeScanningAutofix do
 
   def __fields__(:t) do
     [
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       started_at: {:string, :date_time},
       status: {:enum, ["pending", "error", "success", "outdated"]}
     ]

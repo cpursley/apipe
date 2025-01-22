@@ -57,7 +57,7 @@ defmodule GitHubOpenAPI.Integration do
       client_id: {:string, :generic},
       client_secret: {:string, :generic},
       created_at: {:string, :date_time},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       events: [string: :generic],
       external_url: {:string, :uri},
       html_url: {:string, :uri},
@@ -70,7 +70,7 @@ defmodule GitHubOpenAPI.Integration do
       permissions: :map,
       slug: {:string, :generic},
       updated_at: {:string, :date_time},
-      webhook_secret: {:union, [{:string, :generic}, :null]}
+      webhook_secret: {:string, :generic}
     ]
   end
 end

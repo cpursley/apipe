@@ -20,7 +20,7 @@ defmodule GitHubOpenAPI.RepositoryRulesetBypassActor do
 
   def __fields__(:t) do
     [
-      actor_id: {:union, [:integer, :null]},
+      actor_id: :integer,
       actor_type:
         {:enum, ["Integration", "OrganizationAdmin", "RepositoryRole", "Team", "DeployKey"]},
       bypass_mode: {:enum, ["always", "pull_request"]}

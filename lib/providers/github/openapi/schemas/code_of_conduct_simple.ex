@@ -21,7 +21,7 @@ defmodule GitHubOpenAPI.CodeOfConductSimple do
 
   def __fields__(:t) do
     [
-      html_url: {:union, [{:string, :uri}, :null]},
+      html_url: {:string, :uri},
       key: {:string, :generic},
       name: {:string, :generic},
       url: {:string, :uri}

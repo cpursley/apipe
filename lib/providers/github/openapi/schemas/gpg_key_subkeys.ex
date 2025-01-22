@@ -54,12 +54,12 @@ defmodule GitHubOpenAPI.GpgKeySubkeys do
       can_sign: :boolean,
       created_at: {:string, :generic},
       emails: [{GitHubOpenAPI.GpgKeySubkeysEmails, :t}],
-      expires_at: {:union, [{:string, :generic}, :null]},
+      expires_at: {:string, :generic},
       id: :integer,
       key_id: {:string, :generic},
       primary_key_id: :integer,
       public_key: {:string, :generic},
-      raw_key: {:union, [{:string, :generic}, :null]},
+      raw_key: {:string, :generic},
       revoked: :boolean,
       subkeys: [:map]
     ]

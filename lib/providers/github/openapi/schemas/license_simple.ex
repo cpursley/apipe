@@ -27,8 +27,8 @@ defmodule GitHubOpenAPI.LicenseSimple do
       key: {:string, :generic},
       name: {:string, :generic},
       node_id: {:string, :generic},
-      spdx_id: {:union, [{:string, :generic}, :null]},
-      url: {:union, [{:string, :uri}, :null]}
+      spdx_id: {:string, :generic},
+      url: {:string, :uri}
     ]
   end
 end

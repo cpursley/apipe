@@ -9,7 +9,7 @@ defmodule GitHubOpenAPI.RepositoryCollaboratorPermission do
           __joins__: map,
           permission: String.t(),
           role_name: String.t(),
-          user: GitHubOpenAPI.Collaborator.t() | nil
+          user: GitHubOpenAPI.NullableCollaborator.t()
         }
 
   defstruct [:__info__, :__joins__, :permission, :role_name, :user]
@@ -22,7 +22,7 @@ defmodule GitHubOpenAPI.RepositoryCollaboratorPermission do
     [
       permission: {:string, :generic},
       role_name: {:string, :generic},
-      user: {:union, [{GitHubOpenAPI.Collaborator, :t}, :null]}
+      user: {GitHubOpenAPI.NullableCollaborator, :t}
     ]
   end
 end

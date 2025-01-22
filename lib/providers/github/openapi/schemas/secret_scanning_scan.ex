@@ -21,8 +21,8 @@ defmodule GitHubOpenAPI.SecretScanningScan do
 
   def __fields__(:t) do
     [
-      completed_at: {:union, [{:string, :date_time}, :null]},
-      started_at: {:union, [{:string, :date_time}, :null]},
+      completed_at: {:string, :date_time},
+      started_at: {:string, :date_time},
       status: {:string, :generic},
       type: {:string, :generic}
     ]

@@ -47,8 +47,7 @@ defmodule GitHubOpenAPI.Repos do
 
   """
   @spec add_app_access_restrictions(String.t(), String.t(), String.t(), map, keyword) ::
-          {:ok, [GitHubOpenAPI.Integration.t() | nil]}
-          | {:error, GitHubOpenAPI.ValidationError.t()}
+          {:ok, [GitHubOpenAPI.Integration.t()]} | {:error, GitHubOpenAPI.ValidationError.t()}
   def add_app_access_restrictions(owner, repo, branch, body, opts \\ []) do
     client = opts[:client] || @default_client
 
@@ -60,7 +59,7 @@ defmodule GitHubOpenAPI.Repos do
       method: :post,
       request: [{"application/json", :map}],
       response: [
-        {200, [union: [{GitHubOpenAPI.Integration, :t}, :null]]},
+        {200, [{GitHubOpenAPI.Integration, :t}]},
         {422, {GitHubOpenAPI.ValidationError, :t}}
       ],
       opts: opts
@@ -959,7 +958,7 @@ defmodule GitHubOpenAPI.Repos do
     * [API method documentation](https://docs.github.com/rest/repos/forks#create-a-fork)
 
   """
-  @spec create_fork(String.t(), String.t(), map | nil, keyword) ::
+  @spec create_fork(String.t(), String.t(), map, keyword) ::
           {:ok, GitHubOpenAPI.FullRepository.t()}
           | {:error,
              GitHubOpenAPI.BasicError.t()
@@ -974,7 +973,7 @@ defmodule GitHubOpenAPI.Repos do
       url: "/repos/#{owner}/#{repo}/forks",
       body: body,
       method: :post,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {202, {GitHubOpenAPI.FullRepository, :t}},
         {400, {:union, [{GitHubOpenAPI.BasicError, :t}, {GitHubOpenAPI.ScimError, :t}]}},
@@ -1073,7 +1072,7 @@ defmodule GitHubOpenAPI.Repos do
     * [API method documentation](https://docs.github.com/rest/deployments/environments#create-or-update-an-environment)
 
   """
-  @spec create_or_update_environment(String.t(), String.t(), String.t(), map | nil, keyword) ::
+  @spec create_or_update_environment(String.t(), String.t(), String.t(), map, keyword) ::
           {:ok, GitHubOpenAPI.Environment.t()} | {:error, GitHubOpenAPI.BasicError.t()}
   def create_or_update_environment(owner, repo, environment_name, body, opts \\ []) do
     client = opts[:client] || @default_client
@@ -1084,7 +1083,7 @@ defmodule GitHubOpenAPI.Repos do
       url: "/repos/#{owner}/#{repo}/environments/#{environment_name}",
       body: body,
       method: :put,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [{200, {GitHubOpenAPI.Environment, :t}}, {422, {GitHubOpenAPI.BasicError, :t}}],
       opts: opts
     })
@@ -1379,7 +1378,7 @@ defmodule GitHubOpenAPI.Repos do
     * [API method documentation](https://docs.github.com/rest/repos/webhooks#create-a-repository-webhook)
 
   """
-  @spec create_webhook(String.t(), String.t(), map | nil, keyword) ::
+  @spec create_webhook(String.t(), String.t(), map, keyword) ::
           {:ok, GitHubOpenAPI.Hook.t()}
           | {:error, GitHubOpenAPI.BasicError.t() | GitHubOpenAPI.ValidationError.t()}
   def create_webhook(owner, repo, body, opts \\ []) do
@@ -1391,7 +1390,7 @@ defmodule GitHubOpenAPI.Repos do
       url: "/repos/#{owner}/#{repo}/hooks",
       body: body,
       method: :post,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {201, {GitHubOpenAPI.Hook, :t}},
         {403, {GitHubOpenAPI.BasicError, :t}},
@@ -2560,7 +2559,7 @@ defmodule GitHubOpenAPI.Repos do
 
   """
   @spec get_apps_with_access_to_protected_branch(String.t(), String.t(), String.t(), keyword) ::
-          {:ok, [GitHubOpenAPI.Integration.t() | nil]} | {:error, GitHubOpenAPI.BasicError.t()}
+          {:ok, [GitHubOpenAPI.Integration.t()]} | {:error, GitHubOpenAPI.BasicError.t()}
   def get_apps_with_access_to_protected_branch(owner, repo, branch, opts \\ []) do
     client = opts[:client] || @default_client
 
@@ -2569,10 +2568,7 @@ defmodule GitHubOpenAPI.Repos do
       call: {GitHubOpenAPI.Repos, :get_apps_with_access_to_protected_branch},
       url: "/repos/#{owner}/#{repo}/branches/#{branch}/protection/restrictions/apps",
       method: :get,
-      response: [
-        {200, [union: [{GitHubOpenAPI.Integration, :t}, :null]]},
-        {404, {GitHubOpenAPI.BasicError, :t}}
-      ],
+      response: [{200, [{GitHubOpenAPI.Integration, :t}]}, {404, {GitHubOpenAPI.BasicError, :t}}],
       opts: opts
     })
   end
@@ -5767,8 +5763,7 @@ defmodule GitHubOpenAPI.Repos do
 
   """
   @spec remove_app_access_restrictions(String.t(), String.t(), String.t(), map, keyword) ::
-          {:ok, [GitHubOpenAPI.Integration.t() | nil]}
-          | {:error, GitHubOpenAPI.ValidationError.t()}
+          {:ok, [GitHubOpenAPI.Integration.t()]} | {:error, GitHubOpenAPI.ValidationError.t()}
   def remove_app_access_restrictions(owner, repo, branch, body, opts \\ []) do
     client = opts[:client] || @default_client
 
@@ -5780,7 +5775,7 @@ defmodule GitHubOpenAPI.Repos do
       method: :delete,
       request: [{"application/json", :map}],
       response: [
-        {200, [union: [{GitHubOpenAPI.Integration, :t}, :null]]},
+        {200, [{GitHubOpenAPI.Integration, :t}]},
         {422, {GitHubOpenAPI.ValidationError, :t}}
       ],
       opts: opts
@@ -6108,8 +6103,7 @@ defmodule GitHubOpenAPI.Repos do
 
   """
   @spec set_app_access_restrictions(String.t(), String.t(), String.t(), map, keyword) ::
-          {:ok, [GitHubOpenAPI.Integration.t() | nil]}
-          | {:error, GitHubOpenAPI.ValidationError.t()}
+          {:ok, [GitHubOpenAPI.Integration.t()]} | {:error, GitHubOpenAPI.ValidationError.t()}
   def set_app_access_restrictions(owner, repo, branch, body, opts \\ []) do
     client = opts[:client] || @default_client
 
@@ -6121,7 +6115,7 @@ defmodule GitHubOpenAPI.Repos do
       method: :put,
       request: [{"application/json", :map}],
       response: [
-        {200, [union: [{GitHubOpenAPI.Integration, :t}, :null]]},
+        {200, [{GitHubOpenAPI.Integration, :t}]},
         {422, {GitHubOpenAPI.ValidationError, :t}}
       ],
       opts: opts

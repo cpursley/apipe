@@ -44,17 +44,17 @@ defmodule GitHubOpenAPI.Page do
 
   def __fields__(:t) do
     [
-      build_type: {:enum, ["legacy", "workflow", nil]},
-      cname: {:union, [{:string, :generic}, :null]},
+      build_type: {:enum, ["legacy", "workflow"]},
+      cname: {:string, :generic},
       custom_404: :boolean,
       html_url: {:string, :uri},
       https_certificate: {GitHubOpenAPI.PagesHttpsCertificate, :t},
       https_enforced: :boolean,
-      pending_domain_unverified_at: {:union, [{:string, :date_time}, :null]},
-      protected_domain_state: {:enum, ["pending", "verified", "unverified", nil]},
+      pending_domain_unverified_at: {:string, :date_time},
+      protected_domain_state: {:enum, ["pending", "verified", "unverified"]},
       public: :boolean,
       source: {GitHubOpenAPI.PagesSourceHash, :t},
-      status: {:enum, ["built", "building", "errored", nil]},
+      status: {:enum, ["built", "building", "errored"]},
       url: {:string, :uri}
     ]
   end

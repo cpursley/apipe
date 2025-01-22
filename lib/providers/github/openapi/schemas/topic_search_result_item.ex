@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.TopicSearchResultItem do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          aliases: [map] | nil,
+          aliases: [GitHubOpenAPI.TopicSearchResultItemAliases.t()] | nil,
           created_at: DateTime.t(),
           created_by: String.t() | nil,
           curated: boolean,
@@ -16,7 +16,7 @@ defmodule GitHubOpenAPI.TopicSearchResultItem do
           featured: boolean,
           logo_url: String.t() | nil,
           name: String.t(),
-          related: [map] | nil,
+          related: [GitHubOpenAPI.TopicSearchResultItemRelated.t()] | nil,
           released: String.t() | nil,
           repository_count: integer | nil,
           score: number,
@@ -52,20 +52,20 @@ defmodule GitHubOpenAPI.TopicSearchResultItem do
 
   def __fields__(:t) do
     [
-      aliases: {:union, [[:map], :null]},
+      aliases: [{GitHubOpenAPI.TopicSearchResultItemAliases, :t}],
       created_at: {:string, :date_time},
-      created_by: {:union, [{:string, :generic}, :null]},
+      created_by: {:string, :generic},
       curated: :boolean,
-      description: {:union, [{:string, :generic}, :null]},
-      display_name: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
+      display_name: {:string, :generic},
       featured: :boolean,
-      logo_url: {:union, [{:string, :uri}, :null]},
+      logo_url: {:string, :uri},
       name: {:string, :generic},
-      related: {:union, [[:map], :null]},
-      released: {:union, [{:string, :generic}, :null]},
-      repository_count: {:union, [:integer, :null]},
+      related: [{GitHubOpenAPI.TopicSearchResultItemRelated, :t}],
+      released: {:string, :generic},
+      repository_count: :integer,
       score: :number,
-      short_description: {:union, [{:string, :generic}, :null]},
+      short_description: {:string, :generic},
       text_matches: [{GitHubOpenAPI.SearchResultTextMatches, :t}],
       updated_at: {:string, :date_time}
     ]

@@ -24,9 +24,9 @@ defmodule GitHubOpenAPI.CheckRunOutput do
     [
       annotations_count: :integer,
       annotations_url: {:string, :uri},
-      summary: {:union, [{:string, :generic}, :null]},
-      text: {:union, [{:string, :generic}, :null]},
-      title: {:union, [{:string, :generic}, :null]}
+      summary: {:string, :generic},
+      text: {:string, :generic},
+      title: {:string, :generic}
     ]
   end
 end

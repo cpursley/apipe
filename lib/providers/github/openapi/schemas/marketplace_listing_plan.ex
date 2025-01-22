@@ -56,7 +56,7 @@ defmodule GitHubOpenAPI.MarketplaceListingPlan do
       number: :integer,
       price_model: {:enum, ["FREE", "FLAT_RATE", "PER_UNIT"]},
       state: {:string, :generic},
-      unit_name: {:union, [{:string, :generic}, :null]},
+      unit_name: {:string, :generic},
       url: {:string, :uri},
       yearly_price_in_cents: :integer
     ]

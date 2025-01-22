@@ -34,7 +34,7 @@ defmodule GitHubOpenAPI.RepositorySubscription do
     [
       created_at: {:string, :date_time},
       ignored: :boolean,
-      reason: {:union, [{:string, :generic}, :null]},
+      reason: {:string, :generic},
       repository_url: {:string, :uri},
       subscribed: :boolean,
       url: {:string, :uri}

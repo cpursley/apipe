@@ -21,8 +21,8 @@ defmodule GitHubOpenAPI.IssueEventDismissedReview do
 
   def __fields__(:t) do
     [
-      dismissal_commit_id: {:union, [{:string, :generic}, :null]},
-      dismissal_message: {:union, [{:string, :generic}, :null]},
+      dismissal_commit_id: {:string, :generic},
+      dismissal_message: {:string, :generic},
       review_id: :integer,
       state: {:string, :generic}
     ]

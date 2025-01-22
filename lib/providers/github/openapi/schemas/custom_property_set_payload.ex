@@ -30,9 +30,9 @@ defmodule GitHubOpenAPI.CustomPropertySetPayload do
 
   def __fields__(:t) do
     [
-      allowed_values: {:union, [[string: :generic], :null]},
+      allowed_values: [string: :generic],
       default_value: {:union, [{:string, :generic}, [string: :generic]]},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       required: :boolean,
       value_type: {:enum, ["string", "single_select", "multi_select", "true_false"]}
     ]

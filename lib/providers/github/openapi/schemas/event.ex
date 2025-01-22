@@ -37,13 +37,13 @@ defmodule GitHubOpenAPI.Event do
   def __fields__(:t) do
     [
       actor: {GitHubOpenAPI.Actor, :t},
-      created_at: {:union, [{:string, :date_time}, :null]},
+      created_at: {:string, :date_time},
       id: {:string, :generic},
       org: {GitHubOpenAPI.Actor, :t},
       payload: {GitHubOpenAPI.EventPayload, :t},
       public: :boolean,
       repo: {GitHubOpenAPI.EventRepo, :t},
-      type: {:union, [{:string, :generic}, :null]}
+      type: {:string, :generic}
     ]
   end
 end

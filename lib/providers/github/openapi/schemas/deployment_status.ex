@@ -8,7 +8,7 @@ defmodule GitHubOpenAPI.DeploymentStatus do
           __info__: map,
           __joins__: map,
           created_at: DateTime.t(),
-          creator: GitHubOpenAPI.SimpleUser.t() | nil,
+          creator: GitHubOpenAPI.NullableSimpleUser.t(),
           deployment_url: String.t(),
           description: String.t(),
           environment: String.t() | nil,
@@ -16,7 +16,7 @@ defmodule GitHubOpenAPI.DeploymentStatus do
           id: integer,
           log_url: String.t() | nil,
           node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.Integration.t() | nil,
+          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t() | nil,
           repository_url: String.t(),
           state: String.t(),
           target_url: String.t(),
@@ -51,7 +51,7 @@ defmodule GitHubOpenAPI.DeploymentStatus do
   def __fields__(:t) do
     [
       created_at: {:string, :date_time},
-      creator: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      creator: {GitHubOpenAPI.NullableSimpleUser, :t},
       deployment_url: {:string, :uri},
       description: {:string, :generic},
       environment: {:string, :generic},
@@ -59,7 +59,7 @@ defmodule GitHubOpenAPI.DeploymentStatus do
       id: :integer,
       log_url: {:string, :uri},
       node_id: {:string, :generic},
-      performed_via_github_app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
+      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
       repository_url: {:string, :uri},
       state:
         {:enum, ["error", "failure", "inactive", "pending", "success", "queued", "in_progress"]},

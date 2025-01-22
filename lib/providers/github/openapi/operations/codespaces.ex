@@ -313,7 +313,7 @@ defmodule GitHubOpenAPI.Codespaces do
     * [API method documentation](https://docs.github.com/rest/codespaces/codespaces#create-a-codespace-from-a-pull-request)
 
   """
-  @spec create_with_pr_for_authenticated_user(String.t(), String.t(), integer, map | nil, keyword) ::
+  @spec create_with_pr_for_authenticated_user(String.t(), String.t(), integer, map, keyword) ::
           {:ok, GitHubOpenAPI.Codespace.t()}
           | {:error, GitHubOpenAPI.BasicError.t() | GitHubOpenAPI.ServiceUnavailable.json_resp()}
   def create_with_pr_for_authenticated_user(owner, repo, pull_number, body, opts \\ []) do
@@ -325,7 +325,7 @@ defmodule GitHubOpenAPI.Codespaces do
       url: "/repos/#{owner}/#{repo}/pulls/#{pull_number}/codespaces",
       body: body,
       method: :post,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {201, {GitHubOpenAPI.Codespace, :t}},
         {202, {GitHubOpenAPI.Codespace, :t}},
@@ -350,7 +350,7 @@ defmodule GitHubOpenAPI.Codespaces do
     * [API method documentation](https://docs.github.com/rest/codespaces/codespaces#create-a-codespace-in-a-repository)
 
   """
-  @spec create_with_repo_for_authenticated_user(String.t(), String.t(), map | nil, keyword) ::
+  @spec create_with_repo_for_authenticated_user(String.t(), String.t(), map, keyword) ::
           {:ok, GitHubOpenAPI.Codespace.t()}
           | {:error,
              GitHubOpenAPI.BasicError.t()
@@ -365,7 +365,7 @@ defmodule GitHubOpenAPI.Codespaces do
       url: "/repos/#{owner}/#{repo}/codespaces",
       body: body,
       method: :post,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {201, {GitHubOpenAPI.Codespace, :t}},
         {202, {GitHubOpenAPI.Codespace, :t}},

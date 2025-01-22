@@ -15,7 +15,7 @@ defmodule GitHubOpenAPI.LockedIssueEvent do
           id: integer,
           lock_reason: String.t() | nil,
           node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.Integration.t() | nil,
+          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t(),
           url: String.t()
         }
 
@@ -41,14 +41,14 @@ defmodule GitHubOpenAPI.LockedIssueEvent do
   def __fields__(:t) do
     [
       actor: {GitHubOpenAPI.SimpleUser, :t},
-      commit_id: {:union, [{:string, :generic}, :null]},
-      commit_url: {:union, [{:string, :generic}, :null]},
+      commit_id: {:string, :generic},
+      commit_url: {:string, :generic},
       created_at: {:string, :generic},
       event: {:string, :generic},
       id: :integer,
-      lock_reason: {:union, [{:string, :generic}, :null]},
+      lock_reason: {:string, :generic},
       node_id: {:string, :generic},
-      performed_via_github_app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
+      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
       url: {:string, :generic}
     ]
   end

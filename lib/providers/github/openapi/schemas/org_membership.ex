@@ -13,7 +13,7 @@ defmodule GitHubOpenAPI.OrgMembership do
           role: String.t(),
           state: String.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -40,7 +40,7 @@ defmodule GitHubOpenAPI.OrgMembership do
       role: {:enum, ["admin", "member", "billing_manager"]},
       state: {:enum, ["active", "pending"]},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

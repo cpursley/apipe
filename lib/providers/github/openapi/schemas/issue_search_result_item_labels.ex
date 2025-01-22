@@ -26,7 +26,7 @@ defmodule GitHubOpenAPI.IssueSearchResultItemLabels do
     [
       color: {:string, :generic},
       default: :boolean,
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       id: :integer,
       name: {:string, :generic},
       node_id: {:string, :generic},

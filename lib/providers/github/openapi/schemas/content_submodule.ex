@@ -43,9 +43,9 @@ defmodule GitHubOpenAPI.ContentSubmodule do
   def __fields__(:t) do
     [
       _links: {GitHubOpenAPI.ContentSubmoduleLinks, :t},
-      download_url: {:union, [{:string, :uri}, :null]},
-      git_url: {:union, [{:string, :uri}, :null]},
-      html_url: {:union, [{:string, :uri}, :null]},
+      download_url: {:string, :uri},
+      git_url: {:string, :uri},
+      html_url: {:string, :uri},
       name: {:string, :generic},
       path: {:string, :generic},
       sha: {:string, :generic},

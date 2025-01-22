@@ -13,6 +13,6 @@ defmodule GitHubOpenAPI.PageBuildError do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [message: {:union, [{:string, :generic}, :null]}]
+    [message: {:string, :generic}]
   end
 end

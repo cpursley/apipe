@@ -30,7 +30,7 @@ defmodule GitHubOpenAPI.CodeownersErrorsErrors do
       message: {:string, :generic},
       path: {:string, :generic},
       source: {:string, :generic},
-      suggestion: {:union, [{:string, :generic}, :null]}
+      suggestion: {:string, :generic}
     ]
   end
 end

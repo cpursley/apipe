@@ -39,7 +39,7 @@ defmodule GitHubOpenAPI.Thread do
   def __fields__(:t) do
     [
       id: {:string, :generic},
-      last_read_at: {:union, [{:string, :generic}, :null]},
+      last_read_at: {:string, :generic},
       reason: {:string, :generic},
       repository: {GitHubOpenAPI.MinimalRepository, :t},
       subject: {GitHubOpenAPI.ThreadSubject, :t},

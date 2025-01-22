@@ -50,10 +50,10 @@ defmodule GitHubOpenAPI.ContentFile do
     [
       _links: {GitHubOpenAPI.ContentFileLinks, :t},
       content: {:string, :generic},
-      download_url: {:union, [{:string, :uri}, :null]},
+      download_url: {:string, :uri},
       encoding: {:string, :generic},
-      git_url: {:union, [{:string, :uri}, :null]},
-      html_url: {:union, [{:string, :uri}, :null]},
+      git_url: {:string, :uri},
+      html_url: {:string, :uri},
       name: {:string, :generic},
       path: {:string, :generic},
       sha: {:string, :generic},

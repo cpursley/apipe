@@ -14,7 +14,7 @@ defmodule GitHubOpenAPI.GistComment do
           node_id: String.t(),
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -54,7 +54,7 @@ defmodule GitHubOpenAPI.GistComment do
       node_id: {:string, :generic},
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

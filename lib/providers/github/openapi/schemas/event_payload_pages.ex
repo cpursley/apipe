@@ -27,7 +27,7 @@ defmodule GitHubOpenAPI.EventPayloadPages do
       html_url: {:string, :generic},
       page_name: {:string, :generic},
       sha: {:string, :generic},
-      summary: {:union, [{:string, :generic}, :null]},
+      summary: {:string, :generic},
       title: {:string, :generic}
     ]
   end

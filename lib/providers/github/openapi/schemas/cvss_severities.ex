@@ -19,8 +19,8 @@ defmodule GitHubOpenAPI.CvssSeverities do
 
   def __fields__(:t) do
     [
-      cvss_v3: {:union, [{GitHubOpenAPI.CvssSeveritiesCvssV3, :t}, :null]},
-      cvss_v4: {:union, [{GitHubOpenAPI.CvssSeveritiesCvssV4, :t}, :null]}
+      cvss_v3: {GitHubOpenAPI.CvssSeveritiesCvssV3, :t},
+      cvss_v4: {GitHubOpenAPI.CvssSeveritiesCvssV4, :t}
     ]
   end
 end

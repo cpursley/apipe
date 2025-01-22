@@ -46,10 +46,10 @@ defmodule GitHubOpenAPI.ContentTree do
     [
       _links: {GitHubOpenAPI.ContentTreeLinks, :t},
       content: {:string, :generic},
-      download_url: {:union, [{:string, :uri}, :null]},
+      download_url: {:string, :uri},
       entries: [{GitHubOpenAPI.ContentTreeEntries, :t}],
-      git_url: {:union, [{:string, :uri}, :null]},
-      html_url: {:union, [{:string, :uri}, :null]},
+      git_url: {:string, :uri},
+      html_url: {:string, :uri},
       name: {:string, :generic},
       path: {:string, :generic},
       sha: {:string, :generic},

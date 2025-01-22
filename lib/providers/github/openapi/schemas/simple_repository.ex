@@ -123,7 +123,7 @@ defmodule GitHubOpenAPI.SimpleRepository do
       contents_url: {:string, :generic},
       contributors_url: {:string, :uri},
       deployments_url: {:string, :uri},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       downloads_url: {:string, :uri},
       events_url: {:string, :uri},
       fork: :boolean,

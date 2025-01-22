@@ -36,7 +36,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilitiesPackage do
            "other",
            "swift"
          ]},
-      name: {:union, [{:string, :generic}, :null]}
+      name: {:string, :generic}
     ]
   end
 end

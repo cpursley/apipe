@@ -24,7 +24,7 @@ defmodule GitHubOpenAPI.Email do
       email: {:string, :email},
       primary: :boolean,
       verified: :boolean,
-      visibility: {:union, [{:string, :generic}, :null]}
+      visibility: {:string, :generic}
     ]
   end
 end

@@ -1330,7 +1330,7 @@ defmodule GitHubOpenAPI.Issues do
     * [API method documentation](https://docs.github.com/rest/issues/issues#lock-an-issue)
 
   """
-  @spec lock(String.t(), String.t(), integer, map | nil, keyword) ::
+  @spec lock(String.t(), String.t(), integer, map, keyword) ::
           :ok | {:error, GitHubOpenAPI.BasicError.t() | GitHubOpenAPI.ValidationError.t()}
   def lock(owner, repo, issue_number, body, opts \\ []) do
     client = opts[:client] || @default_client
@@ -1341,7 +1341,7 @@ defmodule GitHubOpenAPI.Issues do
       url: "/repos/#{owner}/#{repo}/issues/#{issue_number}/lock",
       body: body,
       method: :put,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {204, :null},
         {403, {GitHubOpenAPI.BasicError, :t}},

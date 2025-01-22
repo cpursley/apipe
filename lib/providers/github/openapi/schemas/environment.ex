@@ -39,8 +39,7 @@ defmodule GitHubOpenAPI.Environment do
   def __fields__(:t) do
     [
       created_at: {:string, :date_time},
-      deployment_branch_policy:
-        {:union, [{GitHubOpenAPI.DeploymentBranchPolicySettings, :t}, :null]},
+      deployment_branch_policy: {GitHubOpenAPI.DeploymentBranchPolicySettings, :t},
       html_url: {:string, :generic},
       id: :integer,
       name: {:string, :generic},

@@ -13,7 +13,7 @@ defmodule GitHubOpenAPI.DeploymentSimple do
           id: integer,
           node_id: String.t(),
           original_environment: String.t() | nil,
-          performed_via_github_app: GitHubOpenAPI.Integration.t() | nil,
+          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t() | nil,
           production_environment: boolean | nil,
           repository_url: String.t(),
           statuses_url: String.t(),
@@ -49,12 +49,12 @@ defmodule GitHubOpenAPI.DeploymentSimple do
   def __fields__(:t) do
     [
       created_at: {:string, :date_time},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       environment: {:string, :generic},
       id: :integer,
       node_id: {:string, :generic},
       original_environment: {:string, :generic},
-      performed_via_github_app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
+      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
       production_environment: :boolean,
       repository_url: {:string, :uri},
       statuses_url: {:string, :uri},

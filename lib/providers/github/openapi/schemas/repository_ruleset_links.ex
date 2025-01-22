@@ -19,7 +19,7 @@ defmodule GitHubOpenAPI.RepositoryRulesetLinks do
 
   def __fields__(:t) do
     [
-      html: {:union, [{GitHubOpenAPI.RepositoryRulesetLinksHtml, :t}, :null]},
+      html: {GitHubOpenAPI.RepositoryRulesetLinksHtml, :t},
       self: {GitHubOpenAPI.RepositoryRulesetLinksSelf, :t}
     ]
   end

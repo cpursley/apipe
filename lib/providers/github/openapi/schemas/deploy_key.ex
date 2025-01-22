@@ -40,12 +40,12 @@ defmodule GitHubOpenAPI.DeployKey do
 
   def __fields__(:t) do
     [
-      added_by: {:union, [{:string, :generic}, :null]},
+      added_by: {:string, :generic},
       created_at: {:string, :generic},
       enabled: :boolean,
       id: :integer,
       key: {:string, :generic},
-      last_used: {:union, [{:string, :generic}, :null]},
+      last_used: {:string, :generic},
       read_only: :boolean,
       title: {:string, :generic},
       url: {:string, :generic},

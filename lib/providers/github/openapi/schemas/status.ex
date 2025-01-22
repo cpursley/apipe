@@ -10,7 +10,7 @@ defmodule GitHubOpenAPI.Status do
           avatar_url: String.t() | nil,
           context: String.t(),
           created_at: String.t(),
-          creator: GitHubOpenAPI.SimpleUser.t() | nil,
+          creator: GitHubOpenAPI.NullableSimpleUser.t(),
           description: String.t() | nil,
           id: integer,
           node_id: String.t(),
@@ -42,15 +42,15 @@ defmodule GitHubOpenAPI.Status do
 
   def __fields__(:t) do
     [
-      avatar_url: {:union, [{:string, :generic}, :null]},
+      avatar_url: {:string, :generic},
       context: {:string, :generic},
       created_at: {:string, :generic},
-      creator: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
-      description: {:union, [{:string, :generic}, :null]},
+      creator: {GitHubOpenAPI.NullableSimpleUser, :t},
+      description: {:string, :generic},
       id: :integer,
       node_id: {:string, :generic},
       state: {:string, :generic},
-      target_url: {:union, [{:string, :generic}, :null]},
+      target_url: {:string, :generic},
       updated_at: {:string, :generic},
       url: {:string, :generic}
     ]

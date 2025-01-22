@@ -34,8 +34,8 @@ end
 import Apipe
 alias Apipe.Providers.GitHub
 
-# Create a new GitHub client (both token and casting are optional)
-github = Apipe.new(GitHub, cast_response: true)
+# Create a new GitHub client (token and cast_response are optional)
+github = Apipe.new(GitHub)
 
 github
 |> from("repos/cpursley/apipe")
@@ -54,7 +54,7 @@ github
 |> execute()
 
 # Query using chainable operators with select (without type casting)
-Apipe.new(GitHub) # using the client with casting enabled
+Apipe.new(GitHub, cast_response: false)
 |> select([:id, :name, :stargazers_count])
 |> from("search/repositories")
 |> eq(:language, "elixir")

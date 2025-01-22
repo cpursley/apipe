@@ -9,7 +9,7 @@ defmodule GitHubOpenAPI.CommitSearchResultItemCommit do
           __joins__: map,
           author: GitHubOpenAPI.CommitSearchResultItemCommitAuthor.t(),
           comment_count: integer,
-          committer: GitHubOpenAPI.GitUser.t() | nil,
+          committer: GitHubOpenAPI.NullableGitUser.t(),
           message: String.t(),
           tree: GitHubOpenAPI.CommitSearchResultItemCommitTree.t(),
           url: String.t(),
@@ -36,7 +36,7 @@ defmodule GitHubOpenAPI.CommitSearchResultItemCommit do
     [
       author: {GitHubOpenAPI.CommitSearchResultItemCommitAuthor, :t},
       comment_count: :integer,
-      committer: {:union, [{GitHubOpenAPI.GitUser, :t}, :null]},
+      committer: {GitHubOpenAPI.NullableGitUser, :t},
       message: {:string, :generic},
       tree: {GitHubOpenAPI.CommitSearchResultItemCommitTree, :t},
       url: {:string, :uri},

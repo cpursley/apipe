@@ -13,7 +13,7 @@ defmodule GitHubOpenAPI.Authorization do
           fingerprint: String.t() | nil,
           hashed_token: String.t() | nil,
           id: integer,
-          installation: GitHubOpenAPI.ScopedInstallation.t() | nil,
+          installation: GitHubOpenAPI.NullableScopedInstallation.t() | nil,
           note: String.t() | nil,
           note_url: String.t() | nil,
           scopes: [String.t()] | nil,
@@ -21,7 +21,7 @@ defmodule GitHubOpenAPI.Authorization do
           token_last_eight: String.t() | nil,
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t() | nil
         }
 
   defstruct [
@@ -52,19 +52,19 @@ defmodule GitHubOpenAPI.Authorization do
     [
       app: {GitHubOpenAPI.AuthorizationApp, :t},
       created_at: {:string, :date_time},
-      expires_at: {:union, [{:string, :date_time}, :null]},
-      fingerprint: {:union, [{:string, :generic}, :null]},
-      hashed_token: {:union, [{:string, :generic}, :null]},
+      expires_at: {:string, :date_time},
+      fingerprint: {:string, :generic},
+      hashed_token: {:string, :generic},
       id: :integer,
-      installation: {:union, [{GitHubOpenAPI.ScopedInstallation, :t}, :null]},
-      note: {:union, [{:string, :generic}, :null]},
-      note_url: {:union, [{:string, :uri}, :null]},
-      scopes: {:union, [[string: :generic], :null]},
+      installation: {GitHubOpenAPI.NullableScopedInstallation, :t},
+      note: {:string, :generic},
+      note_url: {:string, :uri},
+      scopes: [string: :generic],
       token: {:string, :generic},
-      token_last_eight: {:union, [{:string, :generic}, :null]},
+      token_last_eight: {:string, :generic},
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

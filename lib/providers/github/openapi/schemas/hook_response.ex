@@ -19,10 +19,6 @@ defmodule GitHubOpenAPI.HookResponse do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [
-      code: {:union, [:integer, :null]},
-      message: {:union, [{:string, :generic}, :null]},
-      status: {:union, [{:string, :generic}, :null]}
-    ]
+    [code: :integer, message: {:string, :generic}, status: {:string, :generic}]
   end
 end

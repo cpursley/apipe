@@ -44,11 +44,11 @@ defmodule GitHubOpenAPI.RuleSuite do
 
   def __fields__(:t) do
     [
-      actor_id: {:union, [:integer, :null]},
-      actor_name: {:union, [{:string, :generic}, :null]},
+      actor_id: :integer,
+      actor_name: {:string, :generic},
       after_sha: {:string, :generic},
       before_sha: {:string, :generic},
-      evaluation_result: {:enum, ["pass", "fail", "bypass", nil]},
+      evaluation_result: {:enum, ["pass", "fail", "bypass"]},
       id: :integer,
       pushed_at: {:string, :date_time},
       ref: {:string, :generic},

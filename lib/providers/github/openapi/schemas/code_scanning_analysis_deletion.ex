@@ -18,9 +18,6 @@ defmodule GitHubOpenAPI.CodeScanningAnalysisDeletion do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [
-      confirm_delete_url: {:union, [{:string, :uri}, :null]},
-      next_analysis_url: {:union, [{:string, :uri}, :null]}
-    ]
+    [confirm_delete_url: {:string, :uri}, next_analysis_url: {:string, :uri}]
   end
 end

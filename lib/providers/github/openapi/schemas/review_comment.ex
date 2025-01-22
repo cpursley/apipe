@@ -34,7 +34,7 @@ defmodule GitHubOpenAPI.ReviewComment do
           start_side: String.t() | nil,
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -103,18 +103,18 @@ defmodule GitHubOpenAPI.ReviewComment do
       original_commit_id: {:string, :generic},
       original_line: :integer,
       original_position: :integer,
-      original_start_line: {:union, [:integer, :null]},
+      original_start_line: :integer,
       path: {:string, :generic},
-      position: {:union, [:integer, :null]},
-      pull_request_review_id: {:union, [:integer, :null]},
+      position: :integer,
+      pull_request_review_id: :integer,
       pull_request_url: {:string, :uri},
       reactions: {GitHubOpenAPI.ReactionRollup, :t},
       side: {:enum, ["LEFT", "RIGHT"]},
-      start_line: {:union, [:integer, :null]},
-      start_side: {:enum, ["LEFT", "RIGHT", nil]},
+      start_line: :integer,
+      start_side: {:enum, ["LEFT", "RIGHT"]},
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

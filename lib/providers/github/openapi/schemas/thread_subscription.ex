@@ -34,9 +34,9 @@ defmodule GitHubOpenAPI.ThreadSubscription do
 
   def __fields__(:t) do
     [
-      created_at: {:union, [{:string, :date_time}, :null]},
+      created_at: {:string, :date_time},
       ignored: :boolean,
-      reason: {:union, [{:string, :generic}, :null]},
+      reason: {:string, :generic},
       repository_url: {:string, :uri},
       subscribed: :boolean,
       thread_url: {:string, :uri},

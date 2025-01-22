@@ -32,10 +32,10 @@ defmodule GitHubOpenAPI.SecretScanningScanHistoryCustomPatternBackfillScans do
 
   def __fields__(:t) do
     [
-      completed_at: {:union, [{:string, :date_time}, :null]},
+      completed_at: {:string, :date_time},
       pattern_name: {:string, :generic},
       pattern_scope: {:string, :generic},
-      started_at: {:union, [{:string, :date_time}, :null]},
+      started_at: {:string, :date_time},
       status: {:string, :generic},
       type: {:string, :generic}
     ]

@@ -28,7 +28,7 @@ defmodule GitHubOpenAPI.ValidationErrorErrors do
       index: :integer,
       message: {:string, :generic},
       resource: {:string, :generic},
-      value: {:union, [:integer, {:string, :generic}, [string: :generic], :null]}
+      value: {:union, [:integer, {:string, :generic}, [string: :generic]]}
     ]
   end
 end

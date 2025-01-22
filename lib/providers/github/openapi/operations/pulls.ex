@@ -807,7 +807,7 @@ defmodule GitHubOpenAPI.Pulls do
     * [API method documentation](https://docs.github.com/rest/pulls/pulls#merge-a-pull-request)
 
   """
-  @spec merge(String.t(), String.t(), integer, map | nil, keyword) ::
+  @spec merge(String.t(), String.t(), integer, map, keyword) ::
           {:ok, GitHubOpenAPI.PullRequestMergeResult.t()}
           | {:error, map | GitHubOpenAPI.BasicError.t() | GitHubOpenAPI.ValidationError.t()}
   def merge(owner, repo, pull_number, body, opts \\ []) do
@@ -819,7 +819,7 @@ defmodule GitHubOpenAPI.Pulls do
       url: "/repos/#{owner}/#{repo}/pulls/#{pull_number}/merge",
       body: body,
       method: :put,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {200, {GitHubOpenAPI.PullRequestMergeResult, :t}},
         {403, {GitHubOpenAPI.BasicError, :t}},
@@ -993,7 +993,7 @@ defmodule GitHubOpenAPI.Pulls do
     * [API method documentation](https://docs.github.com/rest/pulls/pulls#update-a-pull-request-branch)
 
   """
-  @spec update_branch(String.t(), String.t(), integer, map | nil, keyword) ::
+  @spec update_branch(String.t(), String.t(), integer, map, keyword) ::
           {:ok, map} | {:error, GitHubOpenAPI.BasicError.t() | GitHubOpenAPI.ValidationError.t()}
   def update_branch(owner, repo, pull_number, body, opts \\ []) do
     client = opts[:client] || @default_client
@@ -1004,7 +1004,7 @@ defmodule GitHubOpenAPI.Pulls do
       url: "/repos/#{owner}/#{repo}/pulls/#{pull_number}/update-branch",
       body: body,
       method: :put,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {202, {GitHubOpenAPI.Pulls, :update_branch_202_json_resp}},
         {403, {GitHubOpenAPI.BasicError, :t}},

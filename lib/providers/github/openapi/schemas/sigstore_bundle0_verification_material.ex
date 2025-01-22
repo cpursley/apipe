@@ -27,7 +27,7 @@ defmodule GitHubOpenAPI.SigstoreBundle0VerificationMaterial do
 
   def __fields__(:t) do
     [
-      timestampVerificationData: {:union, [{:string, :generic}, :null]},
+      timestampVerificationData: {:string, :generic},
       tlogEntries: [{GitHubOpenAPI.SigstoreBundle0VerificationMaterialTlogEntries, :t}],
       x509CertificateChain:
         {GitHubOpenAPI.SigstoreBundle0VerificationMaterialX509CertificateChain, :t}

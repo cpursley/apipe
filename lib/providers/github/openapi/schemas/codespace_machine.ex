@@ -39,7 +39,7 @@ defmodule GitHubOpenAPI.CodespaceMachine do
       memory_in_bytes: :integer,
       name: {:string, :generic},
       operating_system: {:string, :generic},
-      prebuild_availability: {:enum, ["none", "ready", "in_progress", nil]},
+      prebuild_availability: {:enum, ["none", "ready", "in_progress"]},
       storage_in_bytes: :integer
     ]
   end

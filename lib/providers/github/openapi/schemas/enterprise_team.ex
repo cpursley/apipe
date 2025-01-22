@@ -43,8 +43,8 @@ defmodule GitHubOpenAPI.EnterpriseTeam do
   def __fields__(:t) do
     [
       created_at: {:string, :date_time},
-      group_id: {:union, [{:string, :generic}, :null]},
-      group_name: {:union, [{:string, :generic}, :null]},
+      group_id: {:string, :generic},
+      group_name: {:string, :generic},
       html_url: {:string, :uri},
       id: :integer,
       members_url: {:string, :generic},

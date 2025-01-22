@@ -67,23 +67,14 @@ defmodule GitHubOpenAPI.Job do
   def __fields__(:t) do
     [
       check_run_url: {:string, :generic},
-      completed_at: {:union, [{:string, :date_time}, :null]},
+      completed_at: {:string, :date_time},
       conclusion:
         {:enum,
-         [
-           "success",
-           "failure",
-           "neutral",
-           "cancelled",
-           "skipped",
-           "timed_out",
-           "action_required",
-           nil
-         ]},
+         ["success", "failure", "neutral", "cancelled", "skipped", "timed_out", "action_required"]},
       created_at: {:string, :date_time},
-      head_branch: {:union, [{:string, :generic}, :null]},
+      head_branch: {:string, :generic},
       head_sha: {:string, :generic},
-      html_url: {:union, [{:string, :generic}, :null]},
+      html_url: {:string, :generic},
       id: :integer,
       labels: [string: :generic],
       name: {:string, :generic},
@@ -91,15 +82,15 @@ defmodule GitHubOpenAPI.Job do
       run_attempt: :integer,
       run_id: :integer,
       run_url: {:string, :generic},
-      runner_group_id: {:union, [:integer, :null]},
-      runner_group_name: {:union, [{:string, :generic}, :null]},
-      runner_id: {:union, [:integer, :null]},
-      runner_name: {:union, [{:string, :generic}, :null]},
+      runner_group_id: :integer,
+      runner_group_name: {:string, :generic},
+      runner_id: :integer,
+      runner_name: {:string, :generic},
       started_at: {:string, :date_time},
       status: {:enum, ["queued", "in_progress", "completed", "waiting", "requested", "pending"]},
       steps: [{GitHubOpenAPI.JobSteps, :t}],
       url: {:string, :generic},
-      workflow_name: {:union, [{:string, :generic}, :null]}
+      workflow_name: {:string, :generic}
     ]
   end
 end

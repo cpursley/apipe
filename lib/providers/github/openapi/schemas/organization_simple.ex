@@ -45,7 +45,7 @@ defmodule GitHubOpenAPI.OrganizationSimple do
   def __fields__(:t) do
     [
       avatar_url: {:string, :generic},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       events_url: {:string, :uri},
       hooks_url: {:string, :generic},
       id: :integer,

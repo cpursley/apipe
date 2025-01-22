@@ -71,7 +71,7 @@ defmodule GitHubOpenAPI.Contributor do
       followers_url: {:string, :uri},
       following_url: {:string, :generic},
       gists_url: {:string, :generic},
-      gravatar_id: {:union, [{:string, :generic}, :null]},
+      gravatar_id: {:string, :generic},
       html_url: {:string, :uri},
       id: :integer,
       login: {:string, :generic},

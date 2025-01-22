@@ -9,7 +9,7 @@ defmodule GitHubOpenAPI.CodeScanningAlertInstance do
           __joins__: map,
           analysis_key: String.t() | nil,
           category: String.t() | nil,
-          classifications: [String.t() | nil] | nil,
+          classifications: [String.t()] | nil,
           commit_sha: String.t() | nil,
           environment: String.t() | nil,
           html_url: String.t() | nil,
@@ -42,14 +42,14 @@ defmodule GitHubOpenAPI.CodeScanningAlertInstance do
     [
       analysis_key: {:string, :generic},
       category: {:string, :generic},
-      classifications: [enum: ["source", "generated", "test", "library", nil]],
+      classifications: [enum: ["source", "generated", "test", "library"]],
       commit_sha: {:string, :generic},
       environment: {:string, :generic},
       html_url: {:string, :generic},
       location: {GitHubOpenAPI.CodeScanningAlertLocation, :t},
       message: {GitHubOpenAPI.CodeScanningAlertInstanceMessage, :t},
       ref: {:string, :generic},
-      state: {:enum, ["open", "dismissed", "fixed", nil]}
+      state: {:enum, ["open", "dismissed", "fixed"]}
     ]
   end
 end

@@ -17,10 +17,6 @@ defmodule GitHubOpenAPI.ForbiddenGistBlock do
   @doc false
   @spec __fields__(atom) :: keyword
   def __fields__(:json_resp) do
-    [
-      created_at: {:string, :generic},
-      html_url: {:union, [{:string, :generic}, :null]},
-      reason: {:string, :generic}
-    ]
+    [created_at: {:string, :generic}, html_url: {:string, :generic}, reason: {:string, :generic}]
   end
 end

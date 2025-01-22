@@ -10,7 +10,7 @@ defmodule GitHubOpenAPI.Project do
           body: String.t() | nil,
           columns_url: String.t(),
           created_at: DateTime.t(),
-          creator: GitHubOpenAPI.SimpleUser.t() | nil,
+          creator: GitHubOpenAPI.NullableSimpleUser.t(),
           html_url: String.t(),
           id: integer,
           name: String.t(),
@@ -50,10 +50,10 @@ defmodule GitHubOpenAPI.Project do
 
   def __fields__(:t) do
     [
-      body: {:union, [{:string, :generic}, :null]},
+      body: {:string, :generic},
       columns_url: {:string, :uri},
       created_at: {:string, :date_time},
-      creator: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      creator: {GitHubOpenAPI.NullableSimpleUser, :t},
       html_url: {:string, :uri},
       id: :integer,
       name: {:string, :generic},

@@ -36,7 +36,7 @@ defmodule GitHubOpenAPI.OrgPrivateRegistryConfiguration do
       name: {:string, :generic},
       registry_type: {:const, "maven_repository"},
       updated_at: {:string, :date_time},
-      username: {:union, [{:string, :generic}, :null]},
+      username: {:string, :generic},
       visibility: {:enum, ["all", "private", "selected"]}
     ]
   end

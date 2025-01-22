@@ -14,7 +14,7 @@ defmodule GitHubOpenAPI.Team do
           name: String.t(),
           node_id: String.t(),
           notification_setting: String.t() | nil,
-          parent: GitHubOpenAPI.TeamSimple.t() | nil,
+          parent: GitHubOpenAPI.NullableTeamSimple.t(),
           permission: String.t(),
           permissions: GitHubOpenAPI.TeamPermissions.t() | nil,
           privacy: String.t() | nil,
@@ -48,14 +48,14 @@ defmodule GitHubOpenAPI.Team do
 
   def __fields__(:t) do
     [
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       html_url: {:string, :uri},
       id: :integer,
       members_url: {:string, :generic},
       name: {:string, :generic},
       node_id: {:string, :generic},
       notification_setting: {:string, :generic},
-      parent: {:union, [{GitHubOpenAPI.TeamSimple, :t}, :null]},
+      parent: {GitHubOpenAPI.NullableTeamSimple, :t},
       permission: {:string, :generic},
       permissions: {GitHubOpenAPI.TeamPermissions, :t},
       privacy: {:string, :generic},

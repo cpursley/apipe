@@ -32,11 +32,11 @@ defmodule GitHubOpenAPI.ScimError do
 
   def __fields__(:t) do
     [
-      detail: {:union, [{:string, :generic}, :null]},
-      documentation_url: {:union, [{:string, :generic}, :null]},
-      message: {:union, [{:string, :generic}, :null]},
+      detail: {:string, :generic},
+      documentation_url: {:string, :generic},
+      message: {:string, :generic},
       schemas: [string: :generic],
-      scimType: {:union, [{:string, :generic}, :null]},
+      scimType: {:string, :generic},
       status: :integer
     ]
   end

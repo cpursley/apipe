@@ -19,7 +19,7 @@ defmodule GitHubOpenAPI.PullRequestReview do
           pull_request_url: String.t(),
           state: String.t(),
           submitted_at: DateTime.t() | nil,
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -62,14 +62,14 @@ defmodule GitHubOpenAPI.PullRequestReview do
       body: {:string, :generic},
       body_html: {:string, :generic},
       body_text: {:string, :generic},
-      commit_id: {:union, [{:string, :generic}, :null]},
+      commit_id: {:string, :generic},
       html_url: {:string, :uri},
       id: :integer,
       node_id: {:string, :generic},
       pull_request_url: {:string, :uri},
       state: {:string, :generic},
       submitted_at: {:string, :date_time},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

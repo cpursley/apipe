@@ -52,7 +52,7 @@ defmodule GitHubOpenAPI.TeamProject do
 
   def __fields__(:t) do
     [
-      body: {:union, [{:string, :generic}, :null]},
+      body: {:string, :generic},
       columns_url: {:string, :generic},
       created_at: {:string, :generic},
       creator: {GitHubOpenAPI.SimpleUser, :t},

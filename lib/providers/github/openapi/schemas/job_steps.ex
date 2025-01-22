@@ -32,11 +32,11 @@ defmodule GitHubOpenAPI.JobSteps do
 
   def __fields__(:t) do
     [
-      completed_at: {:union, [{:string, :date_time}, :null]},
-      conclusion: {:union, [{:string, :generic}, :null]},
+      completed_at: {:string, :date_time},
+      conclusion: {:string, :generic},
       name: {:string, :generic},
       number: :integer,
-      started_at: {:union, [{:string, :date_time}, :null]},
+      started_at: {:string, :date_time},
       status: {:enum, ["queued", "in_progress", "completed"]}
     ]
   end

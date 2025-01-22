@@ -20,8 +20,8 @@ defmodule GitHubOpenAPI.CodeScanningSarifsStatus do
 
   def __fields__(:t) do
     [
-      analyses_url: {:union, [{:string, :uri}, :null]},
-      errors: {:union, [[string: :generic], :null]},
+      analyses_url: {:string, :uri},
+      errors: [string: :generic],
       processing_status: {:enum, ["pending", "complete", "failed"]}
     ]
   end

@@ -18,6 +18,6 @@ defmodule GitHubOpenAPI.StatusCheckPolicyChecks do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [app_id: {:union, [:integer, :null]}, context: {:string, :generic}]
+    [app_id: :integer, context: {:string, :generic}]
   end
 end

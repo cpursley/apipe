@@ -15,11 +15,11 @@ defmodule GitHubOpenAPI.GistSimple do
           description: String.t() | nil,
           files: GitHubOpenAPI.GistSimpleFiles.t() | nil,
           fork_of: GitHubOpenAPI.Gist.t() | nil,
-          forks: [map] | nil,
+          forks: [GitHubOpenAPI.GistSimpleForks.t()] | nil,
           forks_url: String.t() | nil,
           git_pull_url: String.t() | nil,
           git_push_url: String.t() | nil,
-          history: [map] | nil,
+          history: [GitHubOpenAPI.GistHistory.t()] | nil,
           html_url: String.t() | nil,
           id: String.t() | nil,
           node_id: String.t() | nil,
@@ -69,14 +69,14 @@ defmodule GitHubOpenAPI.GistSimple do
       comments_url: {:string, :generic},
       commits_url: {:string, :generic},
       created_at: {:string, :generic},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       files: {GitHubOpenAPI.GistSimpleFiles, :t},
-      fork_of: {:union, [{GitHubOpenAPI.Gist, :t}, :null]},
-      forks: {:union, [[:map], :null]},
+      fork_of: {GitHubOpenAPI.Gist, :t},
+      forks: [{GitHubOpenAPI.GistSimpleForks, :t}],
       forks_url: {:string, :generic},
       git_pull_url: {:string, :generic},
       git_push_url: {:string, :generic},
-      history: {:union, [[:map], :null]},
+      history: [{GitHubOpenAPI.GistHistory, :t}],
       html_url: {:string, :generic},
       id: {:string, :generic},
       node_id: {:string, :generic},
@@ -85,7 +85,7 @@ defmodule GitHubOpenAPI.GistSimple do
       truncated: :boolean,
       updated_at: {:string, :generic},
       url: {:string, :generic},
-      user: {:union, [{:string, :generic}, :null]}
+      user: {:string, :generic}
     ]
   end
 end

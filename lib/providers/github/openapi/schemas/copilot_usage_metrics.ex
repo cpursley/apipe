@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.CopilotUsageMetrics do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          breakdown: [map] | nil,
+          breakdown: [GitHubOpenAPI.CopilotUsageMetricsBreakdown.t()] | nil,
           day: Date.t(),
           total_acceptances_count: integer | nil,
           total_active_chat_users: integer | nil,
@@ -40,7 +40,7 @@ defmodule GitHubOpenAPI.CopilotUsageMetrics do
 
   def __fields__(:t) do
     [
-      breakdown: {:union, [[:map], :null]},
+      breakdown: [{GitHubOpenAPI.CopilotUsageMetricsBreakdown, :t}],
       day: {:string, :date},
       total_acceptances_count: :integer,
       total_active_chat_users: :integer,

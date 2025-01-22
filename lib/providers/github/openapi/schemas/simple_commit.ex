@@ -23,8 +23,8 @@ defmodule GitHubOpenAPI.SimpleCommit do
 
   def __fields__(:t) do
     [
-      author: {:union, [{GitHubOpenAPI.SimpleCommitAuthor, :t}, :null]},
-      committer: {:union, [{GitHubOpenAPI.SimpleCommitCommitter, :t}, :null]},
+      author: {GitHubOpenAPI.SimpleCommitAuthor, :t},
+      committer: {GitHubOpenAPI.SimpleCommitCommitter, :t},
       id: {:string, :generic},
       message: {:string, :generic},
       timestamp: {:string, :date_time},

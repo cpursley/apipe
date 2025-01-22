@@ -19,10 +19,6 @@ defmodule GitHubOpenAPI.RuleSuiteRuleEvaluationsRuleSource do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [
-      id: {:union, [:integer, :null]},
-      name: {:union, [{:string, :generic}, :null]},
-      type: {:string, :generic}
-    ]
+    [id: :integer, name: {:string, :generic}, type: {:string, :generic}]
   end
 end

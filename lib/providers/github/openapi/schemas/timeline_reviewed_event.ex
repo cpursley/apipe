@@ -61,7 +61,7 @@ defmodule GitHubOpenAPI.TimelineReviewedEvent do
            "NONE",
            "OWNER"
          ]},
-      body: {:union, [{:string, :generic}, :null]},
+      body: {:string, :generic},
       body_html: {:string, :generic},
       body_text: {:string, :generic},
       commit_id: {:string, :generic},

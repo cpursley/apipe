@@ -66,19 +66,19 @@ defmodule GitHubOpenAPI.Import do
 
   def __fields__(:t) do
     [
-      authors_count: {:union, [:integer, :null]},
+      authors_count: :integer,
       authors_url: {:string, :uri},
-      commit_count: {:union, [:integer, :null]},
-      error_message: {:union, [{:string, :generic}, :null]},
-      failed_step: {:union, [{:string, :generic}, :null]},
+      commit_count: :integer,
+      error_message: {:string, :generic},
+      failed_step: {:string, :generic},
       has_large_files: :boolean,
       html_url: {:string, :uri},
-      import_percent: {:union, [:integer, :null]},
+      import_percent: :integer,
       large_files_count: :integer,
       large_files_size: :integer,
       message: {:string, :generic},
       project_choices: [{GitHubOpenAPI.ImportProjectChoices, :t}],
-      push_percent: {:union, [:integer, :null]},
+      push_percent: :integer,
       repository_url: {:string, :uri},
       status:
         {:enum,
@@ -100,13 +100,13 @@ defmodule GitHubOpenAPI.Import do
            "detection_found_nothing",
            "detection_needs_auth"
          ]},
-      status_text: {:union, [{:string, :generic}, :null]},
+      status_text: {:string, :generic},
       svc_root: {:string, :generic},
       svn_root: {:string, :generic},
       tfvc_project: {:string, :generic},
       url: {:string, :uri},
       use_lfs: :boolean,
-      vcs: {:union, [{:string, :generic}, :null]},
+      vcs: {:string, :generic},
       vcs_url: {:string, :generic}
     ]
   end

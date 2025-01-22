@@ -75,8 +75,7 @@ defmodule GitHubOpenAPI.CodeSecurityConfiguration do
       advanced_security: {:enum, ["enabled", "disabled"]},
       code_scanning_default_setup: {:enum, ["enabled", "disabled", "not_set"]},
       code_scanning_default_setup_options:
-        {:union,
-         [{GitHubOpenAPI.CodeSecurityConfigurationCodeScanningDefaultSetupOptions, :t}, :null]},
+        {GitHubOpenAPI.CodeSecurityConfigurationCodeScanningDefaultSetupOptions, :t},
       created_at: {:string, :date_time},
       dependabot_alerts: {:enum, ["enabled", "disabled", "not_set"]},
       dependabot_security_updates: {:enum, ["enabled", "disabled", "not_set"]},

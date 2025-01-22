@@ -7,10 +7,10 @@ defmodule GitHubOpenAPI.CommitSearchResultItem do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          author: GitHubOpenAPI.SimpleUser.t() | nil,
+          author: GitHubOpenAPI.NullableSimpleUser.t(),
           comments_url: String.t(),
           commit: GitHubOpenAPI.CommitSearchResultItemCommit.t(),
-          committer: GitHubOpenAPI.GitUser.t() | nil,
+          committer: GitHubOpenAPI.NullableGitUser.t(),
           html_url: String.t(),
           node_id: String.t(),
           parents: [GitHubOpenAPI.CommitSearchResultItemParents.t()],
@@ -44,10 +44,10 @@ defmodule GitHubOpenAPI.CommitSearchResultItem do
 
   def __fields__(:t) do
     [
-      author: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      author: {GitHubOpenAPI.NullableSimpleUser, :t},
       comments_url: {:string, :uri},
       commit: {GitHubOpenAPI.CommitSearchResultItemCommit, :t},
-      committer: {:union, [{GitHubOpenAPI.GitUser, :t}, :null]},
+      committer: {GitHubOpenAPI.NullableGitUser, :t},
       html_url: {:string, :uri},
       node_id: {:string, :generic},
       parents: [{GitHubOpenAPI.CommitSearchResultItemParents, :t}],

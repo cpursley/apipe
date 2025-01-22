@@ -37,7 +37,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysisRepository do
       name: {:string, :generic},
       private: :boolean,
       stargazers_count: :integer,
-      updated_at: {:union, [{:string, :date_time}, :null]}
+      updated_at: {:string, :date_time}
     ]
   end
 end

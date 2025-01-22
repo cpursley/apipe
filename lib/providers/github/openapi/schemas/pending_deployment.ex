@@ -34,7 +34,7 @@ defmodule GitHubOpenAPI.PendingDeployment do
       environment: {GitHubOpenAPI.PendingDeploymentEnvironment, :t},
       reviewers: [{GitHubOpenAPI.PendingDeploymentReviewers, :t}],
       wait_timer: :integer,
-      wait_timer_started_at: {:union, [{:string, :date_time}, :null]}
+      wait_timer_started_at: {:string, :date_time}
     ]
   end
 end

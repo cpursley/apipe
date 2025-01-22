@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.ProtectedBranchRequiredPullRequestReviewsDismissalRestri
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          apps: [GitHubOpenAPI.Integration.t() | nil] | nil,
+          apps: [GitHubOpenAPI.Integration.t()] | nil,
           teams: [GitHubOpenAPI.Team.t()],
           teams_url: String.t(),
           url: String.t(),
@@ -23,7 +23,7 @@ defmodule GitHubOpenAPI.ProtectedBranchRequiredPullRequestReviewsDismissalRestri
 
   def __fields__(:t) do
     [
-      apps: [union: [{GitHubOpenAPI.Integration, :t}, :null]],
+      apps: [{GitHubOpenAPI.Integration, :t}],
       teams: [{GitHubOpenAPI.Team, :t}],
       teams_url: {:string, :uri},
       url: {:string, :uri},

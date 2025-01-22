@@ -12,7 +12,7 @@ defmodule GitHubOpenAPI.CopilotSeatDetails do
           created_at: DateTime.t(),
           last_activity_at: DateTime.t() | nil,
           last_activity_editor: String.t() | nil,
-          organization: GitHubOpenAPI.OrganizationSimple.t() | nil,
+          organization: GitHubOpenAPI.NullableOrganizationSimple.t() | nil,
           pending_cancellation_date: Date.t() | nil,
           plan_type: String.t() | nil,
           updated_at: DateTime.t() | nil
@@ -41,10 +41,10 @@ defmodule GitHubOpenAPI.CopilotSeatDetails do
       assignee: {GitHubOpenAPI.SimpleUser, :t},
       assigning_team: {:union, [{GitHubOpenAPI.EnterpriseTeam, :t}, {GitHubOpenAPI.Team, :t}]},
       created_at: {:string, :date_time},
-      last_activity_at: {:union, [{:string, :date_time}, :null]},
-      last_activity_editor: {:union, [{:string, :generic}, :null]},
-      organization: {:union, [{GitHubOpenAPI.OrganizationSimple, :t}, :null]},
-      pending_cancellation_date: {:union, [{:string, :date}, :null]},
+      last_activity_at: {:string, :date_time},
+      last_activity_editor: {:string, :generic},
+      organization: {GitHubOpenAPI.NullableOrganizationSimple, :t},
+      pending_cancellation_date: {:string, :date},
       plan_type: {:enum, ["business", "enterprise", "unknown"]},
       updated_at: {:string, :date_time}
     ]

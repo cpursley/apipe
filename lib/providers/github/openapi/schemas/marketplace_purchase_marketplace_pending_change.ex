@@ -26,7 +26,7 @@ defmodule GitHubOpenAPI.MarketplacePurchaseMarketplacePendingChange do
       id: :integer,
       is_installed: :boolean,
       plan: {GitHubOpenAPI.MarketplaceListingPlan, :t},
-      unit_count: {:union, [:integer, :null]}
+      unit_count: :integer
     ]
   end
 end

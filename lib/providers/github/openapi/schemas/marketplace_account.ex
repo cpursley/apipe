@@ -34,11 +34,11 @@ defmodule GitHubOpenAPI.MarketplaceAccount do
 
   def __fields__(:t) do
     [
-      email: {:union, [{:string, :email}, :null]},
+      email: {:string, :email},
       id: :integer,
       login: {:string, :generic},
       node_id: {:string, :generic},
-      organization_billing_email: {:union, [{:string, :email}, :null]},
+      organization_billing_email: {:string, :email},
       type: {:string, :generic},
       url: {:string, :uri}
     ]

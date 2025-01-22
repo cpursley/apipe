@@ -22,12 +22,12 @@ defmodule GitHubOpenAPI.Gist do
           html_url: String.t(),
           id: String.t(),
           node_id: String.t(),
-          owner: GitHubOpenAPI.SimpleUser.t() | nil,
+          owner: GitHubOpenAPI.NullableSimpleUser.t() | nil,
           public: boolean,
           truncated: boolean | nil,
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -67,7 +67,7 @@ defmodule GitHubOpenAPI.Gist do
       comments_url: {:string, :uri},
       commits_url: {:string, :uri},
       created_at: {:string, :date_time},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       files: {GitHubOpenAPI.GistFiles, :t},
       forks: [:map],
       forks_url: {:string, :uri},
@@ -77,12 +77,12 @@ defmodule GitHubOpenAPI.Gist do
       html_url: {:string, :uri},
       id: {:string, :generic},
       node_id: {:string, :generic},
-      owner: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      owner: {GitHubOpenAPI.NullableSimpleUser, :t},
       public: :boolean,
       truncated: :boolean,
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

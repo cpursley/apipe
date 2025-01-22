@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryCreate do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          credits: [map] | nil,
+          credits: [GitHubOpenAPI.RepositoryAdvisoryCreateCredits.t()] | nil,
           cve_id: String.t() | nil,
           cvss_vector_string: String.t() | nil,
           cwe_ids: [String.t()] | nil,
@@ -38,12 +38,12 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryCreate do
 
   def __fields__(:t) do
     [
-      credits: {:union, [[:map], :null]},
-      cve_id: {:union, [{:string, :generic}, :null]},
-      cvss_vector_string: {:union, [{:string, :generic}, :null]},
-      cwe_ids: {:union, [[string: :generic], :null]},
+      credits: [{GitHubOpenAPI.RepositoryAdvisoryCreateCredits, :t}],
+      cve_id: {:string, :generic},
+      cvss_vector_string: {:string, :generic},
+      cwe_ids: [string: :generic],
       description: {:string, :generic},
-      severity: {:enum, ["critical", "high", "medium", "low", nil]},
+      severity: {:enum, ["critical", "high", "medium", "low"]},
       start_private_fork: :boolean,
       summary: {:string, :generic},
       vulnerabilities: [{GitHubOpenAPI.RepositoryAdvisoryCreateVulnerabilities, :t}]

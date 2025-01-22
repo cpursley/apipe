@@ -22,7 +22,7 @@ defmodule GitHubOpenAPI.DependabotAlertWithRepositoryDependency do
     [
       manifest_path: {:string, :generic},
       package: {GitHubOpenAPI.DependabotAlertPackage, :t},
-      scope: {:enum, ["development", "runtime", nil]}
+      scope: {:enum, ["development", "runtime"]}
     ]
   end
 end

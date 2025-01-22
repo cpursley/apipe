@@ -38,12 +38,12 @@ defmodule GitHubOpenAPI.UserMarketplacePurchase do
     [
       account: {GitHubOpenAPI.MarketplaceAccount, :t},
       billing_cycle: {:string, :generic},
-      free_trial_ends_on: {:union, [{:string, :date_time}, :null]},
-      next_billing_date: {:union, [{:string, :date_time}, :null]},
+      free_trial_ends_on: {:string, :date_time},
+      next_billing_date: {:string, :date_time},
       on_free_trial: :boolean,
       plan: {GitHubOpenAPI.MarketplaceListingPlan, :t},
-      unit_count: {:union, [:integer, :null]},
-      updated_at: {:union, [{:string, :date_time}, :null]}
+      unit_count: :integer,
+      updated_at: {:string, :date_time}
     ]
   end
 end

@@ -29,9 +29,9 @@ defmodule GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilities do
   def __fields__(:t) do
     [
       package: {GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilitiesPackage, :t},
-      patched_versions: {:union, [{:string, :generic}, :null]},
-      vulnerable_functions: {:union, [[string: :generic], :null]},
-      vulnerable_version_range: {:union, [{:string, :generic}, :null]}
+      patched_versions: {:string, :generic},
+      vulnerable_functions: [string: :generic],
+      vulnerable_version_range: {:string, :generic}
     ]
   end
 end

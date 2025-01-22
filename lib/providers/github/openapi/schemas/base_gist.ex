@@ -27,7 +27,7 @@ defmodule GitHubOpenAPI.BaseGist do
           truncated: boolean | nil,
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -67,7 +67,7 @@ defmodule GitHubOpenAPI.BaseGist do
       comments_url: {:string, :uri},
       commits_url: {:string, :uri},
       created_at: {:string, :date_time},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       files: {GitHubOpenAPI.BaseGistFiles, :t},
       forks: [:map],
       forks_url: {:string, :uri},
@@ -82,7 +82,7 @@ defmodule GitHubOpenAPI.BaseGist do
       truncated: :boolean,
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

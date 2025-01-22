@@ -17,6 +17,6 @@ defmodule GitHubOpenAPI.CodespaceRuntimeConstraints do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [allowed_port_privacy_settings: {:union, [[string: :generic], :null]}]
+    [allowed_port_privacy_settings: [string: :generic]]
   end
 end

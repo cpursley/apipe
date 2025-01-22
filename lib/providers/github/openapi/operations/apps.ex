@@ -254,7 +254,7 @@ defmodule GitHubOpenAPI.Apps do
     * [API method documentation](https://docs.github.com/rest/apps/apps#get-the-authenticated-app)
 
   """
-  @spec get_authenticated(keyword) :: {:ok, GitHubOpenAPI.Integration.t() | nil} | :error
+  @spec get_authenticated(keyword) :: {:ok, GitHubOpenAPI.Integration.t()} | :error
   def get_authenticated(opts \\ []) do
     client = opts[:client] || @default_client
 
@@ -263,7 +263,7 @@ defmodule GitHubOpenAPI.Apps do
       call: {GitHubOpenAPI.Apps, :get_authenticated},
       url: "/app",
       method: :get,
-      response: [{200, {:union, [{GitHubOpenAPI.Integration, :t}, :null]}}],
+      response: [{200, {GitHubOpenAPI.Integration, :t}}],
       opts: opts
     })
   end
@@ -280,7 +280,7 @@ defmodule GitHubOpenAPI.Apps do
 
   """
   @spec get_by_slug(String.t(), keyword) ::
-          {:ok, GitHubOpenAPI.Integration.t() | nil} | {:error, GitHubOpenAPI.BasicError.t()}
+          {:ok, GitHubOpenAPI.Integration.t()} | {:error, GitHubOpenAPI.BasicError.t()}
   def get_by_slug(app_slug, opts \\ []) do
     client = opts[:client] || @default_client
 
@@ -290,7 +290,7 @@ defmodule GitHubOpenAPI.Apps do
       url: "/apps/#{app_slug}",
       method: :get,
       response: [
-        {200, {:union, [{GitHubOpenAPI.Integration, :t}, :null]}},
+        {200, {GitHubOpenAPI.Integration, :t}},
         {403, {GitHubOpenAPI.BasicError, :t}},
         {404, {GitHubOpenAPI.BasicError, :t}}
       ],
@@ -1277,7 +1277,7 @@ defmodule GitHubOpenAPI.Apps do
       client_id: {:string, :generic},
       client_secret: {:string, :generic},
       created_at: {:string, :date_time},
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       events: [string: :generic],
       external_url: {:string, :uri},
       html_url: {:string, :uri},
@@ -1290,7 +1290,7 @@ defmodule GitHubOpenAPI.Apps do
       permissions: :map,
       slug: {:string, :generic},
       updated_at: {:string, :date_time},
-      webhook_secret: {:union, [{:string, :generic}, :null]}
+      webhook_secret: {:string, :generic}
     ]
   end
 

@@ -22,11 +22,11 @@ defmodule GitHubOpenAPI.IssuePullRequest do
 
   def __fields__(:t) do
     [
-      diff_url: {:union, [{:string, :uri}, :null]},
-      html_url: {:union, [{:string, :uri}, :null]},
-      merged_at: {:union, [{:string, :date_time}, :null]},
-      patch_url: {:union, [{:string, :uri}, :null]},
-      url: {:union, [{:string, :uri}, :null]}
+      diff_url: {:string, :uri},
+      html_url: {:string, :uri},
+      merged_at: {:string, :date_time},
+      patch_url: {:string, :uri},
+      url: {:string, :uri}
     ]
   end
 end

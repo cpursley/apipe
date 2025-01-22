@@ -40,7 +40,7 @@ defmodule GitHubOpenAPI.CodeScanningCodeqlDatabase do
 
   def __fields__(:t) do
     [
-      commit_oid: {:union, [{:string, :generic}, :null]},
+      commit_oid: {:string, :generic},
       content_type: {:string, :generic},
       created_at: {:string, :date_time},
       id: :integer,

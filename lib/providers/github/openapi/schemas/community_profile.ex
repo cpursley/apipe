@@ -33,11 +33,11 @@ defmodule GitHubOpenAPI.CommunityProfile do
   def __fields__(:t) do
     [
       content_reports_enabled: :boolean,
-      description: {:union, [{:string, :generic}, :null]},
-      documentation: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
+      documentation: {:string, :generic},
       files: {GitHubOpenAPI.CommunityProfileFiles, :t},
       health_percentage: :integer,
-      updated_at: {:union, [{:string, :date_time}, :null]}
+      updated_at: {:string, :date_time}
     ]
   end
 end

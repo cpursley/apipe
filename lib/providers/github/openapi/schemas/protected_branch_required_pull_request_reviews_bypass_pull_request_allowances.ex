@@ -7,7 +7,7 @@ defmodule GitHubOpenAPI.ProtectedBranchRequiredPullRequestReviewsBypassPullReque
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          apps: [GitHubOpenAPI.Integration.t() | nil] | nil,
+          apps: [GitHubOpenAPI.Integration.t()] | nil,
           teams: [GitHubOpenAPI.Team.t()],
           users: [GitHubOpenAPI.SimpleUser.t()]
         }
@@ -20,7 +20,7 @@ defmodule GitHubOpenAPI.ProtectedBranchRequiredPullRequestReviewsBypassPullReque
 
   def __fields__(:t) do
     [
-      apps: [union: [{GitHubOpenAPI.Integration, :t}, :null]],
+      apps: [{GitHubOpenAPI.Integration, :t}],
       teams: [{GitHubOpenAPI.Team, :t}],
       users: [{GitHubOpenAPI.SimpleUser, :t}]
     ]

@@ -36,7 +36,7 @@ defmodule GitHubOpenAPI.CodeScanningDefaultSetupUpdate do
         ]
       ],
       query_suite: {:enum, ["default", "extended"]},
-      runner_label: {:union, [{:string, :generic}, :null]},
+      runner_label: {:string, :generic},
       runner_type: {:enum, ["standard", "labeled"]},
       state: {:enum, ["configured", "not-configured"]}
     ]

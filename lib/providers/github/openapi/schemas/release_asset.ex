@@ -18,7 +18,7 @@ defmodule GitHubOpenAPI.ReleaseAsset do
           size: integer,
           state: String.t(),
           updated_at: DateTime.t(),
-          uploader: GitHubOpenAPI.SimpleUser.t() | nil,
+          uploader: GitHubOpenAPI.NullableSimpleUser.t(),
           url: String.t()
         }
 
@@ -51,13 +51,13 @@ defmodule GitHubOpenAPI.ReleaseAsset do
       created_at: {:string, :date_time},
       download_count: :integer,
       id: :integer,
-      label: {:union, [{:string, :generic}, :null]},
+      label: {:string, :generic},
       name: {:string, :generic},
       node_id: {:string, :generic},
       size: :integer,
       state: {:enum, ["uploaded", "open"]},
       updated_at: {:string, :date_time},
-      uploader: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]},
+      uploader: {GitHubOpenAPI.NullableSimpleUser, :t},
       url: {:string, :uri}
     ]
   end

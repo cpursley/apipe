@@ -16,11 +16,11 @@ defmodule GitHubOpenAPI.IssueComment do
           id: integer,
           issue_url: String.t(),
           node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.Integration.t() | nil,
+          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t() | nil,
           reactions: GitHubOpenAPI.ReactionRollup.t() | nil,
           updated_at: DateTime.t(),
           url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t() | nil
+          user: GitHubOpenAPI.NullableSimpleUser.t()
         }
 
   defstruct [
@@ -68,11 +68,11 @@ defmodule GitHubOpenAPI.IssueComment do
       id: :integer,
       issue_url: {:string, :uri},
       node_id: {:string, :generic},
-      performed_via_github_app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
+      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
       reactions: {GitHubOpenAPI.ReactionRollup, :t},
       updated_at: {:string, :date_time},
       url: {:string, :uri},
-      user: {:union, [{GitHubOpenAPI.SimpleUser, :t}, :null]}
+      user: {GitHubOpenAPI.NullableSimpleUser, :t}
     ]
   end
 end

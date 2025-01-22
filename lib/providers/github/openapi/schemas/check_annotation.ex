@@ -40,16 +40,16 @@ defmodule GitHubOpenAPI.CheckAnnotation do
 
   def __fields__(:t) do
     [
-      annotation_level: {:union, [{:string, :generic}, :null]},
+      annotation_level: {:string, :generic},
       blob_href: {:string, :generic},
-      end_column: {:union, [:integer, :null]},
+      end_column: :integer,
       end_line: :integer,
-      message: {:union, [{:string, :generic}, :null]},
+      message: {:string, :generic},
       path: {:string, :generic},
-      raw_details: {:union, [{:string, :generic}, :null]},
-      start_column: {:union, [:integer, :null]},
+      raw_details: {:string, :generic},
+      start_column: :integer,
       start_line: :integer,
-      title: {:union, [{:string, :generic}, :null]}
+      title: {:string, :generic}
     ]
   end
 end

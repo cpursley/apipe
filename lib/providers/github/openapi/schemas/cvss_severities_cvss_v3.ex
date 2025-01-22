@@ -18,6 +18,6 @@ defmodule GitHubOpenAPI.CvssSeveritiesCvssV3 do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [score: {:union, [:number, :null]}, vector_string: {:union, [{:string, :generic}, :null]}]
+    [score: :number, vector_string: {:string, :generic}]
   end
 end

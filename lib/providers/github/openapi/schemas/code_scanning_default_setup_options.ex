@@ -18,9 +18,6 @@ defmodule GitHubOpenAPI.CodeScanningDefaultSetupOptions do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [
-      runner_label: {:union, [{:string, :generic}, :null]},
-      runner_type: {:enum, ["standard", "labeled", "not_set"]}
-    ]
+    [runner_label: {:string, :generic}, runner_type: {:enum, ["standard", "labeled", "not_set"]}]
   end
 end

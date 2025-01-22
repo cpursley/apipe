@@ -50,7 +50,7 @@ defmodule GitHubOpenAPI.CodeScanningVariantAnalysis do
     [
       actions_workflow_run_id: :integer,
       actor: {GitHubOpenAPI.SimpleUser, :t},
-      completed_at: {:union, [{:string, :date_time}, :null]},
+      completed_at: {:string, :date_time},
       controller_repo: {GitHubOpenAPI.SimpleRepository, :t},
       created_at: {:string, :date_time},
       failure_reason:

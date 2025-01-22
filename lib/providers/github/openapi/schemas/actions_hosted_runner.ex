@@ -8,7 +8,7 @@ defmodule GitHubOpenAPI.ActionsHostedRunner do
           __info__: map,
           __joins__: map,
           id: integer,
-          image_details: GitHubOpenAPI.ActionsHostedRunnerPoolImage.t() | nil,
+          image_details: GitHubOpenAPI.NullableActionsHostedRunnerPoolImage.t(),
           last_active_on: DateTime.t() | nil,
           machine_size_details: GitHubOpenAPI.ActionsHostedRunnerMachineSpec.t(),
           maximum_runners: integer | nil,
@@ -43,8 +43,8 @@ defmodule GitHubOpenAPI.ActionsHostedRunner do
   def __fields__(:t) do
     [
       id: :integer,
-      image_details: {:union, [{GitHubOpenAPI.ActionsHostedRunnerPoolImage, :t}, :null]},
-      last_active_on: {:union, [{:string, :date_time}, :null]},
+      image_details: {GitHubOpenAPI.NullableActionsHostedRunnerPoolImage, :t},
+      last_active_on: {:string, :date_time},
       machine_size_details: {GitHubOpenAPI.ActionsHostedRunnerMachineSpec, :t},
       maximum_runners: :integer,
       name: {:string, :generic},

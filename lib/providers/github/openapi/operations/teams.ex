@@ -144,13 +144,8 @@ defmodule GitHubOpenAPI.Teams do
     * [API method documentation](https://docs.github.com/rest/teams/teams#add-or-update-team-project-permissions)
 
   """
-  @spec add_or_update_project_permissions_in_org(
-          String.t(),
-          String.t(),
-          integer,
-          map | nil,
-          keyword
-        ) :: :ok | {:error, map}
+  @spec add_or_update_project_permissions_in_org(String.t(), String.t(), integer, map, keyword) ::
+          :ok | {:error, map}
   def add_or_update_project_permissions_in_org(org, team_slug, project_id, body, opts \\ []) do
     client = opts[:client] || @default_client
 
@@ -160,7 +155,7 @@ defmodule GitHubOpenAPI.Teams do
       url: "/orgs/#{org}/teams/#{team_slug}/projects/#{project_id}",
       body: body,
       method: :put,
-      request: [{"application/json", {:union, [:map, :null]}}],
+      request: [{"application/json", :map}],
       response: [
         {204, :null},
         {403, {GitHubOpenAPI.Teams, :add_or_update_project_permissions_in_org_403_json_resp}}

@@ -7,10 +7,10 @@ defmodule GitHubOpenAPI.Commit do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          author: GitHubOpenAPI.EmptyObject.t() | GitHubOpenAPI.SimpleUser.t(),
+          author: GitHubOpenAPI.EmptyObject.t() | GitHubOpenAPI.SimpleUser.t() | nil,
           comments_url: String.t(),
           commit: GitHubOpenAPI.CommitCommit.t(),
-          committer: GitHubOpenAPI.EmptyObject.t() | GitHubOpenAPI.SimpleUser.t(),
+          committer: GitHubOpenAPI.EmptyObject.t() | GitHubOpenAPI.SimpleUser.t() | nil,
           files: [GitHubOpenAPI.DiffEntry.t()] | nil,
           html_url: String.t(),
           node_id: String.t(),

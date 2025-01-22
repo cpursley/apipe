@@ -43,16 +43,16 @@ defmodule GitHubOpenAPI.Artifact do
   def __fields__(:t) do
     [
       archive_download_url: {:string, :generic},
-      created_at: {:union, [{:string, :date_time}, :null]},
+      created_at: {:string, :date_time},
       expired: :boolean,
-      expires_at: {:union, [{:string, :date_time}, :null]},
+      expires_at: {:string, :date_time},
       id: :integer,
       name: {:string, :generic},
       node_id: {:string, :generic},
       size_in_bytes: :integer,
-      updated_at: {:union, [{:string, :date_time}, :null]},
+      updated_at: {:string, :date_time},
       url: {:string, :generic},
-      workflow_run: {:union, [{GitHubOpenAPI.ArtifactWorkflowRun, :t}, :null]}
+      workflow_run: {GitHubOpenAPI.ArtifactWorkflowRun, :t}
     ]
   end
 end

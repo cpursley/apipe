@@ -39,7 +39,7 @@ defmodule GitHubOpenAPI.Blob do
       highlighted_content: {:string, :generic},
       node_id: {:string, :generic},
       sha: {:string, :generic},
-      size: {:union, [:integer, :null]},
+      size: :integer,
       url: {:string, :uri}
     ]
   end

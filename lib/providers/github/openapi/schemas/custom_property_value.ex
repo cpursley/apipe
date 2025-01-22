@@ -8,7 +8,7 @@ defmodule GitHubOpenAPI.CustomPropertyValue do
           __info__: map,
           __joins__: map,
           property_name: String.t(),
-          value: String.t() | [String.t()]
+          value: String.t() | [String.t()] | nil
         }
 
   defstruct [:__info__, :__joins__, :property_name, :value]

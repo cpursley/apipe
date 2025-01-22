@@ -15,7 +15,7 @@ defmodule GitHubOpenAPI.LabeledIssueEvent do
           id: integer,
           label: GitHubOpenAPI.LabeledIssueEventLabel.t(),
           node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.Integration.t() | nil,
+          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t(),
           url: String.t()
         }
 
@@ -41,14 +41,14 @@ defmodule GitHubOpenAPI.LabeledIssueEvent do
   def __fields__(:t) do
     [
       actor: {GitHubOpenAPI.SimpleUser, :t},
-      commit_id: {:union, [{:string, :generic}, :null]},
-      commit_url: {:union, [{:string, :generic}, :null]},
+      commit_id: {:string, :generic},
+      commit_url: {:string, :generic},
       created_at: {:string, :generic},
       event: {:string, :generic},
       id: :integer,
       label: {GitHubOpenAPI.LabeledIssueEventLabel, :t},
       node_id: {:string, :generic},
-      performed_via_github_app: {:union, [{GitHubOpenAPI.Integration, :t}, :null]},
+      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
       url: {:string, :generic}
     ]
   end

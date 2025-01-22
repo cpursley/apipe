@@ -24,7 +24,7 @@ defmodule GitHubOpenAPI.SearchResultTextMatches do
     [
       fragment: {:string, :generic},
       matches: [{GitHubOpenAPI.SearchResultTextMatchesMatches, :t}],
-      object_type: {:union, [{:string, :generic}, :null]},
+      object_type: {:string, :generic},
       object_url: {:string, :generic},
       property: {:string, :generic}
     ]

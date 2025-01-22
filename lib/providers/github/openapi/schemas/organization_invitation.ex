@@ -45,14 +45,14 @@ defmodule GitHubOpenAPI.OrganizationInvitation do
   def __fields__(:t) do
     [
       created_at: {:string, :generic},
-      email: {:union, [{:string, :generic}, :null]},
-      failed_at: {:union, [{:string, :generic}, :null]},
-      failed_reason: {:union, [{:string, :generic}, :null]},
+      email: {:string, :generic},
+      failed_at: {:string, :generic},
+      failed_reason: {:string, :generic},
       id: :integer,
       invitation_source: {:string, :generic},
       invitation_teams_url: {:string, :generic},
       inviter: {GitHubOpenAPI.SimpleUser, :t},
-      login: {:union, [{:string, :generic}, :null]},
+      login: {:string, :generic},
       node_id: {:string, :generic},
       role: {:string, :generic},
       team_count: :integer

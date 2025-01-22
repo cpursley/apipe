@@ -18,6 +18,6 @@ defmodule GitHubOpenAPI.IssueEventLabel do
   def __fields__(type \\ :t)
 
   def __fields__(:t) do
-    [color: {:union, [{:string, :generic}, :null]}, name: {:union, [{:string, :generic}, :null]}]
+    [color: {:string, :generic}, name: {:string, :generic}]
   end
 end

@@ -7,13 +7,13 @@ defmodule GitHubOpenAPI.CommunityProfileFiles do
   @type t :: %__MODULE__{
           __info__: map,
           __joins__: map,
-          code_of_conduct: GitHubOpenAPI.CodeOfConductSimple.t() | nil,
-          code_of_conduct_file: GitHubOpenAPI.CommunityHealthFile.t() | nil,
-          contributing: GitHubOpenAPI.CommunityHealthFile.t() | nil,
-          issue_template: GitHubOpenAPI.CommunityHealthFile.t() | nil,
-          license: GitHubOpenAPI.LicenseSimple.t() | nil,
-          pull_request_template: GitHubOpenAPI.CommunityHealthFile.t() | nil,
-          readme: GitHubOpenAPI.CommunityHealthFile.t() | nil
+          code_of_conduct: GitHubOpenAPI.NullableCodeOfConductSimple.t(),
+          code_of_conduct_file: GitHubOpenAPI.NullableCommunityHealthFile.t(),
+          contributing: GitHubOpenAPI.NullableCommunityHealthFile.t(),
+          issue_template: GitHubOpenAPI.NullableCommunityHealthFile.t(),
+          license: GitHubOpenAPI.NullableLicenseSimple.t(),
+          pull_request_template: GitHubOpenAPI.NullableCommunityHealthFile.t(),
+          readme: GitHubOpenAPI.NullableCommunityHealthFile.t()
         }
 
   defstruct [
@@ -34,13 +34,13 @@ defmodule GitHubOpenAPI.CommunityProfileFiles do
 
   def __fields__(:t) do
     [
-      code_of_conduct: {:union, [{GitHubOpenAPI.CodeOfConductSimple, :t}, :null]},
-      code_of_conduct_file: {:union, [{GitHubOpenAPI.CommunityHealthFile, :t}, :null]},
-      contributing: {:union, [{GitHubOpenAPI.CommunityHealthFile, :t}, :null]},
-      issue_template: {:union, [{GitHubOpenAPI.CommunityHealthFile, :t}, :null]},
-      license: {:union, [{GitHubOpenAPI.LicenseSimple, :t}, :null]},
-      pull_request_template: {:union, [{GitHubOpenAPI.CommunityHealthFile, :t}, :null]},
-      readme: {:union, [{GitHubOpenAPI.CommunityHealthFile, :t}, :null]}
+      code_of_conduct: {GitHubOpenAPI.NullableCodeOfConductSimple, :t},
+      code_of_conduct_file: {GitHubOpenAPI.NullableCommunityHealthFile, :t},
+      contributing: {GitHubOpenAPI.NullableCommunityHealthFile, :t},
+      issue_template: {GitHubOpenAPI.NullableCommunityHealthFile, :t},
+      license: {GitHubOpenAPI.NullableLicenseSimple, :t},
+      pull_request_template: {GitHubOpenAPI.NullableCommunityHealthFile, :t},
+      readme: {GitHubOpenAPI.NullableCommunityHealthFile, :t}
     ]
   end
 end

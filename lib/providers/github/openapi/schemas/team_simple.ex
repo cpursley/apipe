@@ -46,7 +46,7 @@ defmodule GitHubOpenAPI.TeamSimple do
 
   def __fields__(:t) do
     [
-      description: {:union, [{:string, :generic}, :null]},
+      description: {:string, :generic},
       html_url: {:string, :uri},
       id: :integer,
       ldap_dn: {:string, :generic},

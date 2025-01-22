@@ -36,7 +36,7 @@ defmodule GitHubOpenAPI.AuthenticationToken do
       permissions: :map,
       repositories: [{GitHubOpenAPI.Repository, :t}],
       repository_selection: {:enum, ["all", "selected"]},
-      single_file: {:union, [{:string, :generic}, :null]},
+      single_file: {:string, :generic},
       token: {:string, :generic}
     ]
   end
