@@ -1,24 +1,71 @@
 defmodule Apipe.Providers.GitHub.Routes do
   @moduledoc "OpenAPI generated route registry"
   @behaviour Apipe.Providers.OpenAPI.Routes
-  @routes %{
-    "repos/{owner}/{repo}" => %{
+  @routes [
+    %{
       method: :get,
       operation_id: "repos/get",
+      path: "repos/{owner}/{repo}",
       response_schema: GitHubOpenAPI.FullRepository,
       summary: "Get a repository"
+    },
+    %{
+      method: :get,
+      operation_id: "repos/list-languages",
+      path: "repos/{owner}/{repo}/languages",
+      response_schema: GitHubOpenAPI.Language,
+      summary: "List repository languages"
+    },
+    %{
+      method: :get,
+      operation_id: "users/get-by-username",
+      path: "users/{username}",
+      response_schema: GitHubOpenAPI.PublicUser,
+      summary: "Get a user"
+    },
+    %{
+      method: :get,
+      operation_id: "repos/list-for-user",
+      path: "users/{username}/repos",
+      response_schema: GitHubOpenAPI.MinimalRepository,
+      summary: "List repositories for a user"
     }
-  }
+  ]
   (
     @impl true
     def match_route(path)
 
-    def match_route("repos/" <> _rest) do
-      {:ok, @routes["repos/{owner}/{repo}"]}
+    def match_route("repos/" <> _rest = path) do
+      route =
+        Enum.find(
+          @routes,
+          &String.starts_with?(path, String.replace(&1.path, "{owner}/{repo}", ""))
+        )
+
+      if route do
+        {:ok, route}
+      else
+        %Apipe.Error{type: :validation_error, message: "Route not found", details: %{path: path}}
+      end
+    end
+
+    def match_route("users/" <> _rest = path) do
+      route =
+        Enum.find(@routes, &String.starts_with?(path, String.replace(&1.path, "{username}", "")))
+
+      if route do
+        {:ok, route}
+      else
+        %Apipe.Error{type: :validation_error, message: "Route not found", details: %{path: path}}
+      end
     end
 
     def match_route(path) do
-      %Apipe.Error{type: :validation_error, message: "Route not found", details: %{path: path}}
+      %Apipe.Error{
+        type: :validation_error,
+        message: "Route not found",
+        details: %{path: path}
+      }
     end
   )
 

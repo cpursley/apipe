@@ -54,39 +54,119 @@ defmodule Apipe.Providers.OpenAPI.RouteGenerator do
   end
 
   defp extract_routes(%{"paths" => paths}, base_module) do
-    # For now, just extract the repos path as proof of concept
-    case Map.get(paths, "/repos/{owner}/{repo}") do
-      %{"get" => operation} ->
-        %{
-          "repos/{owner}/{repo}" => %{
-            method: :get,
-            response_schema: extract_response_schema(operation, base_module),
-            operation_id: operation["operationId"],
-            summary: operation["summary"]
-          }
-        }
+    # Extract common public GitHub API routes
+    routes = []
 
+    routes =
+      case Map.get(paths, "/repos/{owner}/{repo}") do
+        %{"get" => operation} ->
+          [
+            %{
+              path: "repos/{owner}/{repo}",
+              method: :get,
+              response_schema: extract_response_schema(operation, base_module),
+              operation_id: operation["operationId"],
+              summary: operation["summary"]
+            }
+            | routes
+          ]
+
+        _ ->
+          routes
+      end
+
+    routes =
+      case Map.get(paths, "/repos/{owner}/{repo}/languages") do
+        %{"get" => operation} ->
+          [
+            %{
+              path: "repos/{owner}/{repo}/languages",
+              method: :get,
+              response_schema: extract_response_schema(operation, base_module),
+              operation_id: operation["operationId"],
+              summary: operation["summary"]
+            }
+            | routes
+          ]
+
+        _ ->
+          routes
+      end
+
+    routes =
+      case Map.get(paths, "/users/{username}") do
+        %{"get" => operation} ->
+          [
+            %{
+              path: "users/{username}",
+              method: :get,
+              response_schema: extract_response_schema(operation, base_module),
+              operation_id: operation["operationId"],
+              summary: operation["summary"]
+            }
+            | routes
+          ]
+
+        _ ->
+          routes
+      end
+
+    routes =
+      case Map.get(paths, "/users/{username}/repos") do
+        %{"get" => operation} ->
+          [
+            %{
+              path: "users/{username}/repos",
+              method: :get,
+              response_schema: extract_response_schema(operation, base_module),
+              operation_id: operation["operationId"],
+              summary: operation["summary"]
+            }
+            | routes
+          ]
+
+        _ ->
+          routes
+      end
+
+    Enum.reverse(routes)
+  end
+
+  defp extract_response_schema(operation, base_module) do
+    schema = get_in(operation, ["responses", "200", "content", "application/json", "schema"])
+
+    case schema do
+      # Direct reference to a schema
+      %{"$ref" => ref} ->
+        extract_schema_name(ref, base_module)
+
+      # Array of items with reference
+      %{"type" => "array", "items" => %{"$ref" => ref}} ->
+        extract_schema_name(ref, base_module)
+
+      # Search results with nested items
+      %{"properties" => %{"items" => %{"items" => %{"$ref" => ref}}}} ->
+        extract_schema_name(ref, base_module)
+
+      # Discriminated schema with oneOf
+      %{"discriminator" => %{"mapping" => mapping}} when is_map(mapping) ->
+        # Default to public schema for unauthenticated requests
+        ref = mapping["public"]
+        extract_schema_name(ref, base_module)
+
+      # No schema reference available
       _ ->
-        %{}
+        :map
     end
   end
 
-  defp extract_response_schema(
-         %{
-           "responses" => %{
-             "200" => %{"content" => %{"application/json" => %{"schema" => %{"$ref" => ref}}}}
-           }
-         },
-         base_module
-       ) do
-    schema_name =
-      ref
-      |> String.replace("#/components/schemas/", "")
-      |> String.split("-")
-      |> Enum.map(&Macro.camelize/1)
-      |> Enum.join()
-
-    Module.concat([base_module, schema_name])
+  defp extract_schema_name(ref, base_module) do
+    ref
+    |> String.replace("#/components/schemas/", "")
+    |> String.split("-")
+    |> Enum.map(&Macro.camelize/1)
+    |> Enum.join()
+    |> then(&Module.concat([base_module, &1]))
   end
 
   defp generate_module(provider, routes) do
