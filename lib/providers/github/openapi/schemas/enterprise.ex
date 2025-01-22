@@ -1,55 +1,26 @@
 defmodule GitHubOpenAPI.Enterprise do
-  @moduledoc """
-  Provides struct and type for a Enterprise
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          avatar_url: String.t(),
-          created_at: DateTime.t() | nil,
-          description: String.t() | nil,
-          html_url: String.t(),
-          id: integer,
-          name: String.t(),
-          node_id: String.t(),
-          slug: String.t(),
-          updated_at: DateTime.t() | nil,
-          website_url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :avatar_url, :string
+    field :created_at, :string
+    field :description, :string
+    field :html_url, :string
+    field :id, :integer
+    field :name, :string
+    field :node_id, :string
+    field :slug, :string
+    field :updated_at, :string
+    field :website_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :avatar_url,
-    :created_at,
-    :description,
-    :html_url,
-    :id,
-    :name,
-    :node_id,
-    :slug,
-    :updated_at,
-    :website_url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      avatar_url: {:string, :uri},
-      created_at: {:string, :date_time},
-      description: {:string, :generic},
-      html_url: {:string, :uri},
-      id: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      slug: {:string, :generic},
-      updated_at: {:string, :date_time},
-      website_url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:avatar_url, :created_at, :description, :html_url, :id, :name, :node_id, :slug, :updated_at, :website_url, :__info__, :__joins__])
+    
   end
 end

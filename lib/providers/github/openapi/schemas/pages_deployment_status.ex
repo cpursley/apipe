@@ -1,34 +1,17 @@
 defmodule GitHubOpenAPI.PagesDeploymentStatus do
-  @moduledoc """
-  Provides struct and type for a PagesDeploymentStatus
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, status: String.t() | nil}
+  @primary_key false
+  embedded_schema do
+    field :status, Ecto.Enum, values: [:deployment_in_progress, :syncing_files, :finished_file_sync, :updating_pages, :purging_cdn, :deployment_cancelled, :deployment_failed, :deployment_content_failed, :deployment_attempt_error, :deployment_lost, :succeed]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :status]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      status:
-        {:enum,
-         [
-           "deployment_in_progress",
-           "syncing_files",
-           "finished_file_sync",
-           "updating_pages",
-           "purging_cdn",
-           "deployment_cancelled",
-           "deployment_failed",
-           "deployment_content_failed",
-           "deployment_attempt_error",
-           "deployment_lost",
-           "succeed"
-         ]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:status, :__info__, :__joins__])
+    
   end
 end

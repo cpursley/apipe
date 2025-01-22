@@ -1,67 +1,30 @@
 defmodule GitHubOpenAPI.RunnerGroupsOrg do
-  @moduledoc """
-  Provides struct and type for a RunnerGroupsOrg
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          allows_public_repositories: boolean,
-          default: boolean,
-          hosted_runners_url: String.t() | nil,
-          id: number,
-          inherited: boolean,
-          inherited_allows_public_repositories: boolean | nil,
-          name: String.t(),
-          network_configuration_id: String.t() | nil,
-          restricted_to_workflows: boolean | nil,
-          runners_url: String.t(),
-          selected_repositories_url: String.t() | nil,
-          selected_workflows: [String.t()] | nil,
-          visibility: String.t(),
-          workflow_restrictions_read_only: boolean | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :allows_public_repositories, :boolean
+    field :default, :boolean
+    field :hosted_runners_url, :string
+    field :id, :float
+    field :inherited, :boolean
+    field :inherited_allows_public_repositories, :boolean
+    field :name, :string
+    field :network_configuration_id, :string
+    field :restricted_to_workflows, :boolean
+    field :runners_url, :string
+    field :selected_repositories_url, :string
+    field :selected_workflows, {:array, :string}
+    field :visibility, :string
+    field :workflow_restrictions_read_only, :boolean
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :allows_public_repositories,
-    :default,
-    :hosted_runners_url,
-    :id,
-    :inherited,
-    :inherited_allows_public_repositories,
-    :name,
-    :network_configuration_id,
-    :restricted_to_workflows,
-    :runners_url,
-    :selected_repositories_url,
-    :selected_workflows,
-    :visibility,
-    :workflow_restrictions_read_only
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      allows_public_repositories: :boolean,
-      default: :boolean,
-      hosted_runners_url: {:string, :generic},
-      id: :number,
-      inherited: :boolean,
-      inherited_allows_public_repositories: :boolean,
-      name: {:string, :generic},
-      network_configuration_id: {:string, :generic},
-      restricted_to_workflows: :boolean,
-      runners_url: {:string, :generic},
-      selected_repositories_url: {:string, :generic},
-      selected_workflows: [string: :generic],
-      visibility: {:string, :generic},
-      workflow_restrictions_read_only: :boolean
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:allows_public_repositories, :default, :hosted_runners_url, :id, :inherited, :inherited_allows_public_repositories, :name, :network_configuration_id, :restricted_to_workflows, :runners_url, :selected_repositories_url, :selected_workflows, :visibility, :workflow_restrictions_read_only, :__info__, :__joins__])
+    
   end
 end

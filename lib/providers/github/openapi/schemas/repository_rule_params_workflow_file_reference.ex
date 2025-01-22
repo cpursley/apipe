@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.RepositoryRuleParamsWorkflowFileReference do
-  @moduledoc """
-  Provides struct and type for a RepositoryRuleParamsWorkflowFileReference
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          path: String.t(),
-          ref: String.t() | nil,
-          repository_id: integer,
-          sha: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :path, :string
+    field :ref, :string
+    field :repository_id, :integer
+    field :sha, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :path, :ref, :repository_id, :sha]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      path: {:string, :generic},
-      ref: {:string, :generic},
-      repository_id: :integer,
-      sha: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:path, :ref, :repository_id, :sha, :__info__, :__joins__])
+    
   end
 end

@@ -1,40 +1,21 @@
 defmodule GitHubOpenAPI.CustomPropertySetPayload do
-  @moduledoc """
-  Provides struct and type for a CustomPropertySetPayload
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          allowed_values: [String.t()] | nil,
-          default_value: String.t() | [String.t()] | nil,
-          description: String.t() | nil,
-          required: boolean | nil,
-          value_type: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :allowed_values, {:array, :string}
+    field :default_value, :map
+    field :description, :string
+    field :required, :boolean
+    field :value_type, Ecto.Enum, values: [:string, :single_select, :multi_select, :true_false]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :allowed_values,
-    :default_value,
-    :description,
-    :required,
-    :value_type
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      allowed_values: [string: :generic],
-      default_value: {:union, [{:string, :generic}, [string: :generic]]},
-      description: {:string, :generic},
-      required: :boolean,
-      value_type: {:enum, ["string", "single_select", "multi_select", "true_false"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:allowed_values, :default_value, :description, :required, :value_type, :__info__, :__joins__])
+    
   end
 end

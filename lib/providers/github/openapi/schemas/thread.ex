@@ -1,52 +1,25 @@
 defmodule GitHubOpenAPI.Thread do
-  @moduledoc """
-  Provides struct and type for a Thread
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          id: String.t(),
-          last_read_at: String.t() | nil,
-          reason: String.t(),
-          repository: GitHubOpenAPI.MinimalRepository.t(),
-          subject: GitHubOpenAPI.ThreadSubject.t(),
-          subscription_url: String.t(),
-          unread: boolean,
-          updated_at: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :id, :string
+    field :last_read_at, :string
+    field :reason, :string
+    field :subject, :map
+    field :subscription_url, :string
+    field :unread, :boolean
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :repository, GitHubOpenAPI.MinimalRepository
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :id,
-    :last_read_at,
-    :reason,
-    :repository,
-    :subject,
-    :subscription_url,
-    :unread,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      id: {:string, :generic},
-      last_read_at: {:string, :generic},
-      reason: {:string, :generic},
-      repository: {GitHubOpenAPI.MinimalRepository, :t},
-      subject: {GitHubOpenAPI.ThreadSubject, :t},
-      subscription_url: {:string, :generic},
-      unread: :boolean,
-      updated_at: {:string, :generic},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:id, :last_read_at, :reason, :subscription_url, :unread, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:repository, with: &GitHubOpenAPI.MinimalRepository.changeset/2)
   end
 end

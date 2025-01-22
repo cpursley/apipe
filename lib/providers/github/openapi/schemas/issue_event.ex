@@ -1,102 +1,51 @@
 defmodule GitHubOpenAPI.IssueEvent do
-  @moduledoc """
-  Provides struct and type for a IssueEvent
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor: GitHubOpenAPI.NullableSimpleUser.t(),
-          assignee: GitHubOpenAPI.NullableSimpleUser.t() | nil,
-          assigner: GitHubOpenAPI.NullableSimpleUser.t() | nil,
-          author_association: String.t() | nil,
-          commit_id: String.t() | nil,
-          commit_url: String.t() | nil,
-          created_at: DateTime.t(),
-          dismissed_review: GitHubOpenAPI.IssueEventDismissedReview.t() | nil,
-          event: String.t(),
-          id: integer,
-          issue: GitHubOpenAPI.NullableIssue.t() | nil,
-          label: GitHubOpenAPI.IssueEventLabel.t() | nil,
-          lock_reason: String.t() | nil,
-          milestone: GitHubOpenAPI.IssueEventMilestone.t() | nil,
-          node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t() | nil,
-          project_card: GitHubOpenAPI.IssueEventProjectCard.t() | nil,
-          rename: GitHubOpenAPI.IssueEventRename.t() | nil,
-          requested_reviewer: GitHubOpenAPI.NullableSimpleUser.t() | nil,
-          requested_team: GitHubOpenAPI.Team.t() | nil,
-          review_requester: GitHubOpenAPI.NullableSimpleUser.t() | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit_id, :string
+    field :commit_url, :string
+    field :created_at, :string
+    field :event, :string
+    field :id, :integer
+    field :lock_reason, :string
+    field :node_id, :string
+    field :url, :string
+    embeds_one :actor, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :assignee, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :assigner, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :author_association, GitHubOpenAPI.AuthorAssociation
+    embeds_one :dismissed_review, GitHubOpenAPI.IssueEventDismissedReview
+    embeds_one :issue, GitHubOpenAPI.NullableIssue
+    embeds_one :label, GitHubOpenAPI.IssueEventLabel
+    embeds_one :milestone, GitHubOpenAPI.IssueEventMilestone
+    embeds_one :performed_via_github_app, GitHubOpenAPI.NullableIntegration
+    embeds_one :project_card, GitHubOpenAPI.IssueEventProjectCard
+    embeds_one :rename, GitHubOpenAPI.IssueEventRename
+    embeds_one :requested_reviewer, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :requested_team, GitHubOpenAPI.Team
+    embeds_one :review_requester, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actor,
-    :assignee,
-    :assigner,
-    :author_association,
-    :commit_id,
-    :commit_url,
-    :created_at,
-    :dismissed_review,
-    :event,
-    :id,
-    :issue,
-    :label,
-    :lock_reason,
-    :milestone,
-    :node_id,
-    :performed_via_github_app,
-    :project_card,
-    :rename,
-    :requested_reviewer,
-    :requested_team,
-    :review_requester,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor: {GitHubOpenAPI.NullableSimpleUser, :t},
-      assignee: {GitHubOpenAPI.NullableSimpleUser, :t},
-      assigner: {GitHubOpenAPI.NullableSimpleUser, :t},
-      author_association:
-        {:enum,
-         [
-           "COLLABORATOR",
-           "CONTRIBUTOR",
-           "FIRST_TIMER",
-           "FIRST_TIME_CONTRIBUTOR",
-           "MANNEQUIN",
-           "MEMBER",
-           "NONE",
-           "OWNER"
-         ]},
-      commit_id: {:string, :generic},
-      commit_url: {:string, :generic},
-      created_at: {:string, :date_time},
-      dismissed_review: {GitHubOpenAPI.IssueEventDismissedReview, :t},
-      event: {:string, :generic},
-      id: :integer,
-      issue: {GitHubOpenAPI.NullableIssue, :t},
-      label: {GitHubOpenAPI.IssueEventLabel, :t},
-      lock_reason: {:string, :generic},
-      milestone: {GitHubOpenAPI.IssueEventMilestone, :t},
-      node_id: {:string, :generic},
-      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
-      project_card: {GitHubOpenAPI.IssueEventProjectCard, :t},
-      rename: {GitHubOpenAPI.IssueEventRename, :t},
-      requested_reviewer: {GitHubOpenAPI.NullableSimpleUser, :t},
-      requested_team: {GitHubOpenAPI.Team, :t},
-      review_requester: {GitHubOpenAPI.NullableSimpleUser, :t},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:commit_id, :commit_url, :created_at, :event, :id, :lock_reason, :node_id, :url, :__info__, :__joins__])
+        |> cast_embed(:actor, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:assignee, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:assigner, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:author_association, with: &GitHubOpenAPI.AuthorAssociation.changeset/2)
+    |> cast_embed(:dismissed_review, with: &GitHubOpenAPI.IssueEventDismissedReview.changeset/2)
+    |> cast_embed(:issue, with: &GitHubOpenAPI.NullableIssue.changeset/2)
+    |> cast_embed(:label, with: &GitHubOpenAPI.IssueEventLabel.changeset/2)
+    |> cast_embed(:milestone, with: &GitHubOpenAPI.IssueEventMilestone.changeset/2)
+    |> cast_embed(:performed_via_github_app, with: &GitHubOpenAPI.NullableIntegration.changeset/2)
+    |> cast_embed(:project_card, with: &GitHubOpenAPI.IssueEventProjectCard.changeset/2)
+    |> cast_embed(:rename, with: &GitHubOpenAPI.IssueEventRename.changeset/2)
+    |> cast_embed(:requested_reviewer, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:requested_team, with: &GitHubOpenAPI.Team.changeset/2)
+    |> cast_embed(:review_requester, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

@@ -1,22 +1,17 @@
 defmodule GitHubOpenAPI.DependencyGraphSpdxSbom do
-  @moduledoc """
-  Provides struct and type for a DependencyGraphSpdxSbom
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          sbom: GitHubOpenAPI.DependencyGraphSpdxSbomSbom.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :sbom, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :sbom]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [sbom: {GitHubOpenAPI.DependencyGraphSpdxSbomSbom, :t}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+    
   end
 end

@@ -1,18 +1,17 @@
 defmodule GitHubOpenAPI.Topic do
-  @moduledoc """
-  Provides struct and type for a Topic
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, names: [String.t()]}
+  @primary_key false
+  embedded_schema do
+    field :names, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :names]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [names: [string: :generic]]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:names, :__info__, :__joins__])
+    
   end
 end

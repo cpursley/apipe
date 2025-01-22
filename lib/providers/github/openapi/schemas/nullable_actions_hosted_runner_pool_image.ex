@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.NullableActionsHostedRunnerPoolImage do
-  @moduledoc """
-  Provides struct and type for a NullableActionsHostedRunnerPoolImage
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          display_name: String.t(),
-          id: String.t(),
-          size_gb: integer,
-          source: String.t(),
-          version: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :display_name, :string
+    field :id, :string
+    field :size_gb, :integer
+    field :source, Ecto.Enum, values: [:github, :partner, :custom]
+    field :version, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :display_name, :id, :size_gb, :source, :version]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      display_name: {:string, :generic},
-      id: {:string, :generic},
-      size_gb: :integer,
-      source: {:enum, ["github", "partner", "custom"]},
-      version: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:display_name, :id, :size_gb, :source, :version, :__info__, :__joins__])
+    
   end
 end

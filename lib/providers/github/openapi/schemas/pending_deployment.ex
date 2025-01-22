@@ -1,40 +1,21 @@
 defmodule GitHubOpenAPI.PendingDeployment do
-  @moduledoc """
-  Provides struct and type for a PendingDeployment
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          current_user_can_approve: boolean,
-          environment: GitHubOpenAPI.PendingDeploymentEnvironment.t(),
-          reviewers: [GitHubOpenAPI.PendingDeploymentReviewers.t()],
-          wait_timer: integer,
-          wait_timer_started_at: DateTime.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :current_user_can_approve, :boolean
+    field :environment, :map
+    field :reviewers, {:array, :string}
+    field :wait_timer, :integer
+    field :wait_timer_started_at, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :current_user_can_approve,
-    :environment,
-    :reviewers,
-    :wait_timer,
-    :wait_timer_started_at
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      current_user_can_approve: :boolean,
-      environment: {GitHubOpenAPI.PendingDeploymentEnvironment, :t},
-      reviewers: [{GitHubOpenAPI.PendingDeploymentReviewers, :t}],
-      wait_timer: :integer,
-      wait_timer_started_at: {:string, :date_time}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:current_user_can_approve, :reviewers, :wait_timer, :wait_timer_started_at, :__info__, :__joins__])
+    
   end
 end

@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.ActionsCacheList do
-  @moduledoc """
-  Provides struct and type for a ActionsCacheList
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actions_caches: [GitHubOpenAPI.ActionsCacheListActionsCaches.t()],
-          total_count: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :actions_caches, {:array, :string}
+    field :total_count, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :actions_caches, :total_count]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [actions_caches: [{GitHubOpenAPI.ActionsCacheListActionsCaches, :t}], total_count: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:actions_caches, :total_count, :__info__, :__joins__])
+    
   end
 end

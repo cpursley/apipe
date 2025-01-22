@@ -1,18 +1,17 @@
 defmodule GitHubOpenAPI.SecretScanningLocationPullRequestTitle do
-  @moduledoc """
-  Provides struct and type for a SecretScanningLocationPullRequestTitle
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, pull_request_title_url: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :pull_request_title_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :pull_request_title_url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [pull_request_title_url: {:string, :uri}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:pull_request_title_url, :__info__, :__joins__])
+    
   end
 end

@@ -1,43 +1,22 @@
 defmodule GitHubOpenAPI.RunnerApplication do
-  @moduledoc """
-  Provides struct and type for a RunnerApplication
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          architecture: String.t(),
-          download_url: String.t(),
-          filename: String.t(),
-          os: String.t(),
-          sha256_checksum: String.t() | nil,
-          temp_download_token: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :architecture, :string
+    field :download_url, :string
+    field :filename, :string
+    field :os, :string
+    field :sha256_checksum, :string
+    field :temp_download_token, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :architecture,
-    :download_url,
-    :filename,
-    :os,
-    :sha256_checksum,
-    :temp_download_token
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      architecture: {:string, :generic},
-      download_url: {:string, :generic},
-      filename: {:string, :generic},
-      os: {:string, :generic},
-      sha256_checksum: {:string, :generic},
-      temp_download_token: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:architecture, :download_url, :filename, :os, :sha256_checksum, :temp_download_token, :__info__, :__joins__])
+    
   end
 end

@@ -1,18 +1,18 @@
 defmodule GitHubOpenAPI.DependabotAlertPackage do
-  @moduledoc """
-  Provides struct and type for a DependabotAlertPackage
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, ecosystem: String.t(), name: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :ecosystem, :string
+    field :name, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :ecosystem, :name]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [ecosystem: {:string, :generic}, name: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:ecosystem, :name, :__info__, :__joins__])
+    
   end
 end

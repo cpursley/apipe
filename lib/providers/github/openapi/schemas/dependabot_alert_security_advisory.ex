@@ -1,67 +1,31 @@
 defmodule GitHubOpenAPI.DependabotAlertSecurityAdvisory do
-  @moduledoc """
-  Provides struct and type for a DependabotAlertSecurityAdvisory
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          cve_id: String.t() | nil,
-          cvss: GitHubOpenAPI.DependabotAlertSecurityAdvisoryCvss.t(),
-          cvss_severities: GitHubOpenAPI.CvssSeverities.t() | nil,
-          cwes: [GitHubOpenAPI.DependabotAlertSecurityAdvisoryCwes.t()],
-          description: String.t(),
-          ghsa_id: String.t(),
-          identifiers: [GitHubOpenAPI.DependabotAlertSecurityAdvisoryIdentifiers.t()],
-          published_at: DateTime.t(),
-          references: [GitHubOpenAPI.DependabotAlertSecurityAdvisoryReferences.t()],
-          severity: String.t(),
-          summary: String.t(),
-          updated_at: DateTime.t(),
-          vulnerabilities: [GitHubOpenAPI.DependabotAlertSecurityVulnerability.t()],
-          withdrawn_at: DateTime.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :cve_id, :string
+    field :cvss, {:map, :string}
+    field :cwes, {:array, :string}
+    field :description, :string
+    field :ghsa_id, :string
+    field :identifiers, {:array, :string}
+    field :published_at, :string
+    field :references, {:array, :string}
+    field :severity, Ecto.Enum, values: [:low, :medium, :high, :critical]
+    field :summary, :string
+    field :updated_at, :string
+    field :withdrawn_at, :string
+    embeds_one :cvss_severities, GitHubOpenAPI.CvssSeverities
+    embeds_many :vulnerabilities, GitHubOpenAPI.DependabotAlertSecurityVulnerability
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :cve_id,
-    :cvss,
-    :cvss_severities,
-    :cwes,
-    :description,
-    :ghsa_id,
-    :identifiers,
-    :published_at,
-    :references,
-    :severity,
-    :summary,
-    :updated_at,
-    :vulnerabilities,
-    :withdrawn_at
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      cve_id: {:string, :generic},
-      cvss: {GitHubOpenAPI.DependabotAlertSecurityAdvisoryCvss, :t},
-      cvss_severities: {GitHubOpenAPI.CvssSeverities, :t},
-      cwes: [{GitHubOpenAPI.DependabotAlertSecurityAdvisoryCwes, :t}],
-      description: {:string, :generic},
-      ghsa_id: {:string, :generic},
-      identifiers: [{GitHubOpenAPI.DependabotAlertSecurityAdvisoryIdentifiers, :t}],
-      published_at: {:string, :date_time},
-      references: [{GitHubOpenAPI.DependabotAlertSecurityAdvisoryReferences, :t}],
-      severity: {:enum, ["low", "medium", "high", "critical"]},
-      summary: {:string, :generic},
-      updated_at: {:string, :date_time},
-      vulnerabilities: [{GitHubOpenAPI.DependabotAlertSecurityVulnerability, :t}],
-      withdrawn_at: {:string, :date_time}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:cve_id, :cwes, :description, :ghsa_id, :identifiers, :published_at, :references, :severity, :summary, :updated_at, :withdrawn_at, :__info__, :__joins__])
+        |> cast_embed(:cvss_severities, with: &GitHubOpenAPI.CvssSeverities.changeset/2)
+    |> cast_embed(:vulnerabilities, with: &GitHubOpenAPI.DependabotAlertSecurityVulnerability.changeset/2)
   end
 end

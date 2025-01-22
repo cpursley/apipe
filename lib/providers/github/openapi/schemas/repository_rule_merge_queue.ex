@@ -1,18 +1,18 @@
 defmodule GitHubOpenAPI.RepositoryRuleMergeQueue do
-  @moduledoc """
-  Provides struct and type for a RepositoryRuleMergeQueue
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, parameters: map | nil, type: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :parameters, :map
+    field :type, Ecto.Enum, values: [:merge_queue]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :parameters, :type]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [parameters: :map, type: {:const, "merge_queue"}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:type, :__info__, :__joins__])
+    
   end
 end

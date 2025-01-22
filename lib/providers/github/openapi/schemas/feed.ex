@@ -1,58 +1,27 @@
 defmodule GitHubOpenAPI.Feed do
-  @moduledoc """
-  Provides struct and type for a Feed
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          _links: GitHubOpenAPI.FeedLinks.t(),
-          current_user_actor_url: String.t() | nil,
-          current_user_organization_url: String.t() | nil,
-          current_user_organization_urls: [String.t()] | nil,
-          current_user_public_url: String.t() | nil,
-          current_user_url: String.t() | nil,
-          repository_discussions_category_url: String.t() | nil,
-          repository_discussions_url: String.t() | nil,
-          security_advisories_url: String.t() | nil,
-          timeline_url: String.t(),
-          user_url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :_links, :map
+    field :current_user_actor_url, :string
+    field :current_user_organization_url, :string
+    field :current_user_organization_urls, {:array, :string}
+    field :current_user_public_url, :string
+    field :current_user_url, :string
+    field :repository_discussions_category_url, :string
+    field :repository_discussions_url, :string
+    field :security_advisories_url, :string
+    field :timeline_url, :string
+    field :user_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :_links,
-    :current_user_actor_url,
-    :current_user_organization_url,
-    :current_user_organization_urls,
-    :current_user_public_url,
-    :current_user_url,
-    :repository_discussions_category_url,
-    :repository_discussions_url,
-    :security_advisories_url,
-    :timeline_url,
-    :user_url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      _links: {GitHubOpenAPI.FeedLinks, :t},
-      current_user_actor_url: {:string, :generic},
-      current_user_organization_url: {:string, :generic},
-      current_user_organization_urls: [string: :uri],
-      current_user_public_url: {:string, :generic},
-      current_user_url: {:string, :generic},
-      repository_discussions_category_url: {:string, :generic},
-      repository_discussions_url: {:string, :generic},
-      security_advisories_url: {:string, :generic},
-      timeline_url: {:string, :generic},
-      user_url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:current_user_actor_url, :current_user_organization_url, :current_user_organization_urls, :current_user_public_url, :current_user_url, :repository_discussions_category_url, :repository_discussions_url, :security_advisories_url, :timeline_url, :user_url, :__info__, :__joins__])
+    
   end
 end

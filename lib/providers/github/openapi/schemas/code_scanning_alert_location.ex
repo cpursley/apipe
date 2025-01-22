@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.CodeScanningAlertLocation do
-  @moduledoc """
-  Provides struct and type for a CodeScanningAlertLocation
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          end_column: integer | nil,
-          end_line: integer | nil,
-          path: String.t() | nil,
-          start_column: integer | nil,
-          start_line: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :end_column, :integer
+    field :end_line, :integer
+    field :path, :string
+    field :start_column, :integer
+    field :start_line, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :end_column, :end_line, :path, :start_column, :start_line]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      end_column: :integer,
-      end_line: :integer,
-      path: {:string, :generic},
-      start_column: :integer,
-      start_line: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:end_column, :end_line, :path, :start_column, :start_line, :__info__, :__joins__])
+    
   end
 end

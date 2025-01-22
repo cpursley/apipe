@@ -1,50 +1,24 @@
 defmodule GitHubOpenAPI.MarketplacePurchase do
-  @moduledoc """
-  Provides struct and type for a MarketplacePurchase
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          email: String.t() | nil,
-          id: integer,
-          login: String.t(),
-          marketplace_pending_change:
-            GitHubOpenAPI.MarketplacePurchaseMarketplacePendingChange.t() | nil,
-          marketplace_purchase: GitHubOpenAPI.MarketplacePurchaseMarketplacePurchase.t(),
-          organization_billing_email: String.t() | nil,
-          type: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :email, :string
+    field :id, :integer
+    field :login, :string
+    field :marketplace_pending_change, :map
+    field :marketplace_purchase, :map
+    field :organization_billing_email, :string
+    field :type, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :email,
-    :id,
-    :login,
-    :marketplace_pending_change,
-    :marketplace_purchase,
-    :organization_billing_email,
-    :type,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      email: {:string, :generic},
-      id: :integer,
-      login: {:string, :generic},
-      marketplace_pending_change: {GitHubOpenAPI.MarketplacePurchaseMarketplacePendingChange, :t},
-      marketplace_purchase: {GitHubOpenAPI.MarketplacePurchaseMarketplacePurchase, :t},
-      organization_billing_email: {:string, :generic},
-      type: {:string, :generic},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:email, :id, :login, :organization_billing_email, :type, :url, :__info__, :__joins__])
+    
   end
 end

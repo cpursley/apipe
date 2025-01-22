@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.CodeScanningSarifsReceipt do
-  @moduledoc """
-  Provides struct and type for a CodeScanningSarifsReceipt
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          id: String.t() | nil,
-          url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :url, :string
+    embeds_one :id, GitHubOpenAPI.CodeScanningAnalysisSarifId
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :id, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [id: {:string, :generic}, url: {:string, :uri}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:url, :__info__, :__joins__])
+        |> cast_embed(:id, with: &GitHubOpenAPI.CodeScanningAnalysisSarifId.changeset/2)
   end
 end

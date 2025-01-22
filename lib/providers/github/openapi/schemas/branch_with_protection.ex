@@ -1,49 +1,25 @@
 defmodule GitHubOpenAPI.BranchWithProtection do
-  @moduledoc """
-  Provides struct and type for a BranchWithProtection
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          _links: GitHubOpenAPI.BranchWithProtectionLinks.t(),
-          commit: GitHubOpenAPI.Commit.t(),
-          name: String.t(),
-          pattern: String.t() | nil,
-          protected: boolean,
-          protection: GitHubOpenAPI.BranchProtection.t(),
-          protection_url: String.t(),
-          required_approving_review_count: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :_links, :map
+    field :name, :string
+    field :pattern, :string
+    field :protected, :boolean
+    field :protection_url, :string
+    field :required_approving_review_count, :integer
+    embeds_one :commit, GitHubOpenAPI.Commit
+    embeds_one :protection, GitHubOpenAPI.BranchProtection
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :_links,
-    :commit,
-    :name,
-    :pattern,
-    :protected,
-    :protection,
-    :protection_url,
-    :required_approving_review_count
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      _links: {GitHubOpenAPI.BranchWithProtectionLinks, :t},
-      commit: {GitHubOpenAPI.Commit, :t},
-      name: {:string, :generic},
-      pattern: {:string, :generic},
-      protected: :boolean,
-      protection: {GitHubOpenAPI.BranchProtection, :t},
-      protection_url: {:string, :uri},
-      required_approving_review_count: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:name, :pattern, :protected, :protection_url, :required_approving_review_count, :__info__, :__joins__])
+        |> cast_embed(:commit, with: &GitHubOpenAPI.Commit.changeset/2)
+    |> cast_embed(:protection, with: &GitHubOpenAPI.BranchProtection.changeset/2)
   end
 end

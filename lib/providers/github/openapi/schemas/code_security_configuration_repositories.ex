@@ -1,37 +1,18 @@
 defmodule GitHubOpenAPI.CodeSecurityConfigurationRepositories do
-  @moduledoc """
-  Provides struct and type for a CodeSecurityConfigurationRepositories
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          repository: GitHubOpenAPI.SimpleRepository.t() | nil,
-          status: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :status, Ecto.Enum, values: [:attached, :attaching, :detached, :removed, :enforced, :failed, :updating, :removed_by_enterprise]
+    embeds_one :repository, GitHubOpenAPI.SimpleRepository
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :repository, :status]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      repository: {GitHubOpenAPI.SimpleRepository, :t},
-      status:
-        {:enum,
-         [
-           "attached",
-           "attaching",
-           "detached",
-           "removed",
-           "enforced",
-           "failed",
-           "updating",
-           "removed_by_enterprise"
-         ]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:status, :__info__, :__joins__])
+        |> cast_embed(:repository, with: &GitHubOpenAPI.SimpleRepository.changeset/2)
   end
 end

@@ -1,76 +1,33 @@
 defmodule GitHubOpenAPI.NullableIntegration do
-  @moduledoc """
-  Provides struct and type for a NullableIntegration
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          client_id: String.t() | nil,
-          client_secret: String.t() | nil,
-          created_at: DateTime.t(),
-          description: String.t() | nil,
-          events: [String.t()],
-          external_url: String.t(),
-          html_url: String.t(),
-          id: integer,
-          installations_count: integer | nil,
-          name: String.t(),
-          node_id: String.t(),
-          owner: GitHubOpenAPI.Enterprise.t() | GitHubOpenAPI.SimpleUser.t(),
-          pem: String.t() | nil,
-          permissions: GitHubOpenAPI.NullableIntegrationPermissions.t(),
-          slug: String.t() | nil,
-          updated_at: DateTime.t(),
-          webhook_secret: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :client_id, :string
+    field :client_secret, :string
+    field :created_at, :string
+    field :description, :string
+    field :events, {:array, :string}
+    field :external_url, :string
+    field :html_url, :string
+    field :id, :integer
+    field :installations_count, :integer
+    field :name, :string
+    field :node_id, :string
+    field :owner, :map
+    field :pem, :string
+    field :permissions, {:map, :string}
+    field :slug, :string
+    field :updated_at, :string
+    field :webhook_secret, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :client_id,
-    :client_secret,
-    :created_at,
-    :description,
-    :events,
-    :external_url,
-    :html_url,
-    :id,
-    :installations_count,
-    :name,
-    :node_id,
-    :owner,
-    :pem,
-    :permissions,
-    :slug,
-    :updated_at,
-    :webhook_secret
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      client_id: {:string, :generic},
-      client_secret: {:string, :generic},
-      created_at: {:string, :date_time},
-      description: {:string, :generic},
-      events: [string: :generic],
-      external_url: {:string, :uri},
-      html_url: {:string, :uri},
-      id: :integer,
-      installations_count: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      owner: {:union, [{GitHubOpenAPI.Enterprise, :t}, {GitHubOpenAPI.SimpleUser, :t}]},
-      pem: {:string, :generic},
-      permissions: {GitHubOpenAPI.NullableIntegrationPermissions, :t},
-      slug: {:string, :generic},
-      updated_at: {:string, :date_time},
-      webhook_secret: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:client_id, :client_secret, :created_at, :description, :events, :external_url, :html_url, :id, :installations_count, :name, :node_id, :owner, :pem, :slug, :updated_at, :webhook_secret, :__info__, :__joins__])
+    
   end
 end

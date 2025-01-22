@@ -1,55 +1,27 @@
 defmodule GitHubOpenAPI.MilestonedIssueEvent do
-  @moduledoc """
-  Provides struct and type for a MilestonedIssueEvent
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor: GitHubOpenAPI.SimpleUser.t(),
-          commit_id: String.t() | nil,
-          commit_url: String.t() | nil,
-          created_at: String.t(),
-          event: String.t(),
-          id: integer,
-          milestone: GitHubOpenAPI.MilestonedIssueEventMilestone.t(),
-          node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit_id, :string
+    field :commit_url, :string
+    field :created_at, :string
+    field :event, :string
+    field :id, :integer
+    field :milestone, :map
+    field :node_id, :string
+    field :url, :string
+    embeds_one :actor, GitHubOpenAPI.SimpleUser
+    embeds_one :performed_via_github_app, GitHubOpenAPI.NullableIntegration
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actor,
-    :commit_id,
-    :commit_url,
-    :created_at,
-    :event,
-    :id,
-    :milestone,
-    :node_id,
-    :performed_via_github_app,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor: {GitHubOpenAPI.SimpleUser, :t},
-      commit_id: {:string, :generic},
-      commit_url: {:string, :generic},
-      created_at: {:string, :generic},
-      event: {:string, :generic},
-      id: :integer,
-      milestone: {GitHubOpenAPI.MilestonedIssueEventMilestone, :t},
-      node_id: {:string, :generic},
-      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:commit_id, :commit_url, :created_at, :event, :id, :node_id, :url, :__info__, :__joins__])
+        |> cast_embed(:actor, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:performed_via_github_app, with: &GitHubOpenAPI.NullableIntegration.changeset/2)
   end
 end

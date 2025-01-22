@@ -1,46 +1,23 @@
 defmodule GitHubOpenAPI.OrgPrivateRegistryConfigurationWithSelectedRepositories do
-  @moduledoc """
-  Provides struct and type for a OrgPrivateRegistryConfigurationWithSelectedRepositories
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          name: String.t(),
-          registry_type: String.t(),
-          selected_repository_ids: [integer] | nil,
-          updated_at: DateTime.t(),
-          username: String.t() | nil,
-          visibility: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :name, :string
+    field :registry_type, Ecto.Enum, values: [:maven_repository]
+    field :selected_repository_ids, {:array, :integer}
+    field :updated_at, :string
+    field :username, :string
+    field :visibility, Ecto.Enum, values: [:all, :private, :selected]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :name,
-    :registry_type,
-    :selected_repository_ids,
-    :updated_at,
-    :username,
-    :visibility
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      name: {:string, :generic},
-      registry_type: {:const, "maven_repository"},
-      selected_repository_ids: [:integer],
-      updated_at: {:string, :date_time},
-      username: {:string, :generic},
-      visibility: {:enum, ["all", "private", "selected"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :name, :registry_type, :selected_repository_ids, :updated_at, :username, :visibility, :__info__, :__joins__])
+    
   end
 end

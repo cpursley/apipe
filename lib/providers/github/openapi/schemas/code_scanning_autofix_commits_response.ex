@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.CodeScanningAutofixCommitsResponse do
-  @moduledoc """
-  Provides struct and type for a CodeScanningAutofixCommitsResponse
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          sha: String.t() | nil,
-          target_ref: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :sha, :string
+    field :target_ref, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :sha, :target_ref]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [sha: {:string, :generic}, target_ref: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:sha, :target_ref, :__info__, :__joins__])
+    
   end
 end

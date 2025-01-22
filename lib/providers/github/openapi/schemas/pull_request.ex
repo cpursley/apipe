@@ -1,180 +1,72 @@
 defmodule GitHubOpenAPI.PullRequest do
-  @moduledoc """
-  Provides struct and type for a PullRequest
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          _links: GitHubOpenAPI.PullRequestLinks.t(),
-          active_lock_reason: String.t() | nil,
-          additions: integer,
-          assignee: GitHubOpenAPI.NullableSimpleUser.t(),
-          assignees: [GitHubOpenAPI.SimpleUser.t()] | nil,
-          author_association: String.t(),
-          auto_merge: GitHubOpenAPI.AutoMerge.t(),
-          base: GitHubOpenAPI.PullRequestBase.t(),
-          body: String.t() | nil,
-          changed_files: integer,
-          closed_at: DateTime.t() | nil,
-          comments: integer,
-          comments_url: String.t(),
-          commits: integer,
-          commits_url: String.t(),
-          created_at: DateTime.t(),
-          deletions: integer,
-          diff_url: String.t(),
-          draft: boolean | nil,
-          head: GitHubOpenAPI.PullRequestHead.t(),
-          html_url: String.t(),
-          id: integer,
-          issue_url: String.t(),
-          labels: [GitHubOpenAPI.PullRequestLabels.t()],
-          locked: boolean,
-          maintainer_can_modify: boolean,
-          merge_commit_sha: String.t() | nil,
-          mergeable: boolean | nil,
-          mergeable_state: String.t(),
-          merged: boolean,
-          merged_at: DateTime.t() | nil,
-          merged_by: GitHubOpenAPI.NullableSimpleUser.t(),
-          milestone: GitHubOpenAPI.NullableMilestone.t(),
-          node_id: String.t(),
-          number: integer,
-          patch_url: String.t(),
-          rebaseable: boolean | nil,
-          requested_reviewers: [GitHubOpenAPI.SimpleUser.t()] | nil,
-          requested_teams: [GitHubOpenAPI.TeamSimple.t()] | nil,
-          review_comment_url: String.t(),
-          review_comments: integer,
-          review_comments_url: String.t(),
-          state: String.t(),
-          statuses_url: String.t(),
-          title: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :state, Ecto.Enum, values: [:open, :closed]
+    field :labels, {:array, :string}
+    field :_links, :map
+    field :review_comment_url, :string
+    field :head, :map
+    field :mergeable_state, :string
+    field :commits_url, :string
+    field :commits, :integer
+    field :comments_url, :string
+    field :base, :map
+    field :issue_url, :string
+    field :merge_commit_sha, :string
+    field :changed_files, :integer
+    field :deletions, :integer
+    field :draft, :boolean
+    field :merged, :boolean
+    field :patch_url, :string
+    field :diff_url, :string
+    field :review_comments_url, :string
+    field :review_comments, :integer
+    field :merged_at, :string
+    field :rebaseable, :boolean
+    field :html_url, :string
+    field :created_at, :string
+    field :updated_at, :string
+    field :closed_at, :string
+    field :statuses_url, :string
+    field :url, :string
+    field :body, :string
+    field :maintainer_can_modify, :boolean
+    field :mergeable, :boolean
+    field :node_id, :string
+    field :active_lock_reason, :string
+    field :number, :integer
+    field :locked, :boolean
+    field :id, :integer
+    field :comments, :integer
+    field :title, :string
+    field :additions, :integer
+    embeds_one :auto_merge, GitHubOpenAPI.AutoMerge
+    embeds_one :milestone, GitHubOpenAPI.NullableMilestone
+    embeds_one :author_association, GitHubOpenAPI.AuthorAssociation
+    embeds_one :assignee, GitHubOpenAPI.NullableSimpleUser
+    embeds_many :assignees, GitHubOpenAPI.SimpleUser
+    embeds_many :requested_reviewers, GitHubOpenAPI.SimpleUser
+    embeds_one :user, GitHubOpenAPI.SimpleUser
+    embeds_many :requested_teams, GitHubOpenAPI.TeamSimple
+    embeds_one :merged_by, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :_links,
-    :active_lock_reason,
-    :additions,
-    :assignee,
-    :assignees,
-    :author_association,
-    :auto_merge,
-    :base,
-    :body,
-    :changed_files,
-    :closed_at,
-    :comments,
-    :comments_url,
-    :commits,
-    :commits_url,
-    :created_at,
-    :deletions,
-    :diff_url,
-    :draft,
-    :head,
-    :html_url,
-    :id,
-    :issue_url,
-    :labels,
-    :locked,
-    :maintainer_can_modify,
-    :merge_commit_sha,
-    :mergeable,
-    :mergeable_state,
-    :merged,
-    :merged_at,
-    :merged_by,
-    :milestone,
-    :node_id,
-    :number,
-    :patch_url,
-    :rebaseable,
-    :requested_reviewers,
-    :requested_teams,
-    :review_comment_url,
-    :review_comments,
-    :review_comments_url,
-    :state,
-    :statuses_url,
-    :title,
-    :updated_at,
-    :url,
-    :user
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      _links: {GitHubOpenAPI.PullRequestLinks, :t},
-      active_lock_reason: {:string, :generic},
-      additions: :integer,
-      assignee: {GitHubOpenAPI.NullableSimpleUser, :t},
-      assignees: [{GitHubOpenAPI.SimpleUser, :t}],
-      author_association:
-        {:enum,
-         [
-           "COLLABORATOR",
-           "CONTRIBUTOR",
-           "FIRST_TIMER",
-           "FIRST_TIME_CONTRIBUTOR",
-           "MANNEQUIN",
-           "MEMBER",
-           "NONE",
-           "OWNER"
-         ]},
-      auto_merge: {GitHubOpenAPI.AutoMerge, :t},
-      base: {GitHubOpenAPI.PullRequestBase, :t},
-      body: {:string, :generic},
-      changed_files: :integer,
-      closed_at: {:string, :date_time},
-      comments: :integer,
-      comments_url: {:string, :uri},
-      commits: :integer,
-      commits_url: {:string, :uri},
-      created_at: {:string, :date_time},
-      deletions: :integer,
-      diff_url: {:string, :uri},
-      draft: :boolean,
-      head: {GitHubOpenAPI.PullRequestHead, :t},
-      html_url: {:string, :uri},
-      id: :integer,
-      issue_url: {:string, :uri},
-      labels: [{GitHubOpenAPI.PullRequestLabels, :t}],
-      locked: :boolean,
-      maintainer_can_modify: :boolean,
-      merge_commit_sha: {:string, :generic},
-      mergeable: :boolean,
-      mergeable_state: {:string, :generic},
-      merged: :boolean,
-      merged_at: {:string, :date_time},
-      merged_by: {GitHubOpenAPI.NullableSimpleUser, :t},
-      milestone: {GitHubOpenAPI.NullableMilestone, :t},
-      node_id: {:string, :generic},
-      number: :integer,
-      patch_url: {:string, :uri},
-      rebaseable: :boolean,
-      requested_reviewers: [{GitHubOpenAPI.SimpleUser, :t}],
-      requested_teams: [{GitHubOpenAPI.TeamSimple, :t}],
-      review_comment_url: {:string, :generic},
-      review_comments: :integer,
-      review_comments_url: {:string, :uri},
-      state: {:enum, ["open", "closed"]},
-      statuses_url: {:string, :uri},
-      title: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri},
-      user: {GitHubOpenAPI.SimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:state, :labels, :review_comment_url, :mergeable_state, :commits_url, :commits, :comments_url, :issue_url, :merge_commit_sha, :changed_files, :deletions, :draft, :merged, :patch_url, :diff_url, :review_comments_url, :review_comments, :merged_at, :rebaseable, :html_url, :created_at, :updated_at, :closed_at, :statuses_url, :url, :body, :maintainer_can_modify, :mergeable, :node_id, :active_lock_reason, :number, :locked, :id, :comments, :title, :additions, :__info__, :__joins__])
+        |> cast_embed(:auto_merge, with: &GitHubOpenAPI.AutoMerge.changeset/2)
+    |> cast_embed(:milestone, with: &GitHubOpenAPI.NullableMilestone.changeset/2)
+    |> cast_embed(:author_association, with: &GitHubOpenAPI.AuthorAssociation.changeset/2)
+    |> cast_embed(:assignee, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:assignees, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:requested_reviewers, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:user, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:requested_teams, with: &GitHubOpenAPI.TeamSimple.changeset/2)
+    |> cast_embed(:merged_by, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

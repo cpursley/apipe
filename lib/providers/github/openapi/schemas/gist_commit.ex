@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.GistCommit do
-  @moduledoc """
-  Provides struct and type for a GistCommit
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          change_status: GitHubOpenAPI.GistCommitChangeStatus.t(),
-          committed_at: DateTime.t(),
-          url: String.t(),
-          user: GitHubOpenAPI.NullableSimpleUser.t(),
-          version: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :change_status, :map
+    field :committed_at, :string
+    field :url, :string
+    field :version, :string
+    embeds_one :user, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :change_status, :committed_at, :url, :user, :version]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      change_status: {GitHubOpenAPI.GistCommitChangeStatus, :t},
-      committed_at: {:string, :date_time},
-      url: {:string, :uri},
-      user: {GitHubOpenAPI.NullableSimpleUser, :t},
-      version: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:committed_at, :url, :version, :__info__, :__joins__])
+        |> cast_embed(:user, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

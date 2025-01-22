@@ -1,96 +1,39 @@
 defmodule GitHubOpenAPI.Job do
-  @moduledoc """
-  Provides struct and type for a Job
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          check_run_url: String.t(),
-          completed_at: DateTime.t() | nil,
-          conclusion: String.t() | nil,
-          created_at: DateTime.t(),
-          head_branch: String.t() | nil,
-          head_sha: String.t(),
-          html_url: String.t() | nil,
-          id: integer,
-          labels: [String.t()],
-          name: String.t(),
-          node_id: String.t(),
-          run_attempt: integer | nil,
-          run_id: integer,
-          run_url: String.t(),
-          runner_group_id: integer | nil,
-          runner_group_name: String.t() | nil,
-          runner_id: integer | nil,
-          runner_name: String.t() | nil,
-          started_at: DateTime.t(),
-          status: String.t(),
-          steps: [GitHubOpenAPI.JobSteps.t()] | nil,
-          url: String.t(),
-          workflow_name: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :check_run_url, :string
+    field :completed_at, :string
+    field :conclusion, Ecto.Enum, values: [:success, :failure, :neutral, :cancelled, :skipped, :timed_out, :action_required]
+    field :created_at, :string
+    field :head_branch, :string
+    field :head_sha, :string
+    field :html_url, :string
+    field :id, :integer
+    field :labels, {:array, :string}
+    field :name, :string
+    field :node_id, :string
+    field :run_attempt, :integer
+    field :run_id, :integer
+    field :run_url, :string
+    field :runner_group_id, :integer
+    field :runner_group_name, :string
+    field :runner_id, :integer
+    field :runner_name, :string
+    field :started_at, :string
+    field :status, Ecto.Enum, values: [:queued, :in_progress, :completed, :waiting, :requested, :pending]
+    field :steps, {:array, :string}
+    field :url, :string
+    field :workflow_name, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :check_run_url,
-    :completed_at,
-    :conclusion,
-    :created_at,
-    :head_branch,
-    :head_sha,
-    :html_url,
-    :id,
-    :labels,
-    :name,
-    :node_id,
-    :run_attempt,
-    :run_id,
-    :run_url,
-    :runner_group_id,
-    :runner_group_name,
-    :runner_id,
-    :runner_name,
-    :started_at,
-    :status,
-    :steps,
-    :url,
-    :workflow_name
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      check_run_url: {:string, :generic},
-      completed_at: {:string, :date_time},
-      conclusion:
-        {:enum,
-         ["success", "failure", "neutral", "cancelled", "skipped", "timed_out", "action_required"]},
-      created_at: {:string, :date_time},
-      head_branch: {:string, :generic},
-      head_sha: {:string, :generic},
-      html_url: {:string, :generic},
-      id: :integer,
-      labels: [string: :generic],
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      run_attempt: :integer,
-      run_id: :integer,
-      run_url: {:string, :generic},
-      runner_group_id: :integer,
-      runner_group_name: {:string, :generic},
-      runner_id: :integer,
-      runner_name: {:string, :generic},
-      started_at: {:string, :date_time},
-      status: {:enum, ["queued", "in_progress", "completed", "waiting", "requested", "pending"]},
-      steps: [{GitHubOpenAPI.JobSteps, :t}],
-      url: {:string, :generic},
-      workflow_name: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:check_run_url, :completed_at, :conclusion, :created_at, :head_branch, :head_sha, :html_url, :id, :labels, :name, :node_id, :run_attempt, :run_id, :run_url, :runner_group_id, :runner_group_name, :runner_id, :runner_name, :started_at, :status, :steps, :url, :workflow_name, :__info__, :__joins__])
+    
   end
 end

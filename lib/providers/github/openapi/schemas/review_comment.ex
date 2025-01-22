@@ -1,120 +1,46 @@
 defmodule GitHubOpenAPI.ReviewComment do
-  @moduledoc """
-  Provides struct and type for a ReviewComment
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          _links: GitHubOpenAPI.ReviewCommentLinks.t(),
-          author_association: String.t(),
-          body: String.t(),
-          body_html: String.t() | nil,
-          body_text: String.t() | nil,
-          commit_id: String.t(),
-          created_at: DateTime.t(),
-          diff_hunk: String.t(),
-          html_url: String.t(),
-          id: integer,
-          in_reply_to_id: integer | nil,
-          line: integer | nil,
-          node_id: String.t(),
-          original_commit_id: String.t(),
-          original_line: integer | nil,
-          original_position: integer,
-          original_start_line: integer | nil,
-          path: String.t(),
-          position: integer | nil,
-          pull_request_review_id: integer | nil,
-          pull_request_url: String.t(),
-          reactions: GitHubOpenAPI.ReactionRollup.t() | nil,
-          side: String.t() | nil,
-          start_line: integer | nil,
-          start_side: String.t() | nil,
-          updated_at: DateTime.t(),
-          url: String.t(),
-          user: GitHubOpenAPI.NullableSimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :_links, :map
+    field :body, :string
+    field :body_html, :string
+    field :body_text, :string
+    field :commit_id, :string
+    field :created_at, :string
+    field :diff_hunk, :string
+    field :html_url, :string
+    field :id, :integer
+    field :in_reply_to_id, :integer
+    field :line, :integer
+    field :node_id, :string
+    field :original_commit_id, :string
+    field :original_line, :integer
+    field :original_position, :integer
+    field :original_start_line, :integer
+    field :path, :string
+    field :position, :integer
+    field :pull_request_review_id, :integer
+    field :pull_request_url, :string
+    field :side, Ecto.Enum, values: [:"LEFT", :"RIGHT"]
+    field :start_line, :integer
+    field :start_side, Ecto.Enum, values: [:"LEFT", :"RIGHT"]
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :author_association, GitHubOpenAPI.AuthorAssociation
+    embeds_one :reactions, GitHubOpenAPI.ReactionRollup
+    embeds_one :user, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :_links,
-    :author_association,
-    :body,
-    :body_html,
-    :body_text,
-    :commit_id,
-    :created_at,
-    :diff_hunk,
-    :html_url,
-    :id,
-    :in_reply_to_id,
-    :line,
-    :node_id,
-    :original_commit_id,
-    :original_line,
-    :original_position,
-    :original_start_line,
-    :path,
-    :position,
-    :pull_request_review_id,
-    :pull_request_url,
-    :reactions,
-    :side,
-    :start_line,
-    :start_side,
-    :updated_at,
-    :url,
-    :user
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      _links: {GitHubOpenAPI.ReviewCommentLinks, :t},
-      author_association:
-        {:enum,
-         [
-           "COLLABORATOR",
-           "CONTRIBUTOR",
-           "FIRST_TIMER",
-           "FIRST_TIME_CONTRIBUTOR",
-           "MANNEQUIN",
-           "MEMBER",
-           "NONE",
-           "OWNER"
-         ]},
-      body: {:string, :generic},
-      body_html: {:string, :generic},
-      body_text: {:string, :generic},
-      commit_id: {:string, :generic},
-      created_at: {:string, :date_time},
-      diff_hunk: {:string, :generic},
-      html_url: {:string, :uri},
-      id: :integer,
-      in_reply_to_id: :integer,
-      line: :integer,
-      node_id: {:string, :generic},
-      original_commit_id: {:string, :generic},
-      original_line: :integer,
-      original_position: :integer,
-      original_start_line: :integer,
-      path: {:string, :generic},
-      position: :integer,
-      pull_request_review_id: :integer,
-      pull_request_url: {:string, :uri},
-      reactions: {GitHubOpenAPI.ReactionRollup, :t},
-      side: {:enum, ["LEFT", "RIGHT"]},
-      start_line: :integer,
-      start_side: {:enum, ["LEFT", "RIGHT"]},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri},
-      user: {GitHubOpenAPI.NullableSimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:body, :body_html, :body_text, :commit_id, :created_at, :diff_hunk, :html_url, :id, :in_reply_to_id, :line, :node_id, :original_commit_id, :original_line, :original_position, :original_start_line, :path, :position, :pull_request_review_id, :pull_request_url, :side, :start_line, :start_side, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:author_association, with: &GitHubOpenAPI.AuthorAssociation.changeset/2)
+    |> cast_embed(:reactions, with: &GitHubOpenAPI.ReactionRollup.changeset/2)
+    |> cast_embed(:user, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

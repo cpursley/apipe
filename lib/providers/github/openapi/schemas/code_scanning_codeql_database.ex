@@ -1,55 +1,26 @@
 defmodule GitHubOpenAPI.CodeScanningCodeqlDatabase do
-  @moduledoc """
-  Provides struct and type for a CodeScanningCodeqlDatabase
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          commit_oid: String.t() | nil,
-          content_type: String.t(),
-          created_at: DateTime.t(),
-          id: integer,
-          language: String.t(),
-          name: String.t(),
-          size: integer,
-          updated_at: DateTime.t(),
-          uploader: GitHubOpenAPI.SimpleUser.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit_oid, :string
+    field :content_type, :string
+    field :created_at, :string
+    field :id, :integer
+    field :language, :string
+    field :name, :string
+    field :size, :integer
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :uploader, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :commit_oid,
-    :content_type,
-    :created_at,
-    :id,
-    :language,
-    :name,
-    :size,
-    :updated_at,
-    :uploader,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      commit_oid: {:string, :generic},
-      content_type: {:string, :generic},
-      created_at: {:string, :date_time},
-      id: :integer,
-      language: {:string, :generic},
-      name: {:string, :generic},
-      size: :integer,
-      updated_at: {:string, :date_time},
-      uploader: {GitHubOpenAPI.SimpleUser, :t},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:commit_oid, :content_type, :created_at, :id, :language, :name, :size, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:uploader, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

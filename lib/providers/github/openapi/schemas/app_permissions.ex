@@ -1,169 +1,64 @@
 defmodule GitHubOpenAPI.AppPermissions do
-  @moduledoc """
-  Provides struct and type for a AppPermissions
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actions: String.t() | nil,
-          administration: String.t() | nil,
-          checks: String.t() | nil,
-          codespaces: String.t() | nil,
-          contents: String.t() | nil,
-          dependabot_secrets: String.t() | nil,
-          deployments: String.t() | nil,
-          email_addresses: String.t() | nil,
-          environments: String.t() | nil,
-          followers: String.t() | nil,
-          git_ssh_keys: String.t() | nil,
-          gpg_keys: String.t() | nil,
-          interaction_limits: String.t() | nil,
-          issues: String.t() | nil,
-          members: String.t() | nil,
-          metadata: String.t() | nil,
-          organization_administration: String.t() | nil,
-          organization_announcement_banners: String.t() | nil,
-          organization_copilot_seat_management: String.t() | nil,
-          organization_custom_org_roles: String.t() | nil,
-          organization_custom_properties: String.t() | nil,
-          organization_custom_roles: String.t() | nil,
-          organization_events: String.t() | nil,
-          organization_hooks: String.t() | nil,
-          organization_packages: String.t() | nil,
-          organization_personal_access_token_requests: String.t() | nil,
-          organization_personal_access_tokens: String.t() | nil,
-          organization_plan: String.t() | nil,
-          organization_projects: String.t() | nil,
-          organization_secrets: String.t() | nil,
-          organization_self_hosted_runners: String.t() | nil,
-          organization_user_blocking: String.t() | nil,
-          packages: String.t() | nil,
-          pages: String.t() | nil,
-          profile: String.t() | nil,
-          pull_requests: String.t() | nil,
-          repository_custom_properties: String.t() | nil,
-          repository_hooks: String.t() | nil,
-          repository_projects: String.t() | nil,
-          secret_scanning_alerts: String.t() | nil,
-          secrets: String.t() | nil,
-          security_events: String.t() | nil,
-          single_file: String.t() | nil,
-          starring: String.t() | nil,
-          statuses: String.t() | nil,
-          team_discussions: String.t() | nil,
-          vulnerability_alerts: String.t() | nil,
-          workflows: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :profile, Ecto.Enum, values: [:write]
+    field :email_addresses, Ecto.Enum, values: [:read, :write]
+    field :organization_custom_roles, Ecto.Enum, values: [:read, :write]
+    field :packages, Ecto.Enum, values: [:read, :write]
+    field :issues, Ecto.Enum, values: [:read, :write]
+    field :secrets, Ecto.Enum, values: [:read, :write]
+    field :team_discussions, Ecto.Enum, values: [:read, :write]
+    field :metadata, Ecto.Enum, values: [:read, :write]
+    field :repository_custom_properties, Ecto.Enum, values: [:read, :write]
+    field :repository_hooks, Ecto.Enum, values: [:read, :write]
+    field :secret_scanning_alerts, Ecto.Enum, values: [:read, :write]
+    field :actions, Ecto.Enum, values: [:read, :write]
+    field :organization_custom_properties, Ecto.Enum, values: [:read, :write, :admin]
+    field :interaction_limits, Ecto.Enum, values: [:read, :write]
+    field :organization_copilot_seat_management, Ecto.Enum, values: [:write]
+    field :organization_projects, Ecto.Enum, values: [:read, :write, :admin]
+    field :vulnerability_alerts, Ecto.Enum, values: [:read, :write]
+    field :administration, Ecto.Enum, values: [:read, :write]
+    field :members, Ecto.Enum, values: [:read, :write]
+    field :organization_personal_access_tokens, Ecto.Enum, values: [:read, :write]
+    field :organization_events, Ecto.Enum, values: [:read]
+    field :organization_custom_org_roles, Ecto.Enum, values: [:read, :write]
+    field :pull_requests, Ecto.Enum, values: [:read, :write]
+    field :codespaces, Ecto.Enum, values: [:read, :write]
+    field :checks, Ecto.Enum, values: [:read, :write]
+    field :contents, Ecto.Enum, values: [:read, :write]
+    field :organization_packages, Ecto.Enum, values: [:read, :write]
+    field :organization_self_hosted_runners, Ecto.Enum, values: [:read, :write]
+    field :organization_administration, Ecto.Enum, values: [:read, :write]
+    field :environments, Ecto.Enum, values: [:read, :write]
+    field :pages, Ecto.Enum, values: [:read, :write]
+    field :organization_announcement_banners, Ecto.Enum, values: [:read, :write]
+    field :repository_projects, Ecto.Enum, values: [:read, :write, :admin]
+    field :git_ssh_keys, Ecto.Enum, values: [:read, :write]
+    field :workflows, Ecto.Enum, values: [:write]
+    field :starring, Ecto.Enum, values: [:read, :write]
+    field :organization_secrets, Ecto.Enum, values: [:read, :write]
+    field :organization_personal_access_token_requests, Ecto.Enum, values: [:read, :write]
+    field :organization_hooks, Ecto.Enum, values: [:read, :write]
+    field :gpg_keys, Ecto.Enum, values: [:read, :write]
+    field :organization_user_blocking, Ecto.Enum, values: [:read, :write]
+    field :single_file, Ecto.Enum, values: [:read, :write]
+    field :deployments, Ecto.Enum, values: [:read, :write]
+    field :organization_plan, Ecto.Enum, values: [:read]
+    field :dependabot_secrets, Ecto.Enum, values: [:read, :write]
+    field :security_events, Ecto.Enum, values: [:read, :write]
+    field :followers, Ecto.Enum, values: [:read, :write]
+    field :statuses, Ecto.Enum, values: [:read, :write]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actions,
-    :administration,
-    :checks,
-    :codespaces,
-    :contents,
-    :dependabot_secrets,
-    :deployments,
-    :email_addresses,
-    :environments,
-    :followers,
-    :git_ssh_keys,
-    :gpg_keys,
-    :interaction_limits,
-    :issues,
-    :members,
-    :metadata,
-    :organization_administration,
-    :organization_announcement_banners,
-    :organization_copilot_seat_management,
-    :organization_custom_org_roles,
-    :organization_custom_properties,
-    :organization_custom_roles,
-    :organization_events,
-    :organization_hooks,
-    :organization_packages,
-    :organization_personal_access_token_requests,
-    :organization_personal_access_tokens,
-    :organization_plan,
-    :organization_projects,
-    :organization_secrets,
-    :organization_self_hosted_runners,
-    :organization_user_blocking,
-    :packages,
-    :pages,
-    :profile,
-    :pull_requests,
-    :repository_custom_properties,
-    :repository_hooks,
-    :repository_projects,
-    :secret_scanning_alerts,
-    :secrets,
-    :security_events,
-    :single_file,
-    :starring,
-    :statuses,
-    :team_discussions,
-    :vulnerability_alerts,
-    :workflows
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actions: {:enum, ["read", "write"]},
-      administration: {:enum, ["read", "write"]},
-      checks: {:enum, ["read", "write"]},
-      codespaces: {:enum, ["read", "write"]},
-      contents: {:enum, ["read", "write"]},
-      dependabot_secrets: {:enum, ["read", "write"]},
-      deployments: {:enum, ["read", "write"]},
-      email_addresses: {:enum, ["read", "write"]},
-      environments: {:enum, ["read", "write"]},
-      followers: {:enum, ["read", "write"]},
-      git_ssh_keys: {:enum, ["read", "write"]},
-      gpg_keys: {:enum, ["read", "write"]},
-      interaction_limits: {:enum, ["read", "write"]},
-      issues: {:enum, ["read", "write"]},
-      members: {:enum, ["read", "write"]},
-      metadata: {:enum, ["read", "write"]},
-      organization_administration: {:enum, ["read", "write"]},
-      organization_announcement_banners: {:enum, ["read", "write"]},
-      organization_copilot_seat_management: {:const, "write"},
-      organization_custom_org_roles: {:enum, ["read", "write"]},
-      organization_custom_properties: {:enum, ["read", "write", "admin"]},
-      organization_custom_roles: {:enum, ["read", "write"]},
-      organization_events: {:const, "read"},
-      organization_hooks: {:enum, ["read", "write"]},
-      organization_packages: {:enum, ["read", "write"]},
-      organization_personal_access_token_requests: {:enum, ["read", "write"]},
-      organization_personal_access_tokens: {:enum, ["read", "write"]},
-      organization_plan: {:const, "read"},
-      organization_projects: {:enum, ["read", "write", "admin"]},
-      organization_secrets: {:enum, ["read", "write"]},
-      organization_self_hosted_runners: {:enum, ["read", "write"]},
-      organization_user_blocking: {:enum, ["read", "write"]},
-      packages: {:enum, ["read", "write"]},
-      pages: {:enum, ["read", "write"]},
-      profile: {:const, "write"},
-      pull_requests: {:enum, ["read", "write"]},
-      repository_custom_properties: {:enum, ["read", "write"]},
-      repository_hooks: {:enum, ["read", "write"]},
-      repository_projects: {:enum, ["read", "write", "admin"]},
-      secret_scanning_alerts: {:enum, ["read", "write"]},
-      secrets: {:enum, ["read", "write"]},
-      security_events: {:enum, ["read", "write"]},
-      single_file: {:enum, ["read", "write"]},
-      starring: {:enum, ["read", "write"]},
-      statuses: {:enum, ["read", "write"]},
-      team_discussions: {:enum, ["read", "write"]},
-      vulnerability_alerts: {:enum, ["read", "write"]},
-      workflows: {:const, "write"}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:profile, :email_addresses, :organization_custom_roles, :packages, :issues, :secrets, :team_discussions, :metadata, :repository_custom_properties, :repository_hooks, :secret_scanning_alerts, :actions, :organization_custom_properties, :interaction_limits, :organization_copilot_seat_management, :organization_projects, :vulnerability_alerts, :administration, :members, :organization_personal_access_tokens, :organization_events, :organization_custom_org_roles, :pull_requests, :codespaces, :checks, :contents, :organization_packages, :organization_self_hosted_runners, :organization_administration, :environments, :pages, :organization_announcement_banners, :repository_projects, :git_ssh_keys, :workflows, :starring, :organization_secrets, :organization_personal_access_token_requests, :organization_hooks, :gpg_keys, :organization_user_blocking, :single_file, :deployments, :organization_plan, :dependabot_secrets, :security_events, :followers, :statuses, :__info__, :__joins__])
+    
   end
 end

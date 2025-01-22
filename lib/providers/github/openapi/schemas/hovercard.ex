@@ -1,22 +1,17 @@
 defmodule GitHubOpenAPI.Hovercard do
-  @moduledoc """
-  Provides struct and type for a Hovercard
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          contexts: [GitHubOpenAPI.HovercardContexts.t()]
-        }
+  @primary_key false
+  embedded_schema do
+    field :contexts, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :contexts]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [contexts: [{GitHubOpenAPI.HovercardContexts, :t}]]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:contexts, :__info__, :__joins__])
+    
   end
 end

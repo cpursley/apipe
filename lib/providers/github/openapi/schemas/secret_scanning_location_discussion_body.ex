@@ -1,18 +1,17 @@
 defmodule GitHubOpenAPI.SecretScanningLocationDiscussionBody do
-  @moduledoc """
-  Provides struct and type for a SecretScanningLocationDiscussionBody
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, discussion_body_url: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :discussion_body_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :discussion_body_url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [discussion_body_url: {:string, :uri}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:discussion_body_url, :__info__, :__joins__])
+    
   end
 end

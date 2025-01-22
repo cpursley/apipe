@@ -1,43 +1,22 @@
 defmodule GitHubOpenAPI.IssueEventProjectCard do
-  @moduledoc """
-  Provides struct and type for a IssueEventProjectCard
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          column_name: String.t(),
-          id: integer,
-          previous_column_name: String.t() | nil,
-          project_id: integer,
-          project_url: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :column_name, :string
+    field :id, :integer
+    field :previous_column_name, :string
+    field :project_id, :integer
+    field :project_url, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :column_name,
-    :id,
-    :previous_column_name,
-    :project_id,
-    :project_url,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      column_name: {:string, :generic},
-      id: :integer,
-      previous_column_name: {:string, :generic},
-      project_id: :integer,
-      project_url: {:string, :uri},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:column_name, :id, :previous_column_name, :project_id, :project_url, :url, :__info__, :__joins__])
+    
   end
 end

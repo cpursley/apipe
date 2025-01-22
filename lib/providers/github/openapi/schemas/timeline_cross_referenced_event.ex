@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.TimelineCrossReferencedEvent do
-  @moduledoc """
-  Provides struct and type for a TimelineCrossReferencedEvent
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor: GitHubOpenAPI.SimpleUser.t() | nil,
-          created_at: DateTime.t(),
-          event: String.t(),
-          source: GitHubOpenAPI.TimelineCrossReferencedEventSource.t(),
-          updated_at: DateTime.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :event, :string
+    field :source, :map
+    field :updated_at, :string
+    embeds_one :actor, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :actor, :created_at, :event, :source, :updated_at]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor: {GitHubOpenAPI.SimpleUser, :t},
-      created_at: {:string, :date_time},
-      event: {:string, :generic},
-      source: {GitHubOpenAPI.TimelineCrossReferencedEventSource, :t},
-      updated_at: {:string, :date_time}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :event, :updated_at, :__info__, :__joins__])
+        |> cast_embed(:actor, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

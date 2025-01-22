@@ -1,58 +1,27 @@
 defmodule GitHubOpenAPI.Status do
-  @moduledoc """
-  Provides struct and type for a Status
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          avatar_url: String.t() | nil,
-          context: String.t(),
-          created_at: String.t(),
-          creator: GitHubOpenAPI.NullableSimpleUser.t(),
-          description: String.t() | nil,
-          id: integer,
-          node_id: String.t(),
-          state: String.t(),
-          target_url: String.t() | nil,
-          updated_at: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :avatar_url, :string
+    field :context, :string
+    field :created_at, :string
+    field :description, :string
+    field :id, :integer
+    field :node_id, :string
+    field :state, :string
+    field :target_url, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :creator, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :avatar_url,
-    :context,
-    :created_at,
-    :creator,
-    :description,
-    :id,
-    :node_id,
-    :state,
-    :target_url,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      avatar_url: {:string, :generic},
-      context: {:string, :generic},
-      created_at: {:string, :generic},
-      creator: {GitHubOpenAPI.NullableSimpleUser, :t},
-      description: {:string, :generic},
-      id: :integer,
-      node_id: {:string, :generic},
-      state: {:string, :generic},
-      target_url: {:string, :generic},
-      updated_at: {:string, :generic},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:avatar_url, :context, :created_at, :description, :id, :node_id, :state, :target_url, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:creator, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.BranchShort do
-  @moduledoc """
-  Provides struct and type for a BranchShort
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          commit: GitHubOpenAPI.BranchShortCommit.t(),
-          name: String.t(),
-          protected: boolean
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit, :map
+    field :name, :string
+    field :protected, :boolean
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :commit, :name, :protected]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      commit: {GitHubOpenAPI.BranchShortCommit, :t},
-      name: {:string, :generic},
-      protected: :boolean
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:name, :protected, :__info__, :__joins__])
+    
   end
 end

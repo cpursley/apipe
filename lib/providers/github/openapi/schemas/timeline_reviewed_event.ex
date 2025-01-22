@@ -1,78 +1,31 @@
 defmodule GitHubOpenAPI.TimelineReviewedEvent do
-  @moduledoc """
-  Provides struct and type for a TimelineReviewedEvent
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          _links: GitHubOpenAPI.TimelineReviewedEventLinks.t(),
-          author_association: String.t(),
-          body: String.t() | nil,
-          body_html: String.t() | nil,
-          body_text: String.t() | nil,
-          commit_id: String.t(),
-          event: String.t(),
-          html_url: String.t(),
-          id: integer,
-          node_id: String.t(),
-          pull_request_url: String.t(),
-          state: String.t(),
-          submitted_at: DateTime.t() | nil,
-          user: GitHubOpenAPI.SimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :_links, :map
+    field :body, :string
+    field :body_html, :string
+    field :body_text, :string
+    field :commit_id, :string
+    field :event, :string
+    field :html_url, :string
+    field :id, :integer
+    field :node_id, :string
+    field :pull_request_url, :string
+    field :state, :string
+    field :submitted_at, :string
+    embeds_one :author_association, GitHubOpenAPI.AuthorAssociation
+    embeds_one :user, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :_links,
-    :author_association,
-    :body,
-    :body_html,
-    :body_text,
-    :commit_id,
-    :event,
-    :html_url,
-    :id,
-    :node_id,
-    :pull_request_url,
-    :state,
-    :submitted_at,
-    :user
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      _links: {GitHubOpenAPI.TimelineReviewedEventLinks, :t},
-      author_association:
-        {:enum,
-         [
-           "COLLABORATOR",
-           "CONTRIBUTOR",
-           "FIRST_TIMER",
-           "FIRST_TIME_CONTRIBUTOR",
-           "MANNEQUIN",
-           "MEMBER",
-           "NONE",
-           "OWNER"
-         ]},
-      body: {:string, :generic},
-      body_html: {:string, :generic},
-      body_text: {:string, :generic},
-      commit_id: {:string, :generic},
-      event: {:string, :generic},
-      html_url: {:string, :uri},
-      id: :integer,
-      node_id: {:string, :generic},
-      pull_request_url: {:string, :uri},
-      state: {:string, :generic},
-      submitted_at: {:string, :date_time},
-      user: {GitHubOpenAPI.SimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:body, :body_html, :body_text, :commit_id, :event, :html_url, :id, :node_id, :pull_request_url, :state, :submitted_at, :__info__, :__joins__])
+        |> cast_embed(:author_association, with: &GitHubOpenAPI.AuthorAssociation.changeset/2)
+    |> cast_embed(:user, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.GitRef do
-  @moduledoc """
-  Provides struct and type for a GitRef
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          node_id: String.t(),
-          object: GitHubOpenAPI.GitRefObject.t(),
-          ref: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :node_id, :string
+    field :object, :map
+    field :ref, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :node_id, :object, :ref, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      node_id: {:string, :generic},
-      object: {GitHubOpenAPI.GitRefObject, :t},
-      ref: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:node_id, :ref, :url, :__info__, :__joins__])
+    
   end
 end

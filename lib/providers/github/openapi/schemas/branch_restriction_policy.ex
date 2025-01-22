@@ -1,46 +1,23 @@
 defmodule GitHubOpenAPI.BranchRestrictionPolicy do
-  @moduledoc """
-  Provides struct and type for a BranchRestrictionPolicy
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          apps: [GitHubOpenAPI.BranchRestrictionPolicyApps.t()],
-          apps_url: String.t(),
-          teams: [GitHubOpenAPI.BranchRestrictionPolicyTeams.t()],
-          teams_url: String.t(),
-          url: String.t(),
-          users: [GitHubOpenAPI.BranchRestrictionPolicyUsers.t()],
-          users_url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :apps, {:array, :string}
+    field :apps_url, :string
+    field :teams, {:array, :string}
+    field :teams_url, :string
+    field :url, :string
+    field :users, {:array, :string}
+    field :users_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :apps,
-    :apps_url,
-    :teams,
-    :teams_url,
-    :url,
-    :users,
-    :users_url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      apps: [{GitHubOpenAPI.BranchRestrictionPolicyApps, :t}],
-      apps_url: {:string, :uri},
-      teams: [{GitHubOpenAPI.BranchRestrictionPolicyTeams, :t}],
-      teams_url: {:string, :uri},
-      url: {:string, :uri},
-      users: [{GitHubOpenAPI.BranchRestrictionPolicyUsers, :t}],
-      users_url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:apps, :apps_url, :teams, :teams_url, :url, :users, :users_url, :__info__, :__joins__])
+    
   end
 end

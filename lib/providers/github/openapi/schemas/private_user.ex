@@ -1,154 +1,59 @@
 defmodule GitHubOpenAPI.PrivateUser do
-  @moduledoc """
-  Provides struct and type for a PrivateUser
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          avatar_url: String.t(),
-          bio: String.t() | nil,
-          blog: String.t() | nil,
-          business_plus: boolean | nil,
-          collaborators: integer,
-          company: String.t() | nil,
-          created_at: DateTime.t(),
-          disk_usage: integer,
-          email: String.t() | nil,
-          events_url: String.t(),
-          followers: integer,
-          followers_url: String.t(),
-          following: integer,
-          following_url: String.t(),
-          gists_url: String.t(),
-          gravatar_id: String.t() | nil,
-          hireable: boolean | nil,
-          html_url: String.t(),
-          id: integer,
-          ldap_dn: String.t() | nil,
-          location: String.t() | nil,
-          login: String.t(),
-          name: String.t() | nil,
-          node_id: String.t(),
-          notification_email: String.t() | nil,
-          organizations_url: String.t(),
-          owned_private_repos: integer,
-          plan: GitHubOpenAPI.PrivateUserPlan.t() | nil,
-          private_gists: integer,
-          public_gists: integer,
-          public_repos: integer,
-          received_events_url: String.t(),
-          repos_url: String.t(),
-          site_admin: boolean,
-          starred_url: String.t(),
-          subscriptions_url: String.t(),
-          total_private_repos: integer,
-          twitter_username: String.t() | nil,
-          two_factor_authentication: boolean,
-          type: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t(),
-          user_view_type: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :organizations_url, :string
+    field :name, :string
+    field :private_gists, :integer
+    field :ldap_dn, :string
+    field :login, :string
+    field :two_factor_authentication, :boolean
+    field :bio, :string
+    field :business_plus, :boolean
+    field :email, :string
+    field :company, :string
+    field :following_url, :string
+    field :starred_url, :string
+    field :owned_private_repos, :integer
+    field :total_private_repos, :integer
+    field :site_admin, :boolean
+    field :followers_url, :string
+    field :public_repos, :integer
+    field :subscriptions_url, :string
+    field :location, :string
+    field :public_gists, :integer
+    field :hireable, :boolean
+    field :user_view_type, :string
+    field :html_url, :string
+    field :gists_url, :string
+    field :gravatar_id, :string
+    field :created_at, :string
+    field :updated_at, :string
+    field :collaborators, :integer
+    field :events_url, :string
+    field :disk_usage, :integer
+    field :avatar_url, :string
+    field :url, :string
+    field :type, :string
+    field :node_id, :string
+    field :twitter_username, :string
+    field :repos_url, :string
+    field :received_events_url, :string
+    field :following, :integer
+    field :notification_email, :string
+    field :blog, :string
+    field :id, :integer
+    field :followers, :integer
+    field :plan, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :avatar_url,
-    :bio,
-    :blog,
-    :business_plus,
-    :collaborators,
-    :company,
-    :created_at,
-    :disk_usage,
-    :email,
-    :events_url,
-    :followers,
-    :followers_url,
-    :following,
-    :following_url,
-    :gists_url,
-    :gravatar_id,
-    :hireable,
-    :html_url,
-    :id,
-    :ldap_dn,
-    :location,
-    :login,
-    :name,
-    :node_id,
-    :notification_email,
-    :organizations_url,
-    :owned_private_repos,
-    :plan,
-    :private_gists,
-    :public_gists,
-    :public_repos,
-    :received_events_url,
-    :repos_url,
-    :site_admin,
-    :starred_url,
-    :subscriptions_url,
-    :total_private_repos,
-    :twitter_username,
-    :two_factor_authentication,
-    :type,
-    :updated_at,
-    :url,
-    :user_view_type
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      avatar_url: {:string, :uri},
-      bio: {:string, :generic},
-      blog: {:string, :generic},
-      business_plus: :boolean,
-      collaborators: :integer,
-      company: {:string, :generic},
-      created_at: {:string, :date_time},
-      disk_usage: :integer,
-      email: {:string, :email},
-      events_url: {:string, :generic},
-      followers: :integer,
-      followers_url: {:string, :uri},
-      following: :integer,
-      following_url: {:string, :generic},
-      gists_url: {:string, :generic},
-      gravatar_id: {:string, :generic},
-      hireable: :boolean,
-      html_url: {:string, :uri},
-      id: :integer,
-      ldap_dn: {:string, :generic},
-      location: {:string, :generic},
-      login: {:string, :generic},
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      notification_email: {:string, :email},
-      organizations_url: {:string, :uri},
-      owned_private_repos: :integer,
-      plan: {GitHubOpenAPI.PrivateUserPlan, :t},
-      private_gists: :integer,
-      public_gists: :integer,
-      public_repos: :integer,
-      received_events_url: {:string, :uri},
-      repos_url: {:string, :uri},
-      site_admin: :boolean,
-      starred_url: {:string, :generic},
-      subscriptions_url: {:string, :uri},
-      total_private_repos: :integer,
-      twitter_username: {:string, :generic},
-      two_factor_authentication: :boolean,
-      type: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri},
-      user_view_type: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:organizations_url, :name, :private_gists, :ldap_dn, :login, :two_factor_authentication, :bio, :business_plus, :email, :company, :following_url, :starred_url, :owned_private_repos, :total_private_repos, :site_admin, :followers_url, :public_repos, :subscriptions_url, :location, :public_gists, :hireable, :user_view_type, :html_url, :gists_url, :gravatar_id, :created_at, :updated_at, :collaborators, :events_url, :disk_usage, :avatar_url, :url, :type, :node_id, :twitter_username, :repos_url, :received_events_url, :following, :notification_email, :blog, :id, :followers, :__info__, :__joins__])
+    
   end
 end

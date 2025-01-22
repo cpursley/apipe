@@ -1,46 +1,23 @@
 defmodule GitHubOpenAPI.PorterAuthor do
-  @moduledoc """
-  Provides struct and type for a PorterAuthor
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          email: String.t(),
-          id: integer,
-          import_url: String.t(),
-          name: String.t(),
-          remote_id: String.t(),
-          remote_name: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :email, :string
+    field :id, :integer
+    field :import_url, :string
+    field :name, :string
+    field :remote_id, :string
+    field :remote_name, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :email,
-    :id,
-    :import_url,
-    :name,
-    :remote_id,
-    :remote_name,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      email: {:string, :generic},
-      id: :integer,
-      import_url: {:string, :uri},
-      name: {:string, :generic},
-      remote_id: {:string, :generic},
-      remote_name: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:email, :id, :import_url, :name, :remote_id, :remote_name, :url, :__info__, :__joins__])
+    
   end
 end

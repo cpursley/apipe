@@ -1,24 +1,19 @@
 defmodule GitHubOpenAPI.CloneTraffic do
-  @moduledoc """
-  Provides struct and type for a CloneTraffic
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          clones: [GitHubOpenAPI.Traffic.t()],
-          count: integer,
-          uniques: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :count, :integer
+    field :uniques, :integer
+    embeds_many :clones, GitHubOpenAPI.Traffic
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :clones, :count, :uniques]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [clones: [{GitHubOpenAPI.Traffic, :t}], count: :integer, uniques: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:count, :uniques, :__info__, :__joins__])
+        |> cast_embed(:clones, with: &GitHubOpenAPI.Traffic.changeset/2)
   end
 end

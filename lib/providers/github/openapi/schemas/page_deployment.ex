@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.PageDeployment do
-  @moduledoc """
-  Provides struct and type for a PageDeployment
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          id: integer | String.t(),
-          page_url: String.t(),
-          preview_url: String.t() | nil,
-          status_url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :id, :map
+    field :page_url, :string
+    field :preview_url, :string
+    field :status_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :id, :page_url, :preview_url, :status_url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      id: {:union, [:integer, string: :generic]},
-      page_url: {:string, :uri},
-      preview_url: {:string, :uri},
-      status_url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:id, :page_url, :preview_url, :status_url, :__info__, :__joins__])
+    
   end
 end

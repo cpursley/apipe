@@ -1,76 +1,33 @@
 defmodule GitHubOpenAPI.ApiOverview do
-  @moduledoc """
-  Provides struct and type for a ApiOverview
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actions: [String.t()] | nil,
-          actions_macos: [String.t()] | nil,
-          api: [String.t()] | nil,
-          codespaces: [String.t()] | nil,
-          copilot: [String.t()] | nil,
-          dependabot: [String.t()] | nil,
-          domains: GitHubOpenAPI.ApiOverviewDomains.t() | nil,
-          git: [String.t()] | nil,
-          github_enterprise_importer: [String.t()] | nil,
-          hooks: [String.t()] | nil,
-          importer: [String.t()] | nil,
-          packages: [String.t()] | nil,
-          pages: [String.t()] | nil,
-          ssh_key_fingerprints: GitHubOpenAPI.ApiOverviewSshKeyFingerprints.t() | nil,
-          ssh_keys: [String.t()] | nil,
-          verifiable_password_authentication: boolean,
-          web: [String.t()] | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :actions, {:array, :string}
+    field :actions_macos, {:array, :string}
+    field :api, {:array, :string}
+    field :codespaces, {:array, :string}
+    field :copilot, {:array, :string}
+    field :dependabot, {:array, :string}
+    field :domains, :map
+    field :git, {:array, :string}
+    field :github_enterprise_importer, {:array, :string}
+    field :hooks, {:array, :string}
+    field :importer, {:array, :string}
+    field :packages, {:array, :string}
+    field :pages, {:array, :string}
+    field :ssh_key_fingerprints, :map
+    field :ssh_keys, {:array, :string}
+    field :verifiable_password_authentication, :boolean
+    field :web, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actions,
-    :actions_macos,
-    :api,
-    :codespaces,
-    :copilot,
-    :dependabot,
-    :domains,
-    :git,
-    :github_enterprise_importer,
-    :hooks,
-    :importer,
-    :packages,
-    :pages,
-    :ssh_key_fingerprints,
-    :ssh_keys,
-    :verifiable_password_authentication,
-    :web
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actions: [string: :generic],
-      actions_macos: [string: :generic],
-      api: [string: :generic],
-      codespaces: [string: :generic],
-      copilot: [string: :generic],
-      dependabot: [string: :generic],
-      domains: {GitHubOpenAPI.ApiOverviewDomains, :t},
-      git: [string: :generic],
-      github_enterprise_importer: [string: :generic],
-      hooks: [string: :generic],
-      importer: [string: :generic],
-      packages: [string: :generic],
-      pages: [string: :generic],
-      ssh_key_fingerprints: {GitHubOpenAPI.ApiOverviewSshKeyFingerprints, :t},
-      ssh_keys: [string: :generic],
-      verifiable_password_authentication: :boolean,
-      web: [string: :generic]
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:actions, :actions_macos, :api, :codespaces, :copilot, :dependabot, :git, :github_enterprise_importer, :hooks, :importer, :packages, :pages, :ssh_keys, :verifiable_password_authentication, :web, :__info__, :__joins__])
+    
   end
 end

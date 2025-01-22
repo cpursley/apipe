@@ -1,26 +1,18 @@
 defmodule GitHubOpenAPI.PagesHealthCheck do
-  @moduledoc """
-  Provides struct and type for a PagesHealthCheck
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          alt_domain: GitHubOpenAPI.PagesHealthCheckAltDomain.t() | nil,
-          domain: GitHubOpenAPI.PagesHealthCheckDomain.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :alt_domain, :map
+    field :domain, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :alt_domain, :domain]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      alt_domain: {GitHubOpenAPI.PagesHealthCheckAltDomain, :t},
-      domain: {GitHubOpenAPI.PagesHealthCheckDomain, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+    
   end
 end

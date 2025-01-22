@@ -1,55 +1,28 @@
 defmodule GitHubOpenAPI.RepositoryInvitation do
-  @moduledoc """
-  Provides struct and type for a RepositoryInvitation
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          expired: boolean | nil,
-          html_url: String.t(),
-          id: integer,
-          invitee: GitHubOpenAPI.NullableSimpleUser.t(),
-          inviter: GitHubOpenAPI.NullableSimpleUser.t(),
-          node_id: String.t(),
-          permissions: String.t(),
-          repository: GitHubOpenAPI.MinimalRepository.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :expired, :boolean
+    field :html_url, :string
+    field :id, :integer
+    field :node_id, :string
+    field :permissions, Ecto.Enum, values: [:read, :write, :admin, :triage, :maintain]
+    field :url, :string
+    embeds_one :invitee, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :inviter, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :repository, GitHubOpenAPI.MinimalRepository
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :expired,
-    :html_url,
-    :id,
-    :invitee,
-    :inviter,
-    :node_id,
-    :permissions,
-    :repository,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      expired: :boolean,
-      html_url: {:string, :generic},
-      id: :integer,
-      invitee: {GitHubOpenAPI.NullableSimpleUser, :t},
-      inviter: {GitHubOpenAPI.NullableSimpleUser, :t},
-      node_id: {:string, :generic},
-      permissions: {:enum, ["read", "write", "admin", "triage", "maintain"]},
-      repository: {GitHubOpenAPI.MinimalRepository, :t},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :expired, :html_url, :id, :node_id, :permissions, :url, :__info__, :__joins__])
+        |> cast_embed(:invitee, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:inviter, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:repository, with: &GitHubOpenAPI.MinimalRepository.changeset/2)
   end
 end

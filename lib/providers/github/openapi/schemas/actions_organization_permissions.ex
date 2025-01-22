@@ -1,37 +1,22 @@
 defmodule GitHubOpenAPI.ActionsOrganizationPermissions do
-  @moduledoc """
-  Provides struct and type for a ActionsOrganizationPermissions
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          allowed_actions: String.t() | nil,
-          enabled_repositories: String.t(),
-          selected_actions_url: String.t() | nil,
-          selected_repositories_url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :selected_repositories_url, :string
+    embeds_one :allowed_actions, GitHubOpenAPI.AllowedActions
+    embeds_one :enabled_repositories, GitHubOpenAPI.EnabledRepositories
+    embeds_one :selected_actions_url, GitHubOpenAPI.SelectedActionsUrl
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :allowed_actions,
-    :enabled_repositories,
-    :selected_actions_url,
-    :selected_repositories_url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      allowed_actions: {:enum, ["all", "local_only", "selected"]},
-      enabled_repositories: {:enum, ["all", "none", "selected"]},
-      selected_actions_url: {:string, :generic},
-      selected_repositories_url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:selected_repositories_url, :__info__, :__joins__])
+        |> cast_embed(:allowed_actions, with: &GitHubOpenAPI.AllowedActions.changeset/2)
+    |> cast_embed(:enabled_repositories, with: &GitHubOpenAPI.EnabledRepositories.changeset/2)
+    |> cast_embed(:selected_actions_url, with: &GitHubOpenAPI.SelectedActionsUrl.changeset/2)
   end
 end

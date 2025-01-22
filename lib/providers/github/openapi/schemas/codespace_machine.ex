@@ -1,46 +1,23 @@
 defmodule GitHubOpenAPI.CodespaceMachine do
-  @moduledoc """
-  Provides struct and type for a CodespaceMachine
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          cpus: integer,
-          display_name: String.t(),
-          memory_in_bytes: integer,
-          name: String.t(),
-          operating_system: String.t(),
-          prebuild_availability: String.t() | nil,
-          storage_in_bytes: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :cpus, :integer
+    field :display_name, :string
+    field :memory_in_bytes, :integer
+    field :name, :string
+    field :operating_system, :string
+    field :prebuild_availability, Ecto.Enum, values: [:none, :ready, :in_progress]
+    field :storage_in_bytes, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :cpus,
-    :display_name,
-    :memory_in_bytes,
-    :name,
-    :operating_system,
-    :prebuild_availability,
-    :storage_in_bytes
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      cpus: :integer,
-      display_name: {:string, :generic},
-      memory_in_bytes: :integer,
-      name: {:string, :generic},
-      operating_system: {:string, :generic},
-      prebuild_availability: {:enum, ["none", "ready", "in_progress"]},
-      storage_in_bytes: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:cpus, :display_name, :memory_in_bytes, :name, :operating_system, :prebuild_availability, :storage_in_bytes, :__info__, :__joins__])
+    
   end
 end

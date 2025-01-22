@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.ReviewCustomGatesStateRequired do
-  @moduledoc """
-  Provides struct and type for a ReviewCustomGatesStateRequired
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          comment: String.t() | nil,
-          environment_name: String.t(),
-          state: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :comment, :string
+    field :environment_name, :string
+    field :state, Ecto.Enum, values: [:approved, :rejected]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :comment, :environment_name, :state]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      comment: {:string, :generic},
-      environment_name: {:string, :generic},
-      state: {:enum, ["approved", "rejected"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:comment, :environment_name, :state, :__info__, :__joins__])
+    
   end
 end

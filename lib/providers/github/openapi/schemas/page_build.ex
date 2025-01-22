@@ -1,49 +1,24 @@
 defmodule GitHubOpenAPI.PageBuild do
-  @moduledoc """
-  Provides struct and type for a PageBuild
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          commit: String.t(),
-          created_at: DateTime.t(),
-          duration: integer,
-          error: GitHubOpenAPI.PageBuildError.t(),
-          pusher: GitHubOpenAPI.NullableSimpleUser.t(),
-          status: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit, :string
+    field :created_at, :string
+    field :duration, :integer
+    field :error, :map
+    field :status, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :pusher, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :commit,
-    :created_at,
-    :duration,
-    :error,
-    :pusher,
-    :status,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      commit: {:string, :generic},
-      created_at: {:string, :date_time},
-      duration: :integer,
-      error: {GitHubOpenAPI.PageBuildError, :t},
-      pusher: {GitHubOpenAPI.NullableSimpleUser, :t},
-      status: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:commit, :created_at, :duration, :status, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:pusher, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

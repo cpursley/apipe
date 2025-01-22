@@ -1,58 +1,27 @@
 defmodule GitHubOpenAPI.PackageVersion do
-  @moduledoc """
-  Provides struct and type for a PackageVersion
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          deleted_at: DateTime.t() | nil,
-          description: String.t() | nil,
-          html_url: String.t() | nil,
-          id: integer,
-          license: String.t() | nil,
-          metadata: GitHubOpenAPI.PackageVersionMetadata.t() | nil,
-          name: String.t(),
-          package_html_url: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :deleted_at, :string
+    field :description, :string
+    field :html_url, :string
+    field :id, :integer
+    field :license, :string
+    field :metadata, :map
+    field :name, :string
+    field :package_html_url, :string
+    field :updated_at, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :deleted_at,
-    :description,
-    :html_url,
-    :id,
-    :license,
-    :metadata,
-    :name,
-    :package_html_url,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      deleted_at: {:string, :date_time},
-      description: {:string, :generic},
-      html_url: {:string, :generic},
-      id: :integer,
-      license: {:string, :generic},
-      metadata: {GitHubOpenAPI.PackageVersionMetadata, :t},
-      name: {:string, :generic},
-      package_html_url: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :deleted_at, :description, :html_url, :id, :license, :name, :package_html_url, :updated_at, :url, :__info__, :__joins__])
+    
   end
 end

@@ -1,67 +1,30 @@
 defmodule GitHubOpenAPI.DeploymentSimple do
-  @moduledoc """
-  Provides struct and type for a DeploymentSimple
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          description: String.t() | nil,
-          environment: String.t(),
-          id: integer,
-          node_id: String.t(),
-          original_environment: String.t() | nil,
-          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t() | nil,
-          production_environment: boolean | nil,
-          repository_url: String.t(),
-          statuses_url: String.t(),
-          task: String.t(),
-          transient_environment: boolean | nil,
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :description, :string
+    field :environment, :string
+    field :id, :integer
+    field :node_id, :string
+    field :original_environment, :string
+    field :production_environment, :boolean
+    field :repository_url, :string
+    field :statuses_url, :string
+    field :task, :string
+    field :transient_environment, :boolean
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :performed_via_github_app, GitHubOpenAPI.NullableIntegration
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :description,
-    :environment,
-    :id,
-    :node_id,
-    :original_environment,
-    :performed_via_github_app,
-    :production_environment,
-    :repository_url,
-    :statuses_url,
-    :task,
-    :transient_environment,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      description: {:string, :generic},
-      environment: {:string, :generic},
-      id: :integer,
-      node_id: {:string, :generic},
-      original_environment: {:string, :generic},
-      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
-      production_environment: :boolean,
-      repository_url: {:string, :uri},
-      statuses_url: {:string, :uri},
-      task: {:string, :generic},
-      transient_environment: :boolean,
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :description, :environment, :id, :node_id, :original_environment, :production_environment, :repository_url, :statuses_url, :task, :transient_environment, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:performed_via_github_app, with: &GitHubOpenAPI.NullableIntegration.changeset/2)
   end
 end

@@ -1,18 +1,17 @@
 defmodule GitHubOpenAPI.SecretScanningLocationDiscussionComment do
-  @moduledoc """
-  Provides struct and type for a SecretScanningLocationDiscussionComment
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, discussion_comment_url: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :discussion_comment_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :discussion_comment_url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [discussion_comment_url: {:string, :uri}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:discussion_comment_url, :__info__, :__joins__])
+    
   end
 end

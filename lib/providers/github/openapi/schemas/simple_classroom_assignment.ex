@@ -1,79 +1,34 @@
 defmodule GitHubOpenAPI.SimpleClassroomAssignment do
-  @moduledoc """
-  Provides struct and type for a SimpleClassroomAssignment
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          accepted: integer,
-          classroom: GitHubOpenAPI.SimpleClassroom.t(),
-          deadline: DateTime.t() | nil,
-          editor: String.t(),
-          feedback_pull_requests_enabled: boolean,
-          id: integer,
-          invitations_enabled: boolean,
-          invite_link: String.t(),
-          language: String.t(),
-          max_members: integer | nil,
-          max_teams: integer | nil,
-          passing: integer,
-          public_repo: boolean,
-          slug: String.t(),
-          students_are_repo_admins: boolean,
-          submitted: integer,
-          title: String.t(),
-          type: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :accepted, :integer
+    field :deadline, :string
+    field :editor, :string
+    field :feedback_pull_requests_enabled, :boolean
+    field :id, :integer
+    field :invitations_enabled, :boolean
+    field :invite_link, :string
+    field :language, :string
+    field :max_members, :integer
+    field :max_teams, :integer
+    field :passing, :integer
+    field :public_repo, :boolean
+    field :slug, :string
+    field :students_are_repo_admins, :boolean
+    field :submitted, :integer
+    field :title, :string
+    field :type, Ecto.Enum, values: [:individual, :group]
+    embeds_one :classroom, GitHubOpenAPI.SimpleClassroom
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :accepted,
-    :classroom,
-    :deadline,
-    :editor,
-    :feedback_pull_requests_enabled,
-    :id,
-    :invitations_enabled,
-    :invite_link,
-    :language,
-    :max_members,
-    :max_teams,
-    :passing,
-    :public_repo,
-    :slug,
-    :students_are_repo_admins,
-    :submitted,
-    :title,
-    :type
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      accepted: :integer,
-      classroom: {GitHubOpenAPI.SimpleClassroom, :t},
-      deadline: {:string, :date_time},
-      editor: {:string, :generic},
-      feedback_pull_requests_enabled: :boolean,
-      id: :integer,
-      invitations_enabled: :boolean,
-      invite_link: {:string, :generic},
-      language: {:string, :generic},
-      max_members: :integer,
-      max_teams: :integer,
-      passing: :integer,
-      public_repo: :boolean,
-      slug: {:string, :generic},
-      students_are_repo_admins: :boolean,
-      submitted: :integer,
-      title: {:string, :generic},
-      type: {:enum, ["individual", "group"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:accepted, :deadline, :editor, :feedback_pull_requests_enabled, :id, :invitations_enabled, :invite_link, :language, :max_members, :max_teams, :passing, :public_repo, :slug, :students_are_repo_admins, :submitted, :title, :type, :__info__, :__joins__])
+        |> cast_embed(:classroom, with: &GitHubOpenAPI.SimpleClassroom.changeset/2)
   end
 end

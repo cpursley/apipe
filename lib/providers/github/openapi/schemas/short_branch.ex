@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.ShortBranch do
-  @moduledoc """
-  Provides struct and type for a ShortBranch
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          commit: GitHubOpenAPI.ShortBranchCommit.t(),
-          name: String.t(),
-          protected: boolean,
-          protection: GitHubOpenAPI.BranchProtection.t() | nil,
-          protection_url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit, :map
+    field :name, :string
+    field :protected, :boolean
+    field :protection_url, :string
+    embeds_one :protection, GitHubOpenAPI.BranchProtection
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :commit, :name, :protected, :protection, :protection_url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      commit: {GitHubOpenAPI.ShortBranchCommit, :t},
-      name: {:string, :generic},
-      protected: :boolean,
-      protection: {GitHubOpenAPI.BranchProtection, :t},
-      protection_url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:name, :protected, :protection_url, :__info__, :__joins__])
+        |> cast_embed(:protection, with: &GitHubOpenAPI.BranchProtection.changeset/2)
   end
 end

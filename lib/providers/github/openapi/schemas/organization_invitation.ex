@@ -1,61 +1,28 @@
 defmodule GitHubOpenAPI.OrganizationInvitation do
-  @moduledoc """
-  Provides struct and type for a OrganizationInvitation
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: String.t(),
-          email: String.t() | nil,
-          failed_at: String.t() | nil,
-          failed_reason: String.t() | nil,
-          id: integer,
-          invitation_source: String.t() | nil,
-          invitation_teams_url: String.t(),
-          inviter: GitHubOpenAPI.SimpleUser.t(),
-          login: String.t() | nil,
-          node_id: String.t(),
-          role: String.t(),
-          team_count: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :email, :string
+    field :failed_at, :string
+    field :failed_reason, :string
+    field :id, :integer
+    field :invitation_source, :string
+    field :invitation_teams_url, :string
+    field :login, :string
+    field :node_id, :string
+    field :role, :string
+    field :team_count, :integer
+    embeds_one :inviter, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :email,
-    :failed_at,
-    :failed_reason,
-    :id,
-    :invitation_source,
-    :invitation_teams_url,
-    :inviter,
-    :login,
-    :node_id,
-    :role,
-    :team_count
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :generic},
-      email: {:string, :generic},
-      failed_at: {:string, :generic},
-      failed_reason: {:string, :generic},
-      id: :integer,
-      invitation_source: {:string, :generic},
-      invitation_teams_url: {:string, :generic},
-      inviter: {GitHubOpenAPI.SimpleUser, :t},
-      login: {:string, :generic},
-      node_id: {:string, :generic},
-      role: {:string, :generic},
-      team_count: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :email, :failed_at, :failed_reason, :id, :invitation_source, :invitation_teams_url, :login, :node_id, :role, :team_count, :__info__, :__joins__])
+        |> cast_embed(:inviter, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

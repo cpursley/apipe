@@ -1,40 +1,21 @@
 defmodule GitHubOpenAPI.CodespacesSecret do
-  @moduledoc """
-  Provides struct and type for a CodespacesSecret
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          name: String.t(),
-          selected_repositories_url: String.t(),
-          updated_at: DateTime.t(),
-          visibility: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :name, :string
+    field :selected_repositories_url, :string
+    field :updated_at, :string
+    field :visibility, Ecto.Enum, values: [:all, :private, :selected]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :name,
-    :selected_repositories_url,
-    :updated_at,
-    :visibility
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      name: {:string, :generic},
-      selected_repositories_url: {:string, :uri},
-      updated_at: {:string, :date_time},
-      visibility: {:enum, ["all", "private", "selected"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :name, :selected_repositories_url, :updated_at, :visibility, :__info__, :__joins__])
+    
   end
 end

@@ -1,64 +1,29 @@
 defmodule GitHubOpenAPI.License do
-  @moduledoc """
-  Provides struct and type for a License
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          body: String.t(),
-          conditions: [String.t()],
-          description: String.t(),
-          featured: boolean,
-          html_url: String.t(),
-          implementation: String.t(),
-          key: String.t(),
-          limitations: [String.t()],
-          name: String.t(),
-          node_id: String.t(),
-          permissions: [String.t()],
-          spdx_id: String.t() | nil,
-          url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :body, :string
+    field :conditions, {:array, :string}
+    field :description, :string
+    field :featured, :boolean
+    field :html_url, :string
+    field :implementation, :string
+    field :key, :string
+    field :limitations, {:array, :string}
+    field :name, :string
+    field :node_id, :string
+    field :permissions, {:array, :string}
+    field :spdx_id, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :body,
-    :conditions,
-    :description,
-    :featured,
-    :html_url,
-    :implementation,
-    :key,
-    :limitations,
-    :name,
-    :node_id,
-    :permissions,
-    :spdx_id,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      body: {:string, :generic},
-      conditions: [string: :generic],
-      description: {:string, :generic},
-      featured: :boolean,
-      html_url: {:string, :uri},
-      implementation: {:string, :generic},
-      key: {:string, :generic},
-      limitations: [string: :generic],
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      permissions: [string: :generic],
-      spdx_id: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:body, :conditions, :description, :featured, :html_url, :implementation, :key, :limitations, :name, :node_id, :permissions, :spdx_id, :url, :__info__, :__joins__])
+    
   end
 end

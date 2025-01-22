@@ -1,52 +1,25 @@
 defmodule GitHubOpenAPI.LabelSearchResultItem do
-  @moduledoc """
-  Provides struct and type for a LabelSearchResultItem
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          color: String.t(),
-          default: boolean,
-          description: String.t() | nil,
-          id: integer,
-          name: String.t(),
-          node_id: String.t(),
-          score: number,
-          text_matches: [GitHubOpenAPI.SearchResultTextMatches.t()] | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :color, :string
+    field :default, :boolean
+    field :description, :string
+    field :id, :integer
+    field :name, :string
+    field :node_id, :string
+    field :score, :float
+    field :url, :string
+    embeds_one :text_matches, GitHubOpenAPI.SearchResultTextMatches
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :color,
-    :default,
-    :description,
-    :id,
-    :name,
-    :node_id,
-    :score,
-    :text_matches,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      color: {:string, :generic},
-      default: :boolean,
-      description: {:string, :generic},
-      id: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      score: :number,
-      text_matches: [{GitHubOpenAPI.SearchResultTextMatches, :t}],
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:color, :default, :description, :id, :name, :node_id, :score, :url, :__info__, :__joins__])
+        |> cast_embed(:text_matches, with: &GitHubOpenAPI.SearchResultTextMatches.changeset/2)
   end
 end

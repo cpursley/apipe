@@ -1,18 +1,18 @@
 defmodule GitHubOpenAPI.GitignoreTemplate do
-  @moduledoc """
-  Provides struct and type for a GitignoreTemplate
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, name: String.t(), source: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :name, :string
+    field :source, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :name, :source]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [name: {:string, :generic}, source: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:name, :source, :__info__, :__joins__])
+    
   end
 end

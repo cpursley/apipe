@@ -1,25 +1,20 @@
 defmodule GitHubOpenAPI.ContentTraffic do
-  @moduledoc """
-  Provides struct and type for a ContentTraffic
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          count: integer,
-          path: String.t(),
-          title: String.t(),
-          uniques: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :count, :integer
+    field :path, :string
+    field :title, :string
+    field :uniques, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :count, :path, :title, :uniques]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [count: :integer, path: {:string, :generic}, title: {:string, :generic}, uniques: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:count, :path, :title, :uniques, :__info__, :__joins__])
+    
   end
 end

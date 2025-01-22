@@ -1,70 +1,31 @@
 defmodule GitHubOpenAPI.Project do
-  @moduledoc """
-  Provides struct and type for a Project
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          body: String.t() | nil,
-          columns_url: String.t(),
-          created_at: DateTime.t(),
-          creator: GitHubOpenAPI.NullableSimpleUser.t(),
-          html_url: String.t(),
-          id: integer,
-          name: String.t(),
-          node_id: String.t(),
-          number: integer,
-          organization_permission: String.t() | nil,
-          owner_url: String.t(),
-          private: boolean | nil,
-          state: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :body, :string
+    field :columns_url, :string
+    field :created_at, :string
+    field :html_url, :string
+    field :id, :integer
+    field :name, :string
+    field :node_id, :string
+    field :number, :integer
+    field :organization_permission, Ecto.Enum, values: [:read, :write, :admin, :none]
+    field :owner_url, :string
+    field :private, :boolean
+    field :state, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :creator, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :body,
-    :columns_url,
-    :created_at,
-    :creator,
-    :html_url,
-    :id,
-    :name,
-    :node_id,
-    :number,
-    :organization_permission,
-    :owner_url,
-    :private,
-    :state,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      body: {:string, :generic},
-      columns_url: {:string, :uri},
-      created_at: {:string, :date_time},
-      creator: {GitHubOpenAPI.NullableSimpleUser, :t},
-      html_url: {:string, :uri},
-      id: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      number: :integer,
-      organization_permission: {:enum, ["read", "write", "admin", "none"]},
-      owner_url: {:string, :uri},
-      private: :boolean,
-      state: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:body, :columns_url, :created_at, :html_url, :id, :name, :node_id, :number, :organization_permission, :owner_url, :private, :state, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:creator, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

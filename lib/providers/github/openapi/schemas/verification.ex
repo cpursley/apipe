@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.Verification do
-  @moduledoc """
-  Provides struct and type for a Verification
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          payload: String.t() | nil,
-          reason: String.t(),
-          signature: String.t() | nil,
-          verified: boolean,
-          verified_at: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :payload, :string
+    field :reason, :string
+    field :signature, :string
+    field :verified, :boolean
+    field :verified_at, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :payload, :reason, :signature, :verified, :verified_at]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      payload: {:string, :generic},
-      reason: {:string, :generic},
-      signature: {:string, :generic},
-      verified: :boolean,
-      verified_at: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:payload, :reason, :signature, :verified, :verified_at, :__info__, :__joins__])
+    
   end
 end

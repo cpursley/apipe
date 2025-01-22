@@ -1,26 +1,18 @@
 defmodule GitHubOpenAPI.CvssSeverities do
-  @moduledoc """
-  Provides struct and type for a CvssSeverities
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          cvss_v3: GitHubOpenAPI.CvssSeveritiesCvssV3.t() | nil,
-          cvss_v4: GitHubOpenAPI.CvssSeveritiesCvssV4.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :cvss_v3, :map
+    field :cvss_v4, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :cvss_v3, :cvss_v4]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      cvss_v3: {GitHubOpenAPI.CvssSeveritiesCvssV3, :t},
-      cvss_v4: {GitHubOpenAPI.CvssSeveritiesCvssV4, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+    
   end
 end

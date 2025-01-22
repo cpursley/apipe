@@ -132,7 +132,7 @@ defmodule Apipe.Providers.GitHub do
                 {:ok, {filtered_data, meta}},
                 response,
                 query,
-                Map.new(opts) |> Map.put(:schema, schema)
+                Map.new(opts) |> Map.put(:schema, schema) |> Map.put(:cast_response, true)
               )
 
             {:ok, {data, meta}} ->
@@ -143,7 +143,7 @@ defmodule Apipe.Providers.GitHub do
                 {:ok, {filtered_data, meta}},
                 response,
                 query,
-                Map.new(opts) |> Map.put(:schema, schema)
+                Map.new(opts) |> Map.put(:schema, schema) |> Map.put(:cast_response, true)
               )
 
             {:ok, data} ->
@@ -154,7 +154,7 @@ defmodule Apipe.Providers.GitHub do
                 {:ok, filtered_data},
                 response,
                 query,
-                Map.new(opts) |> Map.put(:schema, schema)
+                Map.new(opts) |> Map.put(:schema, schema) |> Map.put(:cast_response, true)
               )
 
             error ->
@@ -453,10 +453,13 @@ defmodule Apipe.Providers.GitHub do
            "reset" => get_header_value(response, "x-ratelimit-reset"),
            "used" => get_header_value(response, "x-ratelimit-used")
          },
-         {:ok, rate_limit} <- GitHubOpenAPI.RateLimit.cast(rate_limit_data) do
-      {:ok, rate_limit}
+         changeset =
+           GitHubOpenAPI.RateLimit.changeset(struct(GitHubOpenAPI.RateLimit), rate_limit_data),
+         true <- changeset.valid? do
+      {:ok, Ecto.Changeset.apply_changes(changeset)}
     else
       nil -> {:error, :no_headers}
+      false -> {:error, :invalid_rate_limit}
       {:error, reason} -> {:error, {:cast_failed, reason}}
     end
   end
@@ -486,12 +489,29 @@ defmodule Apipe.Providers.GitHub do
   end
 
   defp cast_item(item, schema) do
-    with joined_data when is_map(joined_data) <- Map.get(item, "__joins__", %{}),
-         {:ok, cast_item} <- schema.cast(item) do
-      Map.merge(cast_item, joined_data)
-    else
-      # If no joins or casting fails, just return the original item
-      _error -> item
+    # Get any existing joins data
+    joined_data = Map.get(item, "__joins__", [])
+
+    # Apply the changeset
+    case apply_changeset(schema, item) do
+      {:ok, cast_item} ->
+        # Merge any join data into the struct fields
+        Enum.reduce(joined_data, cast_item, fn join_map, acc ->
+          # Get the first (and only) key-value pair from the join map
+          {field, data} = Enum.at(Map.to_list(join_map), 0)
+          Map.put(acc, field, data)
+        end)
+
+      # Fallback to original item if casting fails
+      {:error, changeset} ->
+        item
+    end
+  end
+
+  defp apply_changeset(schema, attrs) do
+    case schema.changeset(struct(schema), attrs) do
+      %{valid?: true} = changeset -> {:ok, Ecto.Changeset.apply_changes(changeset)}
+      changeset -> {:error, changeset}
     end
   end
 

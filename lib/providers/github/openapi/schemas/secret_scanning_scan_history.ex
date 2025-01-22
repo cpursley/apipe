@@ -1,40 +1,22 @@
 defmodule GitHubOpenAPI.SecretScanningScanHistory do
-  @moduledoc """
-  Provides struct and type for a SecretScanningScanHistory
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          backfill_scans: [GitHubOpenAPI.SecretScanningScan.t()] | nil,
-          custom_pattern_backfill_scans:
-            [GitHubOpenAPI.SecretScanningScanHistoryCustomPatternBackfillScans.t()] | nil,
-          incremental_scans: [GitHubOpenAPI.SecretScanningScan.t()] | nil,
-          pattern_update_scans: [GitHubOpenAPI.SecretScanningScan.t()] | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :custom_pattern_backfill_scans, {:array, :string}
+    embeds_many :backfill_scans, GitHubOpenAPI.SecretScanningScan
+    embeds_many :incremental_scans, GitHubOpenAPI.SecretScanningScan
+    embeds_many :pattern_update_scans, GitHubOpenAPI.SecretScanningScan
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :backfill_scans,
-    :custom_pattern_backfill_scans,
-    :incremental_scans,
-    :pattern_update_scans
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      backfill_scans: [{GitHubOpenAPI.SecretScanningScan, :t}],
-      custom_pattern_backfill_scans: [
-        {GitHubOpenAPI.SecretScanningScanHistoryCustomPatternBackfillScans, :t}
-      ],
-      incremental_scans: [{GitHubOpenAPI.SecretScanningScan, :t}],
-      pattern_update_scans: [{GitHubOpenAPI.SecretScanningScan, :t}]
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:custom_pattern_backfill_scans, :__info__, :__joins__])
+        |> cast_embed(:backfill_scans, with: &GitHubOpenAPI.SecretScanningScan.changeset/2)
+    |> cast_embed(:incremental_scans, with: &GitHubOpenAPI.SecretScanningScan.changeset/2)
+    |> cast_embed(:pattern_update_scans, with: &GitHubOpenAPI.SecretScanningScan.changeset/2)
   end
 end

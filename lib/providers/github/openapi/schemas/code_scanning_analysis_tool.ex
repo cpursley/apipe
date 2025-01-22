@@ -1,24 +1,21 @@
 defmodule GitHubOpenAPI.CodeScanningAnalysisTool do
-  @moduledoc """
-  Provides struct and type for a CodeScanningAnalysisTool
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          guid: String.t() | nil,
-          name: String.t() | nil,
-          version: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    embeds_one :guid, GitHubOpenAPI.CodeScanningAnalysisToolGuid
+    embeds_one :name, GitHubOpenAPI.CodeScanningAnalysisToolName
+    embeds_one :version, GitHubOpenAPI.CodeScanningAnalysisToolVersion
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :guid, :name, :version]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [guid: {:string, :generic}, name: {:string, :generic}, version: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+        |> cast_embed(:guid, with: &GitHubOpenAPI.CodeScanningAnalysisToolGuid.changeset/2)
+    |> cast_embed(:name, with: &GitHubOpenAPI.CodeScanningAnalysisToolName.changeset/2)
+    |> cast_embed(:version, with: &GitHubOpenAPI.CodeScanningAnalysisToolVersion.changeset/2)
   end
 end

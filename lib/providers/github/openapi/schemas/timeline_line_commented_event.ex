@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.TimelineLineCommentedEvent do
-  @moduledoc """
-  Provides struct and type for a TimelineLineCommentedEvent
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          comments: [GitHubOpenAPI.PullRequestReviewComment.t()] | nil,
-          event: String.t() | nil,
-          node_id: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :event, :string
+    field :node_id, :string
+    embeds_many :comments, GitHubOpenAPI.PullRequestReviewComment
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :comments, :event, :node_id]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      comments: [{GitHubOpenAPI.PullRequestReviewComment, :t}],
-      event: {:string, :generic},
-      node_id: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:event, :node_id, :__info__, :__joins__])
+        |> cast_embed(:comments, with: &GitHubOpenAPI.PullRequestReviewComment.changeset/2)
   end
 end

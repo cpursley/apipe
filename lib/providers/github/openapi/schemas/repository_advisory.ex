@@ -1,106 +1,47 @@
 defmodule GitHubOpenAPI.RepositoryAdvisory do
-  @moduledoc """
-  Provides struct and type for a RepositoryAdvisory
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          author: GitHubOpenAPI.RepositoryAdvisoryAuthor.t() | nil,
-          closed_at: DateTime.t() | nil,
-          collaborating_teams: [GitHubOpenAPI.Team.t()] | nil,
-          collaborating_users: [GitHubOpenAPI.SimpleUser.t()] | nil,
-          created_at: DateTime.t() | nil,
-          credits: [GitHubOpenAPI.RepositoryAdvisoryCredits.t()] | nil,
-          credits_detailed: [GitHubOpenAPI.RepositoryAdvisoryCredit.t()] | nil,
-          cve_id: String.t() | nil,
-          cvss: GitHubOpenAPI.RepositoryAdvisoryCvss.t() | nil,
-          cvss_severities: GitHubOpenAPI.CvssSeverities.t() | nil,
-          cwe_ids: [String.t()] | nil,
-          cwes: [GitHubOpenAPI.RepositoryAdvisoryCwes.t()] | nil,
-          description: String.t() | nil,
-          ghsa_id: String.t(),
-          html_url: String.t(),
-          identifiers: [GitHubOpenAPI.RepositoryAdvisoryIdentifiers.t()],
-          private_fork: GitHubOpenAPI.RepositoryAdvisoryPrivateFork.t() | nil,
-          published_at: DateTime.t() | nil,
-          publisher: GitHubOpenAPI.RepositoryAdvisoryPublisher.t() | nil,
-          severity: String.t() | nil,
-          state: String.t(),
-          submission: GitHubOpenAPI.RepositoryAdvisorySubmission.t() | nil,
-          summary: String.t(),
-          updated_at: DateTime.t() | nil,
-          url: String.t(),
-          vulnerabilities: [GitHubOpenAPI.RepositoryAdvisoryVulnerability.t()] | nil,
-          withdrawn_at: DateTime.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :closed_at, :string
+    field :created_at, :string
+    field :credits, {:array, :string}
+    field :cve_id, :string
+    field :cvss, :map
+    field :cwe_ids, {:array, :string}
+    field :cwes, {:array, :string}
+    field :description, :string
+    field :ghsa_id, :string
+    field :html_url, :string
+    field :identifiers, {:array, :string}
+    field :published_at, :string
+    field :severity, Ecto.Enum, values: [:critical, :high, :medium, :low]
+    field :state, Ecto.Enum, values: [:published, :closed, :withdrawn, :draft, :triage]
+    field :submission, :map
+    field :summary, :string
+    field :updated_at, :string
+    field :url, :string
+    field :withdrawn_at, :string
+    embeds_one :author, GitHubOpenAPI.SimpleUser
+    embeds_many :collaborating_teams, GitHubOpenAPI.Team
+    embeds_many :collaborating_users, GitHubOpenAPI.SimpleUser
+    embeds_many :credits_detailed, GitHubOpenAPI.RepositoryAdvisoryCredit
+    embeds_one :cvss_severities, GitHubOpenAPI.CvssSeverities
+    embeds_one :private_fork, GitHubOpenAPI.SimpleRepository
+    embeds_one :publisher, GitHubOpenAPI.SimpleUser
+    embeds_many :vulnerabilities, GitHubOpenAPI.RepositoryAdvisoryVulnerability
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :author,
-    :closed_at,
-    :collaborating_teams,
-    :collaborating_users,
-    :created_at,
-    :credits,
-    :credits_detailed,
-    :cve_id,
-    :cvss,
-    :cvss_severities,
-    :cwe_ids,
-    :cwes,
-    :description,
-    :ghsa_id,
-    :html_url,
-    :identifiers,
-    :private_fork,
-    :published_at,
-    :publisher,
-    :severity,
-    :state,
-    :submission,
-    :summary,
-    :updated_at,
-    :url,
-    :vulnerabilities,
-    :withdrawn_at
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      author: {GitHubOpenAPI.RepositoryAdvisoryAuthor, :t},
-      closed_at: {:string, :date_time},
-      collaborating_teams: [{GitHubOpenAPI.Team, :t}],
-      collaborating_users: [{GitHubOpenAPI.SimpleUser, :t}],
-      created_at: {:string, :date_time},
-      credits: [{GitHubOpenAPI.RepositoryAdvisoryCredits, :t}],
-      credits_detailed: [{GitHubOpenAPI.RepositoryAdvisoryCredit, :t}],
-      cve_id: {:string, :generic},
-      cvss: {GitHubOpenAPI.RepositoryAdvisoryCvss, :t},
-      cvss_severities: {GitHubOpenAPI.CvssSeverities, :t},
-      cwe_ids: [string: :generic],
-      cwes: [{GitHubOpenAPI.RepositoryAdvisoryCwes, :t}],
-      description: {:string, :generic},
-      ghsa_id: {:string, :generic},
-      html_url: {:string, :uri},
-      identifiers: [{GitHubOpenAPI.RepositoryAdvisoryIdentifiers, :t}],
-      private_fork: {GitHubOpenAPI.RepositoryAdvisoryPrivateFork, :t},
-      published_at: {:string, :date_time},
-      publisher: {GitHubOpenAPI.RepositoryAdvisoryPublisher, :t},
-      severity: {:enum, ["critical", "high", "medium", "low"]},
-      state: {:enum, ["published", "closed", "withdrawn", "draft", "triage"]},
-      submission: {GitHubOpenAPI.RepositoryAdvisorySubmission, :t},
-      summary: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri},
-      vulnerabilities: [{GitHubOpenAPI.RepositoryAdvisoryVulnerability, :t}],
-      withdrawn_at: {:string, :date_time}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:closed_at, :created_at, :credits, :cve_id, :cwe_ids, :cwes, :description, :ghsa_id, :html_url, :identifiers, :published_at, :severity, :state, :summary, :updated_at, :url, :withdrawn_at, :__info__, :__joins__])
+        |> cast_embed(:collaborating_teams, with: &GitHubOpenAPI.Team.changeset/2)
+    |> cast_embed(:collaborating_users, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:credits_detailed, with: &GitHubOpenAPI.RepositoryAdvisoryCredit.changeset/2)
+    |> cast_embed(:cvss_severities, with: &GitHubOpenAPI.CvssSeverities.changeset/2)
+    |> cast_embed(:vulnerabilities, with: &GitHubOpenAPI.RepositoryAdvisoryVulnerability.changeset/2)
   end
 end

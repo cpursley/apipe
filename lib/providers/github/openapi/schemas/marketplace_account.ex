@@ -1,46 +1,23 @@
 defmodule GitHubOpenAPI.MarketplaceAccount do
-  @moduledoc """
-  Provides struct and type for a MarketplaceAccount
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          email: String.t() | nil,
-          id: integer,
-          login: String.t(),
-          node_id: String.t() | nil,
-          organization_billing_email: String.t() | nil,
-          type: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :email, :string
+    field :id, :integer
+    field :login, :string
+    field :node_id, :string
+    field :organization_billing_email, :string
+    field :type, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :email,
-    :id,
-    :login,
-    :node_id,
-    :organization_billing_email,
-    :type,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      email: {:string, :email},
-      id: :integer,
-      login: {:string, :generic},
-      node_id: {:string, :generic},
-      organization_billing_email: {:string, :email},
-      type: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:email, :id, :login, :node_id, :organization_billing_email, :type, :url, :__info__, :__joins__])
+    
   end
 end

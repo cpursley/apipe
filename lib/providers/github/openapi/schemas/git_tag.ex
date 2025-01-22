@@ -1,49 +1,24 @@
 defmodule GitHubOpenAPI.GitTag do
-  @moduledoc """
-  Provides struct and type for a GitTag
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          message: String.t(),
-          node_id: String.t(),
-          object: GitHubOpenAPI.GitTagObject.t(),
-          sha: String.t(),
-          tag: String.t(),
-          tagger: GitHubOpenAPI.GitTagTagger.t(),
-          url: String.t(),
-          verification: GitHubOpenAPI.Verification.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :message, :string
+    field :node_id, :string
+    field :object, :map
+    field :sha, :string
+    field :tag, :string
+    field :tagger, :map
+    field :url, :string
+    embeds_one :verification, GitHubOpenAPI.Verification
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :message,
-    :node_id,
-    :object,
-    :sha,
-    :tag,
-    :tagger,
-    :url,
-    :verification
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      message: {:string, :generic},
-      node_id: {:string, :generic},
-      object: {GitHubOpenAPI.GitTagObject, :t},
-      sha: {:string, :generic},
-      tag: {:string, :generic},
-      tagger: {GitHubOpenAPI.GitTagTagger, :t},
-      url: {:string, :uri},
-      verification: {GitHubOpenAPI.Verification, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:message, :node_id, :sha, :tag, :url, :__info__, :__joins__])
+        |> cast_embed(:verification, with: &GitHubOpenAPI.Verification.changeset/2)
   end
 end

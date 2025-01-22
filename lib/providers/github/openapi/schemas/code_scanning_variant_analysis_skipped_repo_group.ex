@@ -1,26 +1,18 @@
 defmodule GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepoGroup do
-  @moduledoc """
-  Provides struct and type for a CodeScanningVariantAnalysisSkippedRepoGroup
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          repositories: [GitHubOpenAPI.CodeScanningVariantAnalysisRepository.t()],
-          repository_count: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :repository_count, :integer
+    embeds_many :repositories, GitHubOpenAPI.CodeScanningVariantAnalysisRepository
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :repositories, :repository_count]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      repositories: [{GitHubOpenAPI.CodeScanningVariantAnalysisRepository, :t}],
-      repository_count: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:repository_count, :__info__, :__joins__])
+        |> cast_embed(:repositories, with: &GitHubOpenAPI.CodeScanningVariantAnalysisRepository.changeset/2)
   end
 end

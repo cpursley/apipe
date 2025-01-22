@@ -1,52 +1,25 @@
 defmodule GitHubOpenAPI.SecretScanningLocationWikiCommit do
-  @moduledoc """
-  Provides struct and type for a SecretScanningLocationWikiCommit
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          blob_sha: String.t(),
-          commit_sha: String.t(),
-          commit_url: String.t(),
-          end_column: number,
-          end_line: number,
-          page_url: String.t(),
-          path: String.t(),
-          start_column: number,
-          start_line: number
-        }
+  @primary_key false
+  embedded_schema do
+    field :blob_sha, :string
+    field :commit_sha, :string
+    field :commit_url, :string
+    field :end_column, :float
+    field :end_line, :float
+    field :page_url, :string
+    field :path, :string
+    field :start_column, :float
+    field :start_line, :float
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :blob_sha,
-    :commit_sha,
-    :commit_url,
-    :end_column,
-    :end_line,
-    :page_url,
-    :path,
-    :start_column,
-    :start_line
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      blob_sha: {:string, :generic},
-      commit_sha: {:string, :generic},
-      commit_url: {:string, :generic},
-      end_column: :number,
-      end_line: :number,
-      page_url: {:string, :generic},
-      path: {:string, :generic},
-      start_column: :number,
-      start_line: :number
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:blob_sha, :commit_sha, :commit_url, :end_column, :end_line, :page_url, :path, :start_column, :start_line, :__info__, :__joins__])
+    
   end
 end

@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.CopilotDotcomChat do
-  @moduledoc """
-  Provides struct and type for a CopilotDotcomChat
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          models: [GitHubOpenAPI.CopilotDotcomChatModels.t()] | nil,
-          total_engaged_users: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :models, {:array, :string}
+    field :total_engaged_users, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :models, :total_engaged_users]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [models: [{GitHubOpenAPI.CopilotDotcomChatModels, :t}], total_engaged_users: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:models, :total_engaged_users, :__info__, :__joins__])
+    
   end
 end

@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.GitTree do
-  @moduledoc """
-  Provides struct and types for a GitTree
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          sha: String.t(),
-          tree: [GitHubOpenAPI.GitTreeTree.t()],
-          truncated: boolean,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :sha, :string
+    field :tree, {:array, :string}
+    field :truncated, :boolean
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :sha, :tree, :truncated, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      sha: {:string, :generic},
-      tree: [{GitHubOpenAPI.GitTreeTree, :t}],
-      truncated: :boolean,
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:sha, :tree, :truncated, :url, :__info__, :__joins__])
+    
   end
 end

@@ -1,78 +1,35 @@
 defmodule GitHubOpenAPI.CheckRun do
-  @moduledoc """
-  Provides struct and type for a CheckRun
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          app: GitHubOpenAPI.NullableIntegration.t(),
-          check_suite: GitHubOpenAPI.CheckRunCheckSuite.t() | nil,
-          completed_at: DateTime.t() | nil,
-          conclusion: String.t() | nil,
-          deployment: GitHubOpenAPI.DeploymentSimple.t() | nil,
-          details_url: String.t() | nil,
-          external_id: String.t() | nil,
-          head_sha: String.t(),
-          html_url: String.t() | nil,
-          id: integer,
-          name: String.t(),
-          node_id: String.t(),
-          output: GitHubOpenAPI.CheckRunOutput.t(),
-          pull_requests: [GitHubOpenAPI.PullRequestMinimal.t()],
-          started_at: DateTime.t() | nil,
-          status: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :check_suite, :map
+    field :completed_at, :string
+    field :conclusion, Ecto.Enum, values: [:success, :failure, :neutral, :cancelled, :skipped, :timed_out, :action_required]
+    field :details_url, :string
+    field :external_id, :string
+    field :head_sha, :string
+    field :html_url, :string
+    field :id, :integer
+    field :name, :string
+    field :node_id, :string
+    field :output, :map
+    field :started_at, :string
+    field :status, Ecto.Enum, values: [:queued, :in_progress, :completed, :waiting, :requested, :pending]
+    field :url, :string
+    embeds_one :app, GitHubOpenAPI.NullableIntegration
+    embeds_one :deployment, GitHubOpenAPI.DeploymentSimple
+    embeds_many :pull_requests, GitHubOpenAPI.PullRequestMinimal
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :app,
-    :check_suite,
-    :completed_at,
-    :conclusion,
-    :deployment,
-    :details_url,
-    :external_id,
-    :head_sha,
-    :html_url,
-    :id,
-    :name,
-    :node_id,
-    :output,
-    :pull_requests,
-    :started_at,
-    :status,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      app: {GitHubOpenAPI.NullableIntegration, :t},
-      check_suite: {GitHubOpenAPI.CheckRunCheckSuite, :t},
-      completed_at: {:string, :date_time},
-      conclusion:
-        {:enum,
-         ["success", "failure", "neutral", "cancelled", "skipped", "timed_out", "action_required"]},
-      deployment: {GitHubOpenAPI.DeploymentSimple, :t},
-      details_url: {:string, :generic},
-      external_id: {:string, :generic},
-      head_sha: {:string, :generic},
-      html_url: {:string, :generic},
-      id: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      output: {GitHubOpenAPI.CheckRunOutput, :t},
-      pull_requests: [{GitHubOpenAPI.PullRequestMinimal, :t}],
-      started_at: {:string, :date_time},
-      status: {:enum, ["queued", "in_progress", "completed", "waiting", "requested", "pending"]},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:completed_at, :conclusion, :details_url, :external_id, :head_sha, :html_url, :id, :name, :node_id, :started_at, :status, :url, :__info__, :__joins__])
+        |> cast_embed(:app, with: &GitHubOpenAPI.NullableIntegration.changeset/2)
+    |> cast_embed(:deployment, with: &GitHubOpenAPI.DeploymentSimple.changeset/2)
+    |> cast_embed(:pull_requests, with: &GitHubOpenAPI.PullRequestMinimal.changeset/2)
   end
 end

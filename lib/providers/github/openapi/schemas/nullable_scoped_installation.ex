@@ -1,46 +1,24 @@
 defmodule GitHubOpenAPI.NullableScopedInstallation do
-  @moduledoc """
-  Provides struct and type for a NullableScopedInstallation
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          account: GitHubOpenAPI.SimpleUser.t(),
-          has_multiple_single_files: boolean | nil,
-          permissions: GitHubOpenAPI.AppPermissions.t(),
-          repositories_url: String.t(),
-          repository_selection: String.t(),
-          single_file_name: String.t() | nil,
-          single_file_paths: [String.t()] | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :has_multiple_single_files, :boolean
+    field :repositories_url, :string
+    field :repository_selection, Ecto.Enum, values: [:all, :selected]
+    field :single_file_name, :string
+    field :single_file_paths, {:array, :string}
+    embeds_one :account, GitHubOpenAPI.SimpleUser
+    embeds_one :permissions, GitHubOpenAPI.AppPermissions
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :account,
-    :has_multiple_single_files,
-    :permissions,
-    :repositories_url,
-    :repository_selection,
-    :single_file_name,
-    :single_file_paths
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      account: {GitHubOpenAPI.SimpleUser, :t},
-      has_multiple_single_files: :boolean,
-      permissions: {GitHubOpenAPI.AppPermissions, :t},
-      repositories_url: {:string, :uri},
-      repository_selection: {:enum, ["all", "selected"]},
-      single_file_name: {:string, :generic},
-      single_file_paths: [string: :generic]
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:has_multiple_single_files, :repositories_url, :repository_selection, :single_file_name, :single_file_paths, :__info__, :__joins__])
+        |> cast_embed(:account, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:permissions, with: &GitHubOpenAPI.AppPermissions.changeset/2)
   end
 end

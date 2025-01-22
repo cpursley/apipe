@@ -1,58 +1,27 @@
 defmodule GitHubOpenAPI.Artifact do
-  @moduledoc """
-  Provides struct and type for a Artifact
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          archive_download_url: String.t(),
-          created_at: DateTime.t() | nil,
-          expired: boolean,
-          expires_at: DateTime.t() | nil,
-          id: integer,
-          name: String.t(),
-          node_id: String.t(),
-          size_in_bytes: integer,
-          updated_at: DateTime.t() | nil,
-          url: String.t(),
-          workflow_run: GitHubOpenAPI.ArtifactWorkflowRun.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :archive_download_url, :string
+    field :created_at, :string
+    field :expired, :boolean
+    field :expires_at, :string
+    field :id, :integer
+    field :name, :string
+    field :node_id, :string
+    field :size_in_bytes, :integer
+    field :updated_at, :string
+    field :url, :string
+    field :workflow_run, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :archive_download_url,
-    :created_at,
-    :expired,
-    :expires_at,
-    :id,
-    :name,
-    :node_id,
-    :size_in_bytes,
-    :updated_at,
-    :url,
-    :workflow_run
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      archive_download_url: {:string, :generic},
-      created_at: {:string, :date_time},
-      expired: :boolean,
-      expires_at: {:string, :date_time},
-      id: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      size_in_bytes: :integer,
-      updated_at: {:string, :date_time},
-      url: {:string, :generic},
-      workflow_run: {GitHubOpenAPI.ArtifactWorkflowRun, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:archive_download_url, :created_at, :expired, :expires_at, :id, :name, :node_id, :size_in_bytes, :updated_at, :url, :__info__, :__joins__])
+    
   end
 end

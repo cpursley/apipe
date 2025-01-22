@@ -1,163 +1,62 @@
 defmodule GitHubOpenAPI.SimpleRepository do
-  @moduledoc """
-  Provides struct and type for a SimpleRepository
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          archive_url: String.t(),
-          assignees_url: String.t(),
-          blobs_url: String.t(),
-          branches_url: String.t(),
-          collaborators_url: String.t(),
-          comments_url: String.t(),
-          commits_url: String.t(),
-          compare_url: String.t(),
-          contents_url: String.t(),
-          contributors_url: String.t(),
-          deployments_url: String.t(),
-          description: String.t() | nil,
-          downloads_url: String.t(),
-          events_url: String.t(),
-          fork: boolean,
-          forks_url: String.t(),
-          full_name: String.t(),
-          git_commits_url: String.t(),
-          git_refs_url: String.t(),
-          git_tags_url: String.t(),
-          hooks_url: String.t(),
-          html_url: String.t(),
-          id: integer,
-          issue_comment_url: String.t(),
-          issue_events_url: String.t(),
-          issues_url: String.t(),
-          keys_url: String.t(),
-          labels_url: String.t(),
-          languages_url: String.t(),
-          merges_url: String.t(),
-          milestones_url: String.t(),
-          name: String.t(),
-          node_id: String.t(),
-          notifications_url: String.t(),
-          owner: GitHubOpenAPI.SimpleUser.t(),
-          private: boolean,
-          pulls_url: String.t(),
-          releases_url: String.t(),
-          stargazers_url: String.t(),
-          statuses_url: String.t(),
-          subscribers_url: String.t(),
-          subscription_url: String.t(),
-          tags_url: String.t(),
-          teams_url: String.t(),
-          trees_url: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :contents_url, :string
+    field :languages_url, :string
+    field :name, :string
+    field :releases_url, :string
+    field :git_refs_url, :string
+    field :commits_url, :string
+    field :subscribers_url, :string
+    field :description, :string
+    field :branches_url, :string
+    field :issue_comment_url, :string
+    field :comments_url, :string
+    field :archive_url, :string
+    field :git_tags_url, :string
+    field :private, :boolean
+    field :issues_url, :string
+    field :tags_url, :string
+    field :forks_url, :string
+    field :assignees_url, :string
+    field :deployments_url, :string
+    field :merges_url, :string
+    field :issue_events_url, :string
+    field :contributors_url, :string
+    field :pulls_url, :string
+    field :html_url, :string
+    field :events_url, :string
+    field :milestones_url, :string
+    field :statuses_url, :string
+    field :url, :string
+    field :subscription_url, :string
+    field :trees_url, :string
+    field :compare_url, :string
+    field :notifications_url, :string
+    field :node_id, :string
+    field :collaborators_url, :string
+    field :blobs_url, :string
+    field :stargazers_url, :string
+    field :downloads_url, :string
+    field :git_commits_url, :string
+    field :full_name, :string
+    field :teams_url, :string
+    field :id, :integer
+    field :hooks_url, :string
+    field :fork, :boolean
+    field :keys_url, :string
+    field :labels_url, :string
+    embeds_one :owner, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :archive_url,
-    :assignees_url,
-    :blobs_url,
-    :branches_url,
-    :collaborators_url,
-    :comments_url,
-    :commits_url,
-    :compare_url,
-    :contents_url,
-    :contributors_url,
-    :deployments_url,
-    :description,
-    :downloads_url,
-    :events_url,
-    :fork,
-    :forks_url,
-    :full_name,
-    :git_commits_url,
-    :git_refs_url,
-    :git_tags_url,
-    :hooks_url,
-    :html_url,
-    :id,
-    :issue_comment_url,
-    :issue_events_url,
-    :issues_url,
-    :keys_url,
-    :labels_url,
-    :languages_url,
-    :merges_url,
-    :milestones_url,
-    :name,
-    :node_id,
-    :notifications_url,
-    :owner,
-    :private,
-    :pulls_url,
-    :releases_url,
-    :stargazers_url,
-    :statuses_url,
-    :subscribers_url,
-    :subscription_url,
-    :tags_url,
-    :teams_url,
-    :trees_url,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      archive_url: {:string, :generic},
-      assignees_url: {:string, :generic},
-      blobs_url: {:string, :generic},
-      branches_url: {:string, :generic},
-      collaborators_url: {:string, :generic},
-      comments_url: {:string, :generic},
-      commits_url: {:string, :generic},
-      compare_url: {:string, :generic},
-      contents_url: {:string, :generic},
-      contributors_url: {:string, :uri},
-      deployments_url: {:string, :uri},
-      description: {:string, :generic},
-      downloads_url: {:string, :uri},
-      events_url: {:string, :uri},
-      fork: :boolean,
-      forks_url: {:string, :uri},
-      full_name: {:string, :generic},
-      git_commits_url: {:string, :generic},
-      git_refs_url: {:string, :generic},
-      git_tags_url: {:string, :generic},
-      hooks_url: {:string, :uri},
-      html_url: {:string, :uri},
-      id: :integer,
-      issue_comment_url: {:string, :generic},
-      issue_events_url: {:string, :generic},
-      issues_url: {:string, :generic},
-      keys_url: {:string, :generic},
-      labels_url: {:string, :generic},
-      languages_url: {:string, :uri},
-      merges_url: {:string, :uri},
-      milestones_url: {:string, :generic},
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      notifications_url: {:string, :generic},
-      owner: {GitHubOpenAPI.SimpleUser, :t},
-      private: :boolean,
-      pulls_url: {:string, :generic},
-      releases_url: {:string, :generic},
-      stargazers_url: {:string, :uri},
-      statuses_url: {:string, :generic},
-      subscribers_url: {:string, :uri},
-      subscription_url: {:string, :uri},
-      tags_url: {:string, :uri},
-      teams_url: {:string, :uri},
-      trees_url: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:contents_url, :languages_url, :name, :releases_url, :git_refs_url, :commits_url, :subscribers_url, :description, :branches_url, :issue_comment_url, :comments_url, :archive_url, :git_tags_url, :private, :issues_url, :tags_url, :forks_url, :assignees_url, :deployments_url, :merges_url, :issue_events_url, :contributors_url, :pulls_url, :html_url, :events_url, :milestones_url, :statuses_url, :url, :subscription_url, :trees_url, :compare_url, :notifications_url, :node_id, :collaborators_url, :blobs_url, :stargazers_url, :downloads_url, :git_commits_url, :full_name, :teams_url, :id, :hooks_url, :fork, :keys_url, :labels_url, :__info__, :__joins__])
+        |> cast_embed(:owner, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

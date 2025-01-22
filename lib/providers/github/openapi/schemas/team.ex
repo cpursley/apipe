@@ -1,67 +1,30 @@
 defmodule GitHubOpenAPI.Team do
-  @moduledoc """
-  Provides struct and type for a Team
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          description: String.t() | nil,
-          html_url: String.t(),
-          id: integer,
-          members_url: String.t(),
-          name: String.t(),
-          node_id: String.t(),
-          notification_setting: String.t() | nil,
-          parent: GitHubOpenAPI.NullableTeamSimple.t(),
-          permission: String.t(),
-          permissions: GitHubOpenAPI.TeamPermissions.t() | nil,
-          privacy: String.t() | nil,
-          repositories_url: String.t(),
-          slug: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :description, :string
+    field :html_url, :string
+    field :id, :integer
+    field :members_url, :string
+    field :name, :string
+    field :node_id, :string
+    field :notification_setting, :string
+    field :permission, :string
+    field :permissions, :map
+    field :privacy, :string
+    field :repositories_url, :string
+    field :slug, :string
+    field :url, :string
+    embeds_one :parent, GitHubOpenAPI.NullableTeamSimple
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :description,
-    :html_url,
-    :id,
-    :members_url,
-    :name,
-    :node_id,
-    :notification_setting,
-    :parent,
-    :permission,
-    :permissions,
-    :privacy,
-    :repositories_url,
-    :slug,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      description: {:string, :generic},
-      html_url: {:string, :uri},
-      id: :integer,
-      members_url: {:string, :generic},
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      notification_setting: {:string, :generic},
-      parent: {GitHubOpenAPI.NullableTeamSimple, :t},
-      permission: {:string, :generic},
-      permissions: {GitHubOpenAPI.TeamPermissions, :t},
-      privacy: {:string, :generic},
-      repositories_url: {:string, :uri},
-      slug: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:description, :html_url, :id, :members_url, :name, :node_id, :notification_setting, :permission, :privacy, :repositories_url, :slug, :url, :__info__, :__joins__])
+        |> cast_embed(:parent, with: &GitHubOpenAPI.NullableTeamSimple.changeset/2)
   end
 end

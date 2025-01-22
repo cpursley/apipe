@@ -1,43 +1,22 @@
 defmodule GitHubOpenAPI.RepositorySubscription do
-  @moduledoc """
-  Provides struct and type for a RepositorySubscription
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          ignored: boolean,
-          reason: String.t() | nil,
-          repository_url: String.t(),
-          subscribed: boolean,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :ignored, :boolean
+    field :reason, :string
+    field :repository_url, :string
+    field :subscribed, :boolean
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :ignored,
-    :reason,
-    :repository_url,
-    :subscribed,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      ignored: :boolean,
-      reason: {:string, :generic},
-      repository_url: {:string, :uri},
-      subscribed: :boolean,
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :ignored, :reason, :repository_url, :subscribed, :url, :__info__, :__joins__])
+    
   end
 end

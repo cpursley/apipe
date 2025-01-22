@@ -1,18 +1,18 @@
 defmodule GitHubOpenAPI.RepositoryRuleCodeScanning do
-  @moduledoc """
-  Provides struct and type for a RepositoryRuleCodeScanning
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, parameters: map | nil, type: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :parameters, :map
+    field :type, Ecto.Enum, values: [:code_scanning]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :parameters, :type]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [parameters: :map, type: {:const, "code_scanning"}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:type, :__info__, :__joins__])
+    
   end
 end

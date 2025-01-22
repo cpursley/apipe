@@ -1,55 +1,26 @@
 defmodule GitHubOpenAPI.GitCommit do
-  @moduledoc """
-  Provides struct and type for a GitCommit
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          author: GitHubOpenAPI.GitCommitAuthor.t(),
-          committer: GitHubOpenAPI.GitCommitCommitter.t(),
-          html_url: String.t(),
-          message: String.t(),
-          node_id: String.t(),
-          parents: [GitHubOpenAPI.GitCommitParents.t()],
-          sha: String.t(),
-          tree: GitHubOpenAPI.GitCommitTree.t(),
-          url: String.t(),
-          verification: GitHubOpenAPI.GitCommitVerification.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :author, :map
+    field :committer, :map
+    field :html_url, :string
+    field :message, :string
+    field :node_id, :string
+    field :parents, {:array, :string}
+    field :sha, :string
+    field :tree, :map
+    field :url, :string
+    field :verification, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :author,
-    :committer,
-    :html_url,
-    :message,
-    :node_id,
-    :parents,
-    :sha,
-    :tree,
-    :url,
-    :verification
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      author: {GitHubOpenAPI.GitCommitAuthor, :t},
-      committer: {GitHubOpenAPI.GitCommitCommitter, :t},
-      html_url: {:string, :uri},
-      message: {:string, :generic},
-      node_id: {:string, :generic},
-      parents: [{GitHubOpenAPI.GitCommitParents, :t}],
-      sha: {:string, :generic},
-      tree: {GitHubOpenAPI.GitCommitTree, :t},
-      url: {:string, :uri},
-      verification: {GitHubOpenAPI.GitCommitVerification, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:html_url, :message, :node_id, :parents, :sha, :url, :__info__, :__joins__])
+    
   end
 end

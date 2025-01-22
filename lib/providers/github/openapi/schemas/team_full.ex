@@ -1,82 +1,36 @@
 defmodule GitHubOpenAPI.TeamFull do
-  @moduledoc """
-  Provides struct and type for a TeamFull
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          description: String.t() | nil,
-          html_url: String.t(),
-          id: integer,
-          ldap_dn: String.t() | nil,
-          members_count: integer,
-          members_url: String.t(),
-          name: String.t(),
-          node_id: String.t(),
-          notification_setting: String.t() | nil,
-          organization: GitHubOpenAPI.TeamOrganization.t(),
-          parent: GitHubOpenAPI.NullableTeamSimple.t() | nil,
-          permission: String.t(),
-          privacy: String.t() | nil,
-          repos_count: integer,
-          repositories_url: String.t(),
-          slug: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :description, :string
+    field :html_url, :string
+    field :id, :integer
+    field :ldap_dn, :string
+    field :members_count, :integer
+    field :members_url, :string
+    field :name, :string
+    field :node_id, :string
+    field :notification_setting, Ecto.Enum, values: [:notifications_enabled, :notifications_disabled]
+    field :permission, :string
+    field :privacy, Ecto.Enum, values: [:closed, :secret]
+    field :repos_count, :integer
+    field :repositories_url, :string
+    field :slug, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :organization, GitHubOpenAPI.TeamOrganization
+    embeds_one :parent, GitHubOpenAPI.NullableTeamSimple
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :description,
-    :html_url,
-    :id,
-    :ldap_dn,
-    :members_count,
-    :members_url,
-    :name,
-    :node_id,
-    :notification_setting,
-    :organization,
-    :parent,
-    :permission,
-    :privacy,
-    :repos_count,
-    :repositories_url,
-    :slug,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      description: {:string, :generic},
-      html_url: {:string, :uri},
-      id: :integer,
-      ldap_dn: {:string, :generic},
-      members_count: :integer,
-      members_url: {:string, :generic},
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      notification_setting: {:enum, ["notifications_enabled", "notifications_disabled"]},
-      organization: {GitHubOpenAPI.TeamOrganization, :t},
-      parent: {GitHubOpenAPI.NullableTeamSimple, :t},
-      permission: {:string, :generic},
-      privacy: {:enum, ["closed", "secret"]},
-      repos_count: :integer,
-      repositories_url: {:string, :uri},
-      slug: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :description, :html_url, :id, :ldap_dn, :members_count, :members_url, :name, :node_id, :notification_setting, :permission, :privacy, :repos_count, :repositories_url, :slug, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:organization, with: &GitHubOpenAPI.TeamOrganization.changeset/2)
+    |> cast_embed(:parent, with: &GitHubOpenAPI.NullableTeamSimple.changeset/2)
   end
 end

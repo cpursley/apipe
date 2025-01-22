@@ -1,22 +1,17 @@
 defmodule GitHubOpenAPI.CodeownersErrors do
-  @moduledoc """
-  Provides struct and type for a CodeownersErrors
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          errors: [GitHubOpenAPI.CodeownersErrorsErrors.t()]
-        }
+  @primary_key false
+  embedded_schema do
+    field :errors, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :errors]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [errors: [{GitHubOpenAPI.CodeownersErrorsErrors, :t}]]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:errors, :__info__, :__joins__])
+    
   end
 end

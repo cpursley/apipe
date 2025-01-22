@@ -1,58 +1,27 @@
 defmodule GitHubOpenAPI.RepositoryAdvisoryUpdate do
-  @moduledoc """
-  Provides struct and type for a RepositoryAdvisoryUpdate
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          collaborating_teams: [String.t()] | nil,
-          collaborating_users: [String.t()] | nil,
-          credits: [GitHubOpenAPI.RepositoryAdvisoryUpdateCredits.t()] | nil,
-          cve_id: String.t() | nil,
-          cvss_vector_string: String.t() | nil,
-          cwe_ids: [String.t()] | nil,
-          description: String.t() | nil,
-          severity: String.t() | nil,
-          state: String.t() | nil,
-          summary: String.t() | nil,
-          vulnerabilities: [GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilities.t()] | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :collaborating_teams, {:array, :string}
+    field :collaborating_users, {:array, :string}
+    field :credits, {:array, :string}
+    field :cve_id, :string
+    field :cvss_vector_string, :string
+    field :cwe_ids, {:array, :string}
+    field :description, :string
+    field :severity, Ecto.Enum, values: [:critical, :high, :medium, :low]
+    field :state, Ecto.Enum, values: [:published, :closed, :draft]
+    field :summary, :string
+    field :vulnerabilities, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :collaborating_teams,
-    :collaborating_users,
-    :credits,
-    :cve_id,
-    :cvss_vector_string,
-    :cwe_ids,
-    :description,
-    :severity,
-    :state,
-    :summary,
-    :vulnerabilities
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      collaborating_teams: [string: :generic],
-      collaborating_users: [string: :generic],
-      credits: [{GitHubOpenAPI.RepositoryAdvisoryUpdateCredits, :t}],
-      cve_id: {:string, :generic},
-      cvss_vector_string: {:string, :generic},
-      cwe_ids: [string: :generic],
-      description: {:string, :generic},
-      severity: {:enum, ["critical", "high", "medium", "low"]},
-      state: {:enum, ["published", "closed", "draft"]},
-      summary: {:string, :generic},
-      vulnerabilities: [{GitHubOpenAPI.RepositoryAdvisoryUpdateVulnerabilities, :t}]
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:collaborating_teams, :collaborating_users, :credits, :cve_id, :cvss_vector_string, :cwe_ids, :description, :severity, :state, :summary, :vulnerabilities, :__info__, :__joins__])
+    
   end
 end

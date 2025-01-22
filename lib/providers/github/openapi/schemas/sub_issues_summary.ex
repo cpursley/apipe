@@ -1,24 +1,19 @@
 defmodule GitHubOpenAPI.SubIssuesSummary do
-  @moduledoc """
-  Provides struct and types for a SubIssuesSummary
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          completed: integer,
-          percent_completed: integer,
-          total: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :completed, :integer
+    field :percent_completed, :integer
+    field :total, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :completed, :percent_completed, :total]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [completed: :integer, percent_completed: :integer, total: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:completed, :percent_completed, :total, :__info__, :__joins__])
+    
   end
 end

@@ -1,34 +1,22 @@
 defmodule GitHubOpenAPI.NullableLicenseSimple do
-  @moduledoc """
-  Provides struct and type for a NullableLicenseSimple
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          html_url: String.t() | nil,
-          key: String.t(),
-          name: String.t(),
-          node_id: String.t(),
-          spdx_id: String.t() | nil,
-          url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :html_url, :string
+    field :key, :string
+    field :name, :string
+    field :node_id, :string
+    field :spdx_id, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :html_url, :key, :name, :node_id, :spdx_id, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      html_url: {:string, :uri},
-      key: {:string, :generic},
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      spdx_id: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:html_url, :key, :name, :node_id, :spdx_id, :url, :__info__, :__joins__])
+    
   end
 end

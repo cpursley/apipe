@@ -1,61 +1,31 @@
 defmodule GitHubOpenAPI.CommitSearchResultItem do
-  @moduledoc """
-  Provides struct and type for a CommitSearchResultItem
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          author: GitHubOpenAPI.NullableSimpleUser.t(),
-          comments_url: String.t(),
-          commit: GitHubOpenAPI.CommitSearchResultItemCommit.t(),
-          committer: GitHubOpenAPI.NullableGitUser.t(),
-          html_url: String.t(),
-          node_id: String.t(),
-          parents: [GitHubOpenAPI.CommitSearchResultItemParents.t()],
-          repository: GitHubOpenAPI.MinimalRepository.t(),
-          score: number,
-          sha: String.t(),
-          text_matches: [GitHubOpenAPI.SearchResultTextMatches.t()] | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :comments_url, :string
+    field :commit, :map
+    field :html_url, :string
+    field :node_id, :string
+    field :parents, {:array, :string}
+    field :score, :float
+    field :sha, :string
+    field :url, :string
+    embeds_one :author, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :committer, GitHubOpenAPI.NullableGitUser
+    embeds_one :repository, GitHubOpenAPI.MinimalRepository
+    embeds_one :text_matches, GitHubOpenAPI.SearchResultTextMatches
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :author,
-    :comments_url,
-    :commit,
-    :committer,
-    :html_url,
-    :node_id,
-    :parents,
-    :repository,
-    :score,
-    :sha,
-    :text_matches,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      author: {GitHubOpenAPI.NullableSimpleUser, :t},
-      comments_url: {:string, :uri},
-      commit: {GitHubOpenAPI.CommitSearchResultItemCommit, :t},
-      committer: {GitHubOpenAPI.NullableGitUser, :t},
-      html_url: {:string, :uri},
-      node_id: {:string, :generic},
-      parents: [{GitHubOpenAPI.CommitSearchResultItemParents, :t}],
-      repository: {GitHubOpenAPI.MinimalRepository, :t},
-      score: :number,
-      sha: {:string, :generic},
-      text_matches: [{GitHubOpenAPI.SearchResultTextMatches, :t}],
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:comments_url, :html_url, :node_id, :parents, :score, :sha, :url, :__info__, :__joins__])
+        |> cast_embed(:author, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:committer, with: &GitHubOpenAPI.NullableGitUser.changeset/2)
+    |> cast_embed(:repository, with: &GitHubOpenAPI.MinimalRepository.changeset/2)
+    |> cast_embed(:text_matches, with: &GitHubOpenAPI.SearchResultTextMatches.changeset/2)
   end
 end

@@ -1,52 +1,17 @@
 defmodule GitHubOpenAPI.ApiInsightsUserStats do
-  @moduledoc """
-  Provides struct and type for a ApiInsightsUserStats
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor_id: integer | nil,
-          actor_name: String.t() | nil,
-          actor_type: String.t() | nil,
-          integration_id: integer | nil,
-          last_rate_limited_timestamp: String.t() | nil,
-          last_request_timestamp: String.t() | nil,
-          oauth_application_id: integer | nil,
-          rate_limited_request_count: integer | nil,
-          total_request_count: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actor_id,
-    :actor_name,
-    :actor_type,
-    :integration_id,
-    :last_rate_limited_timestamp,
-    :last_request_timestamp,
-    :oauth_application_id,
-    :rate_limited_request_count,
-    :total_request_count
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor_id: :integer,
-      actor_name: {:string, :generic},
-      actor_type: {:string, :generic},
-      integration_id: :integer,
-      last_rate_limited_timestamp: {:string, :generic},
-      last_request_timestamp: {:string, :generic},
-      oauth_application_id: :integer,
-      rate_limited_request_count: :integer,
-      total_request_count: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+    
   end
 end

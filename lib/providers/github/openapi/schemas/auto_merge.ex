@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.AutoMerge do
-  @moduledoc """
-  Provides struct and type for a AutoMerge
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          commit_message: String.t(),
-          commit_title: String.t(),
-          enabled_by: GitHubOpenAPI.SimpleUser.t(),
-          merge_method: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit_message, :string
+    field :commit_title, :string
+    field :merge_method, Ecto.Enum, values: [:merge, :squash, :rebase]
+    embeds_one :enabled_by, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :commit_message, :commit_title, :enabled_by, :merge_method]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      commit_message: {:string, :generic},
-      commit_title: {:string, :generic},
-      enabled_by: {GitHubOpenAPI.SimpleUser, :t},
-      merge_method: {:enum, ["merge", "squash", "rebase"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:commit_message, :commit_title, :merge_method, :__info__, :__joins__])
+        |> cast_embed(:enabled_by, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

@@ -1,34 +1,22 @@
 defmodule GitHubOpenAPI.Actor do
-  @moduledoc """
-  Provides struct and type for a Actor
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          avatar_url: String.t(),
-          display_login: String.t() | nil,
-          gravatar_id: String.t() | nil,
-          id: integer,
-          login: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :avatar_url, :string
+    field :display_login, :string
+    field :gravatar_id, :string
+    field :id, :integer
+    field :login, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :avatar_url, :display_login, :gravatar_id, :id, :login, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      avatar_url: {:string, :uri},
-      display_login: {:string, :generic},
-      gravatar_id: {:string, :generic},
-      id: :integer,
-      login: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:avatar_url, :display_login, :gravatar_id, :id, :login, :url, :__info__, :__joins__])
+    
   end
 end

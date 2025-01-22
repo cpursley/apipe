@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.RepositoryRuleParamsStatusCheckConfiguration do
-  @moduledoc """
-  Provides struct and type for a RepositoryRuleParamsStatusCheckConfiguration
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          context: String.t(),
-          integration_id: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :context, :string
+    field :integration_id, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :context, :integration_id]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [context: {:string, :generic}, integration_id: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:context, :integration_id, :__info__, :__joins__])
+    
   end
 end

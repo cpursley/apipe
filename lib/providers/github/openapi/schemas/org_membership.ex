@@ -1,46 +1,24 @@
 defmodule GitHubOpenAPI.OrgMembership do
-  @moduledoc """
-  Provides struct and type for a OrgMembership
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          organization: GitHubOpenAPI.OrganizationSimple.t(),
-          organization_url: String.t(),
-          permissions: GitHubOpenAPI.OrgMembershipPermissions.t() | nil,
-          role: String.t(),
-          state: String.t(),
-          url: String.t(),
-          user: GitHubOpenAPI.NullableSimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :organization_url, :string
+    field :permissions, :map
+    field :role, Ecto.Enum, values: [:admin, :member, :billing_manager]
+    field :state, Ecto.Enum, values: [:active, :pending]
+    field :url, :string
+    embeds_one :organization, GitHubOpenAPI.OrganizationSimple
+    embeds_one :user, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :organization,
-    :organization_url,
-    :permissions,
-    :role,
-    :state,
-    :url,
-    :user
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      organization: {GitHubOpenAPI.OrganizationSimple, :t},
-      organization_url: {:string, :uri},
-      permissions: {GitHubOpenAPI.OrgMembershipPermissions, :t},
-      role: {:enum, ["admin", "member", "billing_manager"]},
-      state: {:enum, ["active", "pending"]},
-      url: {:string, :uri},
-      user: {GitHubOpenAPI.NullableSimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:organization_url, :role, :state, :url, :__info__, :__joins__])
+        |> cast_embed(:organization, with: &GitHubOpenAPI.OrganizationSimple.changeset/2)
+    |> cast_embed(:user, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

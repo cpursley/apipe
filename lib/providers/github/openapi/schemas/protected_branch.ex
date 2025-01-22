@@ -1,68 +1,30 @@
 defmodule GitHubOpenAPI.ProtectedBranch do
-  @moduledoc """
-  Provides struct and type for a ProtectedBranch
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          allow_deletions: GitHubOpenAPI.ProtectedBranchAllowDeletions.t() | nil,
-          allow_force_pushes: GitHubOpenAPI.ProtectedBranchAllowForcePushes.t() | nil,
-          allow_fork_syncing: GitHubOpenAPI.ProtectedBranchAllowForkSyncing.t() | nil,
-          block_creations: GitHubOpenAPI.ProtectedBranchBlockCreations.t() | nil,
-          enforce_admins: GitHubOpenAPI.ProtectedBranchEnforceAdmins.t() | nil,
-          lock_branch: GitHubOpenAPI.ProtectedBranchLockBranch.t() | nil,
-          required_conversation_resolution:
-            GitHubOpenAPI.ProtectedBranchRequiredConversationResolution.t() | nil,
-          required_linear_history: GitHubOpenAPI.ProtectedBranchRequiredLinearHistory.t() | nil,
-          required_pull_request_reviews:
-            GitHubOpenAPI.ProtectedBranchRequiredPullRequestReviews.t() | nil,
-          required_signatures: GitHubOpenAPI.ProtectedBranchRequiredSignatures.t() | nil,
-          required_status_checks: GitHubOpenAPI.StatusCheckPolicy.t() | nil,
-          restrictions: GitHubOpenAPI.BranchRestrictionPolicy.t() | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :allow_deletions, {:map, :string}
+    field :allow_force_pushes, {:map, :string}
+    field :allow_fork_syncing, {:map, :string}
+    field :block_creations, {:map, :string}
+    field :enforce_admins, {:map, :string}
+    field :lock_branch, {:map, :string}
+    field :required_conversation_resolution, {:map, :string}
+    field :required_linear_history, {:map, :string}
+    field :required_pull_request_reviews, :map
+    field :required_signatures, :map
+    field :url, :string
+    embeds_one :required_status_checks, GitHubOpenAPI.StatusCheckPolicy
+    embeds_one :restrictions, GitHubOpenAPI.BranchRestrictionPolicy
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :allow_deletions,
-    :allow_force_pushes,
-    :allow_fork_syncing,
-    :block_creations,
-    :enforce_admins,
-    :lock_branch,
-    :required_conversation_resolution,
-    :required_linear_history,
-    :required_pull_request_reviews,
-    :required_signatures,
-    :required_status_checks,
-    :restrictions,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      allow_deletions: {GitHubOpenAPI.ProtectedBranchAllowDeletions, :t},
-      allow_force_pushes: {GitHubOpenAPI.ProtectedBranchAllowForcePushes, :t},
-      allow_fork_syncing: {GitHubOpenAPI.ProtectedBranchAllowForkSyncing, :t},
-      block_creations: {GitHubOpenAPI.ProtectedBranchBlockCreations, :t},
-      enforce_admins: {GitHubOpenAPI.ProtectedBranchEnforceAdmins, :t},
-      lock_branch: {GitHubOpenAPI.ProtectedBranchLockBranch, :t},
-      required_conversation_resolution:
-        {GitHubOpenAPI.ProtectedBranchRequiredConversationResolution, :t},
-      required_linear_history: {GitHubOpenAPI.ProtectedBranchRequiredLinearHistory, :t},
-      required_pull_request_reviews:
-        {GitHubOpenAPI.ProtectedBranchRequiredPullRequestReviews, :t},
-      required_signatures: {GitHubOpenAPI.ProtectedBranchRequiredSignatures, :t},
-      required_status_checks: {GitHubOpenAPI.StatusCheckPolicy, :t},
-      restrictions: {GitHubOpenAPI.BranchRestrictionPolicy, :t},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:url, :__info__, :__joins__])
+        |> cast_embed(:required_status_checks, with: &GitHubOpenAPI.StatusCheckPolicy.changeset/2)
+    |> cast_embed(:restrictions, with: &GitHubOpenAPI.BranchRestrictionPolicy.changeset/2)
   end
 end

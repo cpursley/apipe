@@ -1,18 +1,18 @@
 defmodule GitHubOpenAPI.DeploymentBranchPolicyNamePatternWithType do
-  @moduledoc """
-  Provides struct and type for a DeploymentBranchPolicyNamePatternWithType
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, name: String.t(), type: String.t() | nil}
+  @primary_key false
+  embedded_schema do
+    field :name, :string
+    field :type, Ecto.Enum, values: [:branch, :tag]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :name, :type]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [name: {:string, :generic}, type: {:enum, ["branch", "tag"]}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:name, :type, :__info__, :__joins__])
+    
   end
 end

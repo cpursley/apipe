@@ -1,64 +1,30 @@
 defmodule GitHubOpenAPI.CodeSearchResultItem do
-  @moduledoc """
-  Provides struct and type for a CodeSearchResultItem
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          file_size: integer | nil,
-          git_url: String.t(),
-          html_url: String.t(),
-          language: String.t() | nil,
-          last_modified_at: DateTime.t() | nil,
-          line_numbers: [String.t()] | nil,
-          name: String.t(),
-          path: String.t(),
-          repository: GitHubOpenAPI.MinimalRepository.t(),
-          score: number,
-          sha: String.t(),
-          text_matches: [GitHubOpenAPI.SearchResultTextMatches.t()] | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :file_size, :integer
+    field :git_url, :string
+    field :html_url, :string
+    field :language, :string
+    field :last_modified_at, :string
+    field :line_numbers, {:array, :string}
+    field :name, :string
+    field :path, :string
+    field :score, :float
+    field :sha, :string
+    field :url, :string
+    embeds_one :repository, GitHubOpenAPI.MinimalRepository
+    embeds_one :text_matches, GitHubOpenAPI.SearchResultTextMatches
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :file_size,
-    :git_url,
-    :html_url,
-    :language,
-    :last_modified_at,
-    :line_numbers,
-    :name,
-    :path,
-    :repository,
-    :score,
-    :sha,
-    :text_matches,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      file_size: :integer,
-      git_url: {:string, :uri},
-      html_url: {:string, :uri},
-      language: {:string, :generic},
-      last_modified_at: {:string, :date_time},
-      line_numbers: [string: :generic],
-      name: {:string, :generic},
-      path: {:string, :generic},
-      repository: {GitHubOpenAPI.MinimalRepository, :t},
-      score: :number,
-      sha: {:string, :generic},
-      text_matches: [{GitHubOpenAPI.SearchResultTextMatches, :t}],
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:file_size, :git_url, :html_url, :language, :last_modified_at, :line_numbers, :name, :path, :score, :sha, :url, :__info__, :__joins__])
+        |> cast_embed(:repository, with: &GitHubOpenAPI.MinimalRepository.changeset/2)
+    |> cast_embed(:text_matches, with: &GitHubOpenAPI.SearchResultTextMatches.changeset/2)
   end
 end

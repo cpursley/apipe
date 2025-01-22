@@ -1,52 +1,25 @@
 defmodule GitHubOpenAPI.OrganizationRole do
-  @moduledoc """
-  Provides struct and type for a OrganizationRole
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          base_role: String.t() | nil,
-          created_at: DateTime.t(),
-          description: String.t() | nil,
-          id: integer,
-          name: String.t(),
-          organization: GitHubOpenAPI.NullableSimpleUser.t(),
-          permissions: [String.t()],
-          source: String.t() | nil,
-          updated_at: DateTime.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :base_role, Ecto.Enum, values: [:read, :triage, :write, :maintain, :admin]
+    field :created_at, :string
+    field :description, :string
+    field :id, :integer
+    field :name, :string
+    field :permissions, {:array, :string}
+    field :source, Ecto.Enum, values: [:"Organization", :"Enterprise", :"Predefined"]
+    field :updated_at, :string
+    embeds_one :organization, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :base_role,
-    :created_at,
-    :description,
-    :id,
-    :name,
-    :organization,
-    :permissions,
-    :source,
-    :updated_at
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      base_role: {:enum, ["read", "triage", "write", "maintain", "admin"]},
-      created_at: {:string, :date_time},
-      description: {:string, :generic},
-      id: :integer,
-      name: {:string, :generic},
-      organization: {GitHubOpenAPI.NullableSimpleUser, :t},
-      permissions: [string: :generic],
-      source: {:enum, ["Organization", "Enterprise", "Predefined"]},
-      updated_at: {:string, :date_time}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:base_role, :created_at, :description, :id, :name, :permissions, :source, :updated_at, :__info__, :__joins__])
+        |> cast_embed(:organization, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

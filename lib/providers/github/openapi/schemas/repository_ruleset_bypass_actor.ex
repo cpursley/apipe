@@ -1,29 +1,19 @@
 defmodule GitHubOpenAPI.RepositoryRulesetBypassActor do
-  @moduledoc """
-  Provides struct and type for a RepositoryRulesetBypassActor
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor_id: integer | nil,
-          actor_type: String.t(),
-          bypass_mode: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :actor_id, :integer
+    field :actor_type, Ecto.Enum, values: [:"Integration", :"OrganizationAdmin", :"RepositoryRole", :"Team", :"DeployKey"]
+    field :bypass_mode, Ecto.Enum, values: [:always, :pull_request]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :actor_id, :actor_type, :bypass_mode]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor_id: :integer,
-      actor_type:
-        {:enum, ["Integration", "OrganizationAdmin", "RepositoryRole", "Team", "DeployKey"]},
-      bypass_mode: {:enum, ["always", "pull_request"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:actor_id, :actor_type, :bypass_mode, :__info__, :__joins__])
+    
   end
 end

@@ -226,4 +226,20 @@ defmodule Apipe.Providers.OpenAPI.RouteGenerator do
 
     Logger.info("Generated #{output_path}")
   end
+
+  defp get_schema_module(schema_name, provider) do
+    schema_name = String.replace(schema_name, "#/components/schemas/", "")
+
+    module_name =
+      schema_name |> String.split(["-", "."]) |> Enum.map(&Macro.camelize/1) |> Enum.join("")
+
+    "#{get_module_prefix(provider)}.#{module_name}"
+  end
+
+  defp get_module_prefix(provider) do
+    provider
+    |> to_string()
+    |> Macro.camelize()
+    |> then(&"#{&1}OpenAPI")
+  end
 end

@@ -1,59 +1,27 @@
 defmodule GitHubOpenAPI.DiffEntry do
-  @moduledoc """
-  Provides struct and type for a DiffEntry
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          additions: integer,
-          blob_url: String.t(),
-          changes: integer,
-          contents_url: String.t(),
-          deletions: integer,
-          filename: String.t(),
-          patch: String.t() | nil,
-          previous_filename: String.t() | nil,
-          raw_url: String.t(),
-          sha: String.t(),
-          status: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :additions, :integer
+    field :blob_url, :string
+    field :changes, :integer
+    field :contents_url, :string
+    field :deletions, :integer
+    field :filename, :string
+    field :patch, :string
+    field :previous_filename, :string
+    field :raw_url, :string
+    field :sha, :string
+    field :status, Ecto.Enum, values: [:added, :removed, :modified, :renamed, :copied, :changed, :unchanged]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :additions,
-    :blob_url,
-    :changes,
-    :contents_url,
-    :deletions,
-    :filename,
-    :patch,
-    :previous_filename,
-    :raw_url,
-    :sha,
-    :status
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      additions: :integer,
-      blob_url: {:string, :uri},
-      changes: :integer,
-      contents_url: {:string, :uri},
-      deletions: :integer,
-      filename: {:string, :generic},
-      patch: {:string, :generic},
-      previous_filename: {:string, :generic},
-      raw_url: {:string, :uri},
-      sha: {:string, :generic},
-      status:
-        {:enum, ["added", "removed", "modified", "renamed", "copied", "changed", "unchanged"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:additions, :blob_url, :changes, :contents_url, :deletions, :filename, :patch, :previous_filename, :raw_url, :sha, :status, :__info__, :__joins__])
+    
   end
 end

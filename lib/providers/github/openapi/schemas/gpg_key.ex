@@ -1,70 +1,31 @@
 defmodule GitHubOpenAPI.GpgKey do
-  @moduledoc """
-  Provides struct and type for a GpgKey
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          can_certify: boolean,
-          can_encrypt_comms: boolean,
-          can_encrypt_storage: boolean,
-          can_sign: boolean,
-          created_at: DateTime.t(),
-          emails: [GitHubOpenAPI.GpgKeyEmails.t()],
-          expires_at: DateTime.t() | nil,
-          id: integer,
-          key_id: String.t(),
-          name: String.t() | nil,
-          primary_key_id: integer | nil,
-          public_key: String.t(),
-          raw_key: String.t() | nil,
-          revoked: boolean,
-          subkeys: [GitHubOpenAPI.GpgKeySubkeys.t()]
-        }
+  @primary_key false
+  embedded_schema do
+    field :can_certify, :boolean
+    field :can_encrypt_comms, :boolean
+    field :can_encrypt_storage, :boolean
+    field :can_sign, :boolean
+    field :created_at, :string
+    field :emails, {:array, :string}
+    field :expires_at, :string
+    field :id, :integer
+    field :key_id, :string
+    field :name, :string
+    field :primary_key_id, :integer
+    field :public_key, :string
+    field :raw_key, :string
+    field :revoked, :boolean
+    field :subkeys, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :can_certify,
-    :can_encrypt_comms,
-    :can_encrypt_storage,
-    :can_sign,
-    :created_at,
-    :emails,
-    :expires_at,
-    :id,
-    :key_id,
-    :name,
-    :primary_key_id,
-    :public_key,
-    :raw_key,
-    :revoked,
-    :subkeys
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      can_certify: :boolean,
-      can_encrypt_comms: :boolean,
-      can_encrypt_storage: :boolean,
-      can_sign: :boolean,
-      created_at: {:string, :date_time},
-      emails: [{GitHubOpenAPI.GpgKeyEmails, :t}],
-      expires_at: {:string, :date_time},
-      id: :integer,
-      key_id: {:string, :generic},
-      name: {:string, :generic},
-      primary_key_id: :integer,
-      public_key: {:string, :generic},
-      raw_key: {:string, :generic},
-      revoked: :boolean,
-      subkeys: [{GitHubOpenAPI.GpgKeySubkeys, :t}]
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:can_certify, :can_encrypt_comms, :can_encrypt_storage, :can_sign, :created_at, :emails, :expires_at, :id, :key_id, :name, :primary_key_id, :public_key, :raw_key, :revoked, :subkeys, :__info__, :__joins__])
+    
   end
 end

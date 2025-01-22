@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.SecretScanningPushProtectionBypass do
-  @moduledoc """
-  Provides struct and type for a SecretScanningPushProtectionBypass
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          expire_at: DateTime.t() | nil,
-          reason: String.t() | nil,
-          token_type: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :expire_at, :string
+    field :token_type, :string
+    embeds_one :reason, GitHubOpenAPI.SecretScanningPushProtectionBypassReason
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :expire_at, :reason, :token_type]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      expire_at: {:string, :date_time},
-      reason: {:enum, ["false_positive", "used_in_tests", "will_fix_later"]},
-      token_type: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:expire_at, :token_type, :__info__, :__joins__])
+        |> cast_embed(:reason, with: &GitHubOpenAPI.SecretScanningPushProtectionBypassReason.changeset/2)
   end
 end

@@ -1,84 +1,36 @@
 defmodule GitHubOpenAPI.TimelineCommentEvent do
-  @moduledoc """
-  Provides struct and type for a TimelineCommentEvent
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor: GitHubOpenAPI.SimpleUser.t(),
-          author_association: String.t(),
-          body: String.t() | nil,
-          body_html: String.t() | nil,
-          body_text: String.t() | nil,
-          created_at: DateTime.t(),
-          event: String.t(),
-          html_url: String.t(),
-          id: integer,
-          issue_url: String.t(),
-          node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t() | nil,
-          reactions: GitHubOpenAPI.ReactionRollup.t() | nil,
-          updated_at: DateTime.t(),
-          url: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :body, :string
+    field :body_html, :string
+    field :body_text, :string
+    field :created_at, :string
+    field :event, :string
+    field :html_url, :string
+    field :id, :integer
+    field :issue_url, :string
+    field :node_id, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :actor, GitHubOpenAPI.SimpleUser
+    embeds_one :author_association, GitHubOpenAPI.AuthorAssociation
+    embeds_one :performed_via_github_app, GitHubOpenAPI.NullableIntegration
+    embeds_one :reactions, GitHubOpenAPI.ReactionRollup
+    embeds_one :user, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actor,
-    :author_association,
-    :body,
-    :body_html,
-    :body_text,
-    :created_at,
-    :event,
-    :html_url,
-    :id,
-    :issue_url,
-    :node_id,
-    :performed_via_github_app,
-    :reactions,
-    :updated_at,
-    :url,
-    :user
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor: {GitHubOpenAPI.SimpleUser, :t},
-      author_association:
-        {:enum,
-         [
-           "COLLABORATOR",
-           "CONTRIBUTOR",
-           "FIRST_TIMER",
-           "FIRST_TIME_CONTRIBUTOR",
-           "MANNEQUIN",
-           "MEMBER",
-           "NONE",
-           "OWNER"
-         ]},
-      body: {:string, :generic},
-      body_html: {:string, :generic},
-      body_text: {:string, :generic},
-      created_at: {:string, :date_time},
-      event: {:string, :generic},
-      html_url: {:string, :uri},
-      id: :integer,
-      issue_url: {:string, :uri},
-      node_id: {:string, :generic},
-      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
-      reactions: {GitHubOpenAPI.ReactionRollup, :t},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri},
-      user: {GitHubOpenAPI.SimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:body, :body_html, :body_text, :created_at, :event, :html_url, :id, :issue_url, :node_id, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:actor, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:author_association, with: &GitHubOpenAPI.AuthorAssociation.changeset/2)
+    |> cast_embed(:performed_via_github_app, with: &GitHubOpenAPI.NullableIntegration.changeset/2)
+    |> cast_embed(:reactions, with: &GitHubOpenAPI.ReactionRollup.changeset/2)
+    |> cast_embed(:user, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

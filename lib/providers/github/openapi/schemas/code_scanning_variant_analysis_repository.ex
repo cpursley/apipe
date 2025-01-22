@@ -1,43 +1,22 @@
 defmodule GitHubOpenAPI.CodeScanningVariantAnalysisRepository do
-  @moduledoc """
-  Provides struct and type for a CodeScanningVariantAnalysisRepository
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          full_name: String.t(),
-          id: integer,
-          name: String.t(),
-          private: boolean,
-          stargazers_count: integer,
-          updated_at: DateTime.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :full_name, :string
+    field :id, :integer
+    field :name, :string
+    field :private, :boolean
+    field :stargazers_count, :integer
+    field :updated_at, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :full_name,
-    :id,
-    :name,
-    :private,
-    :stargazers_count,
-    :updated_at
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      full_name: {:string, :generic},
-      id: :integer,
-      name: {:string, :generic},
-      private: :boolean,
-      stargazers_count: :integer,
-      updated_at: {:string, :date_time}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:full_name, :id, :name, :private, :stargazers_count, :updated_at, :__info__, :__joins__])
+    
   end
 end

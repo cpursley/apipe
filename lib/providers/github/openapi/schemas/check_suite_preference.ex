@@ -1,26 +1,18 @@
 defmodule GitHubOpenAPI.CheckSuitePreference do
-  @moduledoc """
-  Provides struct and type for a CheckSuitePreference
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          preferences: GitHubOpenAPI.CheckSuitePreferencePreferences.t(),
-          repository: GitHubOpenAPI.MinimalRepository.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :preferences, :map
+    embeds_one :repository, GitHubOpenAPI.MinimalRepository
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :preferences, :repository]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      preferences: {GitHubOpenAPI.CheckSuitePreferencePreferences, :t},
-      repository: {GitHubOpenAPI.MinimalRepository, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+        |> cast_embed(:repository, with: &GitHubOpenAPI.MinimalRepository.changeset/2)
   end
 end

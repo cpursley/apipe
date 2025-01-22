@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.TagProtection do
-  @moduledoc """
-  Provides struct and type for a TagProtection
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: String.t() | nil,
-          enabled: boolean | nil,
-          id: integer | nil,
-          pattern: String.t(),
-          updated_at: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :enabled, :boolean
+    field :id, :integer
+    field :pattern, :string
+    field :updated_at, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :created_at, :enabled, :id, :pattern, :updated_at]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :generic},
-      enabled: :boolean,
-      id: :integer,
-      pattern: {:string, :generic},
-      updated_at: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :enabled, :id, :pattern, :updated_at, :__info__, :__joins__])
+    
   end
 end

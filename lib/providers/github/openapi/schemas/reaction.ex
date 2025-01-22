@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.Reaction do
-  @moduledoc """
-  Provides struct and type for a Reaction
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          content: String.t(),
-          created_at: DateTime.t(),
-          id: integer,
-          node_id: String.t(),
-          user: GitHubOpenAPI.NullableSimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :content, Ecto.Enum, values: [:"+1", :"-1", :laugh, :confused, :heart, :hooray, :rocket, :eyes]
+    field :created_at, :string
+    field :id, :integer
+    field :node_id, :string
+    embeds_one :user, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :content, :created_at, :id, :node_id, :user]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      content: {:enum, ["+1", "-1", "laugh", "confused", "heart", "hooray", "rocket", "eyes"]},
-      created_at: {:string, :date_time},
-      id: :integer,
-      node_id: {:string, :generic},
-      user: {GitHubOpenAPI.NullableSimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:content, :created_at, :id, :node_id, :__info__, :__joins__])
+        |> cast_embed(:user, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

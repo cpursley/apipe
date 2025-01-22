@@ -1,61 +1,32 @@
 defmodule GitHubOpenAPI.ReviewRequestedIssueEvent do
-  @moduledoc """
-  Provides struct and type for a ReviewRequestedIssueEvent
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor: GitHubOpenAPI.SimpleUser.t(),
-          commit_id: String.t() | nil,
-          commit_url: String.t() | nil,
-          created_at: String.t(),
-          event: String.t(),
-          id: integer,
-          node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t(),
-          requested_reviewer: GitHubOpenAPI.SimpleUser.t() | nil,
-          requested_team: GitHubOpenAPI.Team.t() | nil,
-          review_requester: GitHubOpenAPI.SimpleUser.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit_id, :string
+    field :commit_url, :string
+    field :created_at, :string
+    field :event, :string
+    field :id, :integer
+    field :node_id, :string
+    field :url, :string
+    embeds_one :actor, GitHubOpenAPI.SimpleUser
+    embeds_one :performed_via_github_app, GitHubOpenAPI.NullableIntegration
+    embeds_one :requested_reviewer, GitHubOpenAPI.SimpleUser
+    embeds_one :requested_team, GitHubOpenAPI.Team
+    embeds_one :review_requester, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actor,
-    :commit_id,
-    :commit_url,
-    :created_at,
-    :event,
-    :id,
-    :node_id,
-    :performed_via_github_app,
-    :requested_reviewer,
-    :requested_team,
-    :review_requester,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor: {GitHubOpenAPI.SimpleUser, :t},
-      commit_id: {:string, :generic},
-      commit_url: {:string, :generic},
-      created_at: {:string, :generic},
-      event: {:string, :generic},
-      id: :integer,
-      node_id: {:string, :generic},
-      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
-      requested_reviewer: {GitHubOpenAPI.SimpleUser, :t},
-      requested_team: {GitHubOpenAPI.Team, :t},
-      review_requester: {GitHubOpenAPI.SimpleUser, :t},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:commit_id, :commit_url, :created_at, :event, :id, :node_id, :url, :__info__, :__joins__])
+        |> cast_embed(:actor, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:performed_via_github_app, with: &GitHubOpenAPI.NullableIntegration.changeset/2)
+    |> cast_embed(:requested_reviewer, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:requested_team, with: &GitHubOpenAPI.Team.changeset/2)
+    |> cast_embed(:review_requester, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

@@ -1,64 +1,29 @@
 defmodule GitHubOpenAPI.ReleaseAsset do
-  @moduledoc """
-  Provides struct and type for a ReleaseAsset
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          browser_download_url: String.t(),
-          content_type: String.t(),
-          created_at: DateTime.t(),
-          download_count: integer,
-          id: integer,
-          label: String.t() | nil,
-          name: String.t(),
-          node_id: String.t(),
-          size: integer,
-          state: String.t(),
-          updated_at: DateTime.t(),
-          uploader: GitHubOpenAPI.NullableSimpleUser.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :browser_download_url, :string
+    field :content_type, :string
+    field :created_at, :string
+    field :download_count, :integer
+    field :id, :integer
+    field :label, :string
+    field :name, :string
+    field :node_id, :string
+    field :size, :integer
+    field :state, Ecto.Enum, values: [:uploaded, :open]
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :uploader, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :browser_download_url,
-    :content_type,
-    :created_at,
-    :download_count,
-    :id,
-    :label,
-    :name,
-    :node_id,
-    :size,
-    :state,
-    :updated_at,
-    :uploader,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      browser_download_url: {:string, :uri},
-      content_type: {:string, :generic},
-      created_at: {:string, :date_time},
-      download_count: :integer,
-      id: :integer,
-      label: {:string, :generic},
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      size: :integer,
-      state: {:enum, ["uploaded", "open"]},
-      updated_at: {:string, :date_time},
-      uploader: {GitHubOpenAPI.NullableSimpleUser, :t},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:browser_download_url, :content_type, :created_at, :download_count, :id, :label, :name, :node_id, :size, :state, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:uploader, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

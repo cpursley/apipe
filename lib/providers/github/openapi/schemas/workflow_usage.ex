@@ -1,22 +1,17 @@
 defmodule GitHubOpenAPI.WorkflowUsage do
-  @moduledoc """
-  Provides struct and type for a WorkflowUsage
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          billable: GitHubOpenAPI.WorkflowUsageBillable.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :billable, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :billable]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [billable: {GitHubOpenAPI.WorkflowUsageBillable, :t}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+    
   end
 end

@@ -1,18 +1,17 @@
 defmodule GitHubOpenAPI.CodespacesPermissionsCheckForDevcontainer do
-  @moduledoc """
-  Provides struct and type for a CodespacesPermissionsCheckForDevcontainer
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, accepted: boolean}
+  @primary_key false
+  embedded_schema do
+    field :accepted, :boolean
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :accepted]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [accepted: :boolean]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:accepted, :__info__, :__joins__])
+    
   end
 end

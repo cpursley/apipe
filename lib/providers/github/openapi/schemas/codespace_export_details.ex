@@ -1,46 +1,23 @@
 defmodule GitHubOpenAPI.CodespaceExportDetails do
-  @moduledoc """
-  Provides struct and type for a CodespaceExportDetails
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          branch: String.t() | nil,
-          completed_at: DateTime.t() | nil,
-          export_url: String.t() | nil,
-          html_url: String.t() | nil,
-          id: String.t() | nil,
-          sha: String.t() | nil,
-          state: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :branch, :string
+    field :completed_at, :string
+    field :export_url, :string
+    field :html_url, :string
+    field :id, :string
+    field :sha, :string
+    field :state, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :branch,
-    :completed_at,
-    :export_url,
-    :html_url,
-    :id,
-    :sha,
-    :state
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      branch: {:string, :generic},
-      completed_at: {:string, :date_time},
-      export_url: {:string, :generic},
-      html_url: {:string, :generic},
-      id: {:string, :generic},
-      sha: {:string, :generic},
-      state: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:branch, :completed_at, :export_url, :html_url, :id, :sha, :state, :__info__, :__joins__])
+    
   end
 end

@@ -1,24 +1,19 @@
 defmodule GitHubOpenAPI.PullRequestMergeResult do
-  @moduledoc """
-  Provides struct and type for a PullRequestMergeResult
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          merged: boolean,
-          message: String.t(),
-          sha: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :merged, :boolean
+    field :message, :string
+    field :sha, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :merged, :message, :sha]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [merged: :boolean, message: {:string, :generic}, sha: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:merged, :message, :sha, :__info__, :__joins__])
+    
   end
 end

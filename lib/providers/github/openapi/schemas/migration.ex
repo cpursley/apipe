@@ -1,79 +1,35 @@
 defmodule GitHubOpenAPI.Migration do
-  @moduledoc """
-  Provides struct and type for a Migration
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          archive_url: String.t() | nil,
-          created_at: DateTime.t(),
-          exclude: [String.t()] | nil,
-          exclude_attachments: boolean,
-          exclude_git_data: boolean,
-          exclude_metadata: boolean,
-          exclude_owner_projects: boolean,
-          exclude_releases: boolean,
-          guid: String.t(),
-          id: integer,
-          lock_repositories: boolean,
-          node_id: String.t(),
-          org_metadata_only: boolean,
-          owner: GitHubOpenAPI.NullableSimpleUser.t(),
-          repositories: [GitHubOpenAPI.Repository.t()],
-          state: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :archive_url, :string
+    field :created_at, :string
+    field :exclude, {:array, :string}
+    field :exclude_attachments, :boolean
+    field :exclude_git_data, :boolean
+    field :exclude_metadata, :boolean
+    field :exclude_owner_projects, :boolean
+    field :exclude_releases, :boolean
+    field :guid, :string
+    field :id, :integer
+    field :lock_repositories, :boolean
+    field :node_id, :string
+    field :org_metadata_only, :boolean
+    field :state, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :owner, GitHubOpenAPI.NullableSimpleUser
+    embeds_many :repositories, GitHubOpenAPI.Repository
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :archive_url,
-    :created_at,
-    :exclude,
-    :exclude_attachments,
-    :exclude_git_data,
-    :exclude_metadata,
-    :exclude_owner_projects,
-    :exclude_releases,
-    :guid,
-    :id,
-    :lock_repositories,
-    :node_id,
-    :org_metadata_only,
-    :owner,
-    :repositories,
-    :state,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      archive_url: {:string, :uri},
-      created_at: {:string, :date_time},
-      exclude: [string: :generic],
-      exclude_attachments: :boolean,
-      exclude_git_data: :boolean,
-      exclude_metadata: :boolean,
-      exclude_owner_projects: :boolean,
-      exclude_releases: :boolean,
-      guid: {:string, :generic},
-      id: :integer,
-      lock_repositories: :boolean,
-      node_id: {:string, :generic},
-      org_metadata_only: :boolean,
-      owner: {GitHubOpenAPI.NullableSimpleUser, :t},
-      repositories: [{GitHubOpenAPI.Repository, :t}],
-      state: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:archive_url, :created_at, :exclude, :exclude_attachments, :exclude_git_data, :exclude_metadata, :exclude_owner_projects, :exclude_releases, :guid, :id, :lock_repositories, :node_id, :org_metadata_only, :state, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:owner, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:repositories, with: &GitHubOpenAPI.Repository.changeset/2)
   end
 end

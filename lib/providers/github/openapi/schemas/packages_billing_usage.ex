@@ -1,34 +1,19 @@
 defmodule GitHubOpenAPI.PackagesBillingUsage do
-  @moduledoc """
-  Provides struct and type for a PackagesBillingUsage
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          included_gigabytes_bandwidth: integer,
-          total_gigabytes_bandwidth_used: integer,
-          total_paid_gigabytes_bandwidth_used: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :included_gigabytes_bandwidth, :integer
+    field :total_gigabytes_bandwidth_used, :integer
+    field :total_paid_gigabytes_bandwidth_used, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :included_gigabytes_bandwidth,
-    :total_gigabytes_bandwidth_used,
-    :total_paid_gigabytes_bandwidth_used
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      included_gigabytes_bandwidth: :integer,
-      total_gigabytes_bandwidth_used: :integer,
-      total_paid_gigabytes_bandwidth_used: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:included_gigabytes_bandwidth, :total_gigabytes_bandwidth_used, :total_paid_gigabytes_bandwidth_used, :__info__, :__joins__])
+    
   end
 end

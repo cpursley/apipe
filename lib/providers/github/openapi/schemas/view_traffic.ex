@@ -1,24 +1,19 @@
 defmodule GitHubOpenAPI.ViewTraffic do
-  @moduledoc """
-  Provides struct and type for a ViewTraffic
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          count: integer,
-          uniques: integer,
-          views: [GitHubOpenAPI.Traffic.t()]
-        }
+  @primary_key false
+  embedded_schema do
+    field :count, :integer
+    field :uniques, :integer
+    embeds_many :views, GitHubOpenAPI.Traffic
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :count, :uniques, :views]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [count: :integer, uniques: :integer, views: [{GitHubOpenAPI.Traffic, :t}]]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:count, :uniques, :__info__, :__joins__])
+        |> cast_embed(:views, with: &GitHubOpenAPI.Traffic.changeset/2)
   end
 end

@@ -1,25 +1,20 @@
 defmodule GitHubOpenAPI.SimpleClassroom do
-  @moduledoc """
-  Provides struct and type for a SimpleClassroom
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          archived: boolean,
-          id: integer,
-          name: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :archived, :boolean
+    field :id, :integer
+    field :name, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :archived, :id, :name, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [archived: :boolean, id: :integer, name: {:string, :generic}, url: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:archived, :id, :name, :url, :__info__, :__joins__])
+    
   end
 end

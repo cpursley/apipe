@@ -1,24 +1,19 @@
 defmodule GitHubOpenAPI.RunnerLabel do
-  @moduledoc """
-  Provides struct and type for a RunnerLabel
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          id: integer | nil,
-          name: String.t(),
-          type: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :id, :integer
+    field :name, :string
+    field :type, Ecto.Enum, values: [:"read-only", :custom]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :id, :name, :type]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [id: :integer, name: {:string, :generic}, type: {:enum, ["read-only", "custom"]}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:id, :name, :type, :__info__, :__joins__])
+    
   end
 end

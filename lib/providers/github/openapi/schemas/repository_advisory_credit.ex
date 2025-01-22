@@ -1,41 +1,20 @@
 defmodule GitHubOpenAPI.RepositoryAdvisoryCredit do
-  @moduledoc """
-  Provides struct and type for a RepositoryAdvisoryCredit
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          state: String.t(),
-          type: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :state, Ecto.Enum, values: [:accepted, :declined, :pending]
+    embeds_one :type, GitHubOpenAPI.SecurityAdvisoryCreditTypes
+    embeds_one :user, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :state, :type, :user]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      state: {:enum, ["accepted", "declined", "pending"]},
-      type:
-        {:enum,
-         [
-           "analyst",
-           "finder",
-           "reporter",
-           "coordinator",
-           "remediation_developer",
-           "remediation_reviewer",
-           "remediation_verifier",
-           "tool",
-           "sponsor",
-           "other"
-         ]},
-      user: {GitHubOpenAPI.SimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:state, :__info__, :__joins__])
+        |> cast_embed(:type, with: &GitHubOpenAPI.SecurityAdvisoryCreditTypes.changeset/2)
+    |> cast_embed(:user, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

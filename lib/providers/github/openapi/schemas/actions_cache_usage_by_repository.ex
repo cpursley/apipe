@@ -1,34 +1,19 @@
 defmodule GitHubOpenAPI.ActionsCacheUsageByRepository do
-  @moduledoc """
-  Provides struct and type for a ActionsCacheUsageByRepository
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          active_caches_count: integer,
-          active_caches_size_in_bytes: integer,
-          full_name: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :active_caches_count, :integer
+    field :active_caches_size_in_bytes, :integer
+    field :full_name, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :active_caches_count,
-    :active_caches_size_in_bytes,
-    :full_name
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      active_caches_count: :integer,
-      active_caches_size_in_bytes: :integer,
-      full_name: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:active_caches_count, :active_caches_size_in_bytes, :full_name, :__info__, :__joins__])
+    
   end
 end

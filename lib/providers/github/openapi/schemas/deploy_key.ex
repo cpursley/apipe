@@ -1,55 +1,26 @@
 defmodule GitHubOpenAPI.DeployKey do
-  @moduledoc """
-  Provides struct and type for a DeployKey
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          added_by: String.t() | nil,
-          created_at: String.t(),
-          enabled: boolean | nil,
-          id: integer,
-          key: String.t(),
-          last_used: String.t() | nil,
-          read_only: boolean,
-          title: String.t(),
-          url: String.t(),
-          verified: boolean
-        }
+  @primary_key false
+  embedded_schema do
+    field :added_by, :string
+    field :created_at, :string
+    field :enabled, :boolean
+    field :id, :integer
+    field :key, :string
+    field :last_used, :string
+    field :read_only, :boolean
+    field :title, :string
+    field :url, :string
+    field :verified, :boolean
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :added_by,
-    :created_at,
-    :enabled,
-    :id,
-    :key,
-    :last_used,
-    :read_only,
-    :title,
-    :url,
-    :verified
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      added_by: {:string, :generic},
-      created_at: {:string, :generic},
-      enabled: :boolean,
-      id: :integer,
-      key: {:string, :generic},
-      last_used: {:string, :generic},
-      read_only: :boolean,
-      title: {:string, :generic},
-      url: {:string, :generic},
-      verified: :boolean
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:added_by, :created_at, :enabled, :id, :key, :last_used, :read_only, :title, :url, :verified, :__info__, :__joins__])
+    
   end
 end

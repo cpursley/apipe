@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.WorkflowRunUsage do
-  @moduledoc """
-  Provides struct and type for a WorkflowRunUsage
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          billable: GitHubOpenAPI.WorkflowRunUsageBillable.t(),
-          run_duration_ms: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :billable, :map
+    field :run_duration_ms, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :billable, :run_duration_ms]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [billable: {GitHubOpenAPI.WorkflowRunUsageBillable, :t}, run_duration_ms: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:run_duration_ms, :__info__, :__joins__])
+    
   end
 end

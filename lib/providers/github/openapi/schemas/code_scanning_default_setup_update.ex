@@ -1,44 +1,21 @@
 defmodule GitHubOpenAPI.CodeScanningDefaultSetupUpdate do
-  @moduledoc """
-  Provides struct and type for a CodeScanningDefaultSetupUpdate
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          languages: [String.t()] | nil,
-          query_suite: String.t() | nil,
-          runner_label: String.t() | nil,
-          runner_type: String.t() | nil,
-          state: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :languages, {:array, :string}
+    field :query_suite, Ecto.Enum, values: [:default, :extended]
+    field :runner_label, :string
+    field :runner_type, Ecto.Enum, values: [:standard, :labeled]
+    field :state, Ecto.Enum, values: [:configured, :"not-configured"]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :languages, :query_suite, :runner_label, :runner_type, :state]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      languages: [
-        enum: [
-          "actions",
-          "c-cpp",
-          "csharp",
-          "go",
-          "java-kotlin",
-          "javascript-typescript",
-          "python",
-          "ruby",
-          "swift"
-        ]
-      ],
-      query_suite: {:enum, ["default", "extended"]},
-      runner_label: {:string, :generic},
-      runner_type: {:enum, ["standard", "labeled"]},
-      state: {:enum, ["configured", "not-configured"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:languages, :query_suite, :runner_label, :runner_type, :state, :__info__, :__joins__])
+    
   end
 end

@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.ValidationError do
-  @moduledoc """
-  Provides struct and type for a ValidationError
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          documentation_url: String.t(),
-          errors: [GitHubOpenAPI.ValidationErrorErrors.t()] | nil,
-          message: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :documentation_url, :string
+    field :errors, {:array, :string}
+    field :message, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :documentation_url, :errors, :message]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      documentation_url: {:string, :generic},
-      errors: [{GitHubOpenAPI.ValidationErrorErrors, :t}],
-      message: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:documentation_url, :errors, :message, :__info__, :__joins__])
+    
   end
 end

@@ -1,71 +1,41 @@
 defmodule GitHubOpenAPI.DependabotAlert do
-  @moduledoc """
-  Provides struct and type for a DependabotAlert
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          auto_dismissed_at: DateTime.t() | nil,
-          created_at: DateTime.t(),
-          dependency: GitHubOpenAPI.DependabotAlertDependency.t(),
-          dismissed_at: DateTime.t(),
-          dismissed_by: GitHubOpenAPI.NullableSimpleUser.t(),
-          dismissed_comment: String.t() | nil,
-          dismissed_reason: String.t() | nil,
-          fixed_at: DateTime.t(),
-          html_url: String.t(),
-          number: integer,
-          security_advisory: GitHubOpenAPI.DependabotAlertSecurityAdvisory.t(),
-          security_vulnerability: GitHubOpenAPI.DependabotAlertSecurityVulnerability.t(),
-          state: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :dependency, :map
+    field :dismissed_comment, :string
+    field :dismissed_reason, Ecto.Enum, values: [:fix_started, :inaccurate, :no_bandwidth, :not_used, :tolerable_risk]
+    field :state, Ecto.Enum, values: [:auto_dismissed, :dismissed, :fixed, :open]
+    embeds_one :auto_dismissed_at, GitHubOpenAPI.AlertAutoDismissedAt
+    embeds_one :created_at, GitHubOpenAPI.AlertCreatedAt
+    embeds_one :dismissed_at, GitHubOpenAPI.AlertDismissedAt
+    embeds_one :dismissed_by, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :fixed_at, GitHubOpenAPI.AlertFixedAt
+    embeds_one :html_url, GitHubOpenAPI.AlertHtmlUrl
+    embeds_one :number, GitHubOpenAPI.AlertNumber
+    embeds_one :security_advisory, GitHubOpenAPI.DependabotAlertSecurityAdvisory
+    embeds_one :security_vulnerability, GitHubOpenAPI.DependabotAlertSecurityVulnerability
+    embeds_one :updated_at, GitHubOpenAPI.AlertUpdatedAt
+    embeds_one :url, GitHubOpenAPI.AlertUrl
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :auto_dismissed_at,
-    :created_at,
-    :dependency,
-    :dismissed_at,
-    :dismissed_by,
-    :dismissed_comment,
-    :dismissed_reason,
-    :fixed_at,
-    :html_url,
-    :number,
-    :security_advisory,
-    :security_vulnerability,
-    :state,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      auto_dismissed_at: {:string, :date_time},
-      created_at: {:string, :date_time},
-      dependency: {GitHubOpenAPI.DependabotAlertDependency, :t},
-      dismissed_at: {:string, :date_time},
-      dismissed_by: {GitHubOpenAPI.NullableSimpleUser, :t},
-      dismissed_comment: {:string, :generic},
-      dismissed_reason:
-        {:enum, ["fix_started", "inaccurate", "no_bandwidth", "not_used", "tolerable_risk"]},
-      fixed_at: {:string, :date_time},
-      html_url: {:string, :uri},
-      number: :integer,
-      security_advisory: {GitHubOpenAPI.DependabotAlertSecurityAdvisory, :t},
-      security_vulnerability: {GitHubOpenAPI.DependabotAlertSecurityVulnerability, :t},
-      state: {:enum, ["auto_dismissed", "dismissed", "fixed", "open"]},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:dismissed_comment, :dismissed_reason, :state, :__info__, :__joins__])
+        |> cast_embed(:auto_dismissed_at, with: &GitHubOpenAPI.AlertAutoDismissedAt.changeset/2)
+    |> cast_embed(:created_at, with: &GitHubOpenAPI.AlertCreatedAt.changeset/2)
+    |> cast_embed(:dismissed_at, with: &GitHubOpenAPI.AlertDismissedAt.changeset/2)
+    |> cast_embed(:dismissed_by, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:fixed_at, with: &GitHubOpenAPI.AlertFixedAt.changeset/2)
+    |> cast_embed(:html_url, with: &GitHubOpenAPI.AlertHtmlUrl.changeset/2)
+    |> cast_embed(:number, with: &GitHubOpenAPI.AlertNumber.changeset/2)
+    |> cast_embed(:security_advisory, with: &GitHubOpenAPI.DependabotAlertSecurityAdvisory.changeset/2)
+    |> cast_embed(:security_vulnerability, with: &GitHubOpenAPI.DependabotAlertSecurityVulnerability.changeset/2)
+    |> cast_embed(:updated_at, with: &GitHubOpenAPI.AlertUpdatedAt.changeset/2)
+    |> cast_embed(:url, with: &GitHubOpenAPI.AlertUrl.changeset/2)
   end
 end

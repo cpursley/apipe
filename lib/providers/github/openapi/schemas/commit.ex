@@ -1,58 +1,27 @@
 defmodule GitHubOpenAPI.Commit do
-  @moduledoc """
-  Provides struct and type for a Commit
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          author: GitHubOpenAPI.EmptyObject.t() | GitHubOpenAPI.SimpleUser.t() | nil,
-          comments_url: String.t(),
-          commit: GitHubOpenAPI.CommitCommit.t(),
-          committer: GitHubOpenAPI.EmptyObject.t() | GitHubOpenAPI.SimpleUser.t() | nil,
-          files: [GitHubOpenAPI.DiffEntry.t()] | nil,
-          html_url: String.t(),
-          node_id: String.t(),
-          parents: [GitHubOpenAPI.CommitParents.t()],
-          sha: String.t(),
-          stats: GitHubOpenAPI.CommitStats.t() | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :author, :map
+    field :comments_url, :string
+    field :commit, :map
+    field :committer, :map
+    field :html_url, :string
+    field :node_id, :string
+    field :parents, {:array, :string}
+    field :sha, :string
+    field :stats, :map
+    field :url, :string
+    embeds_many :files, GitHubOpenAPI.DiffEntry
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :author,
-    :comments_url,
-    :commit,
-    :committer,
-    :files,
-    :html_url,
-    :node_id,
-    :parents,
-    :sha,
-    :stats,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      author: {:union, [{GitHubOpenAPI.EmptyObject, :t}, {GitHubOpenAPI.SimpleUser, :t}]},
-      comments_url: {:string, :uri},
-      commit: {GitHubOpenAPI.CommitCommit, :t},
-      committer: {:union, [{GitHubOpenAPI.EmptyObject, :t}, {GitHubOpenAPI.SimpleUser, :t}]},
-      files: [{GitHubOpenAPI.DiffEntry, :t}],
-      html_url: {:string, :uri},
-      node_id: {:string, :generic},
-      parents: [{GitHubOpenAPI.CommitParents, :t}],
-      sha: {:string, :generic},
-      stats: {GitHubOpenAPI.CommitStats, :t},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:author, :comments_url, :committer, :html_url, :node_id, :parents, :sha, :url, :__info__, :__joins__])
+        |> cast_embed(:files, with: &GitHubOpenAPI.DiffEntry.changeset/2)
   end
 end

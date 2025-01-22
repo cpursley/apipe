@@ -1,23 +1,19 @@
 defmodule GitHubOpenAPI.PullRequestReviewRequest do
-  @moduledoc """
-  Provides struct and type for a PullRequestReviewRequest
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          teams: [GitHubOpenAPI.Team.t()],
-          users: [GitHubOpenAPI.SimpleUser.t()]
-        }
+  @primary_key false
+  embedded_schema do
+    embeds_many :teams, GitHubOpenAPI.Team
+    embeds_many :users, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :teams, :users]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [teams: [{GitHubOpenAPI.Team, :t}], users: [{GitHubOpenAPI.SimpleUser, :t}]]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+        |> cast_embed(:teams, with: &GitHubOpenAPI.Team.changeset/2)
+    |> cast_embed(:users, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

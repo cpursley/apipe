@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.DeploymentBranchPolicySettings do
-  @moduledoc """
-  Provides struct and type for a DeploymentBranchPolicySettings
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          custom_branch_policies: boolean,
-          protected_branches: boolean
-        }
+  @primary_key false
+  embedded_schema do
+    field :custom_branch_policies, :boolean
+    field :protected_branches, :boolean
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :custom_branch_policies, :protected_branches]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [custom_branch_policies: :boolean, protected_branches: :boolean]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:custom_branch_policies, :protected_branches, :__info__, :__joins__])
+    
   end
 end

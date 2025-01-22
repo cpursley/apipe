@@ -1,95 +1,38 @@
 defmodule GitHubOpenAPI.CheckSuite do
-  @moduledoc """
-  Provides struct and type for a CheckSuite
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          after: String.t() | nil,
-          app: GitHubOpenAPI.NullableIntegration.t(),
-          before: String.t() | nil,
-          check_runs_url: String.t(),
-          conclusion: String.t() | nil,
-          created_at: DateTime.t() | nil,
-          head_branch: String.t() | nil,
-          head_commit: GitHubOpenAPI.SimpleCommit.t(),
-          head_sha: String.t(),
-          id: integer,
-          latest_check_runs_count: integer,
-          node_id: String.t(),
-          pull_requests: [GitHubOpenAPI.PullRequestMinimal.t()] | nil,
-          repository: GitHubOpenAPI.MinimalRepository.t(),
-          rerequestable: boolean | nil,
-          runs_rerequestable: boolean | nil,
-          status: String.t() | nil,
-          updated_at: DateTime.t() | nil,
-          url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :after, :string
+    field :before, :string
+    field :check_runs_url, :string
+    field :conclusion, Ecto.Enum, values: [:success, :failure, :neutral, :cancelled, :skipped, :timed_out, :action_required, :startup_failure, :stale]
+    field :created_at, :string
+    field :head_branch, :string
+    field :head_sha, :string
+    field :id, :integer
+    field :latest_check_runs_count, :integer
+    field :node_id, :string
+    field :rerequestable, :boolean
+    field :runs_rerequestable, :boolean
+    field :status, Ecto.Enum, values: [:queued, :in_progress, :completed, :waiting, :requested, :pending]
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :app, GitHubOpenAPI.NullableIntegration
+    embeds_one :head_commit, GitHubOpenAPI.SimpleCommit
+    embeds_many :pull_requests, GitHubOpenAPI.PullRequestMinimal
+    embeds_one :repository, GitHubOpenAPI.MinimalRepository
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :after,
-    :app,
-    :before,
-    :check_runs_url,
-    :conclusion,
-    :created_at,
-    :head_branch,
-    :head_commit,
-    :head_sha,
-    :id,
-    :latest_check_runs_count,
-    :node_id,
-    :pull_requests,
-    :repository,
-    :rerequestable,
-    :runs_rerequestable,
-    :status,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      after: {:string, :generic},
-      app: {GitHubOpenAPI.NullableIntegration, :t},
-      before: {:string, :generic},
-      check_runs_url: {:string, :generic},
-      conclusion:
-        {:enum,
-         [
-           "success",
-           "failure",
-           "neutral",
-           "cancelled",
-           "skipped",
-           "timed_out",
-           "action_required",
-           "startup_failure",
-           "stale",
-           nil
-         ]},
-      created_at: {:string, :date_time},
-      head_branch: {:string, :generic},
-      head_commit: {GitHubOpenAPI.SimpleCommit, :t},
-      head_sha: {:string, :generic},
-      id: :integer,
-      latest_check_runs_count: :integer,
-      node_id: {:string, :generic},
-      pull_requests: [{GitHubOpenAPI.PullRequestMinimal, :t}],
-      repository: {GitHubOpenAPI.MinimalRepository, :t},
-      rerequestable: :boolean,
-      runs_rerequestable: :boolean,
-      status: {:enum, ["queued", "in_progress", "completed", "waiting", "requested", "pending"]},
-      updated_at: {:string, :date_time},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:after, :before, :check_runs_url, :conclusion, :created_at, :head_branch, :head_sha, :id, :latest_check_runs_count, :node_id, :rerequestable, :runs_rerequestable, :status, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:app, with: &GitHubOpenAPI.NullableIntegration.changeset/2)
+    |> cast_embed(:head_commit, with: &GitHubOpenAPI.SimpleCommit.changeset/2)
+    |> cast_embed(:pull_requests, with: &GitHubOpenAPI.PullRequestMinimal.changeset/2)
+    |> cast_embed(:repository, with: &GitHubOpenAPI.MinimalRepository.changeset/2)
   end
 end

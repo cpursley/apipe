@@ -1,55 +1,32 @@
 defmodule GitHubOpenAPI.CodeScanningAlertInstance do
-  @moduledoc """
-  Provides struct and type for a CodeScanningAlertInstance
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          analysis_key: String.t() | nil,
-          category: String.t() | nil,
-          classifications: [String.t()] | nil,
-          commit_sha: String.t() | nil,
-          environment: String.t() | nil,
-          html_url: String.t() | nil,
-          location: GitHubOpenAPI.CodeScanningAlertLocation.t() | nil,
-          message: GitHubOpenAPI.CodeScanningAlertInstanceMessage.t() | nil,
-          ref: String.t() | nil,
-          state: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit_sha, :string
+    field :html_url, :string
+    field :message, :map
+    embeds_one :analysis_key, GitHubOpenAPI.CodeScanningAnalysisAnalysisKey
+    embeds_one :category, GitHubOpenAPI.CodeScanningAnalysisCategory
+    embeds_many :classifications, GitHubOpenAPI.CodeScanningAlertClassification
+    embeds_one :environment, GitHubOpenAPI.CodeScanningAlertEnvironment
+    embeds_one :location, GitHubOpenAPI.CodeScanningAlertLocation
+    embeds_one :ref, GitHubOpenAPI.CodeScanningRef
+    embeds_one :state, GitHubOpenAPI.CodeScanningAlertState
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :analysis_key,
-    :category,
-    :classifications,
-    :commit_sha,
-    :environment,
-    :html_url,
-    :location,
-    :message,
-    :ref,
-    :state
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      analysis_key: {:string, :generic},
-      category: {:string, :generic},
-      classifications: [enum: ["source", "generated", "test", "library"]],
-      commit_sha: {:string, :generic},
-      environment: {:string, :generic},
-      html_url: {:string, :generic},
-      location: {GitHubOpenAPI.CodeScanningAlertLocation, :t},
-      message: {GitHubOpenAPI.CodeScanningAlertInstanceMessage, :t},
-      ref: {:string, :generic},
-      state: {:enum, ["open", "dismissed", "fixed"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:commit_sha, :html_url, :__info__, :__joins__])
+        |> cast_embed(:analysis_key, with: &GitHubOpenAPI.CodeScanningAnalysisAnalysisKey.changeset/2)
+    |> cast_embed(:category, with: &GitHubOpenAPI.CodeScanningAnalysisCategory.changeset/2)
+    |> cast_embed(:classifications, with: &GitHubOpenAPI.CodeScanningAlertClassification.changeset/2)
+    |> cast_embed(:environment, with: &GitHubOpenAPI.CodeScanningAlertEnvironment.changeset/2)
+    |> cast_embed(:location, with: &GitHubOpenAPI.CodeScanningAlertLocation.changeset/2)
+    |> cast_embed(:ref, with: &GitHubOpenAPI.CodeScanningRef.changeset/2)
+    |> cast_embed(:state, with: &GitHubOpenAPI.CodeScanningAlertState.changeset/2)
   end
 end

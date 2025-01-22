@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.RepositoryRuleViolationError do
-  @moduledoc """
-  Provides struct and type for a RepositoryRuleViolationError
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          documentation_url: String.t() | nil,
-          message: String.t() | nil,
-          metadata: GitHubOpenAPI.RepositoryRuleViolationErrorMetadata.t() | nil,
-          status: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :documentation_url, :string
+    field :message, :string
+    field :metadata, :map
+    field :status, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :documentation_url, :message, :metadata, :status]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      documentation_url: {:string, :generic},
-      message: {:string, :generic},
-      metadata: {GitHubOpenAPI.RepositoryRuleViolationErrorMetadata, :t},
-      status: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:documentation_url, :message, :status, :__info__, :__joins__])
+    
   end
 end

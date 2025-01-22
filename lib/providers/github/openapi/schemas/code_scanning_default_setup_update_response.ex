@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.CodeScanningDefaultSetupUpdateResponse do
-  @moduledoc """
-  Provides struct and type for a CodeScanningDefaultSetupUpdateResponse
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          run_id: integer | nil,
-          run_url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :run_id, :integer
+    field :run_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :run_id, :run_url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [run_id: :integer, run_url: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:run_id, :run_url, :__info__, :__joins__])
+    
   end
 end

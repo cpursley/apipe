@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.SecretScanningScan do
-  @moduledoc """
-  Provides struct and type for a SecretScanningScan
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          completed_at: DateTime.t() | nil,
-          started_at: DateTime.t() | nil,
-          status: String.t() | nil,
-          type: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :completed_at, :string
+    field :started_at, :string
+    field :status, :string
+    field :type, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :completed_at, :started_at, :status, :type]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      completed_at: {:string, :date_time},
-      started_at: {:string, :date_time},
-      status: {:string, :generic},
-      type: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:completed_at, :started_at, :status, :type, :__info__, :__joins__])
+    
   end
 end

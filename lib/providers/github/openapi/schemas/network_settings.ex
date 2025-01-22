@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.NetworkSettings do
-  @moduledoc """
-  Provides struct and type for a NetworkSettings
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          id: String.t(),
-          name: String.t(),
-          network_configuration_id: String.t() | nil,
-          region: String.t(),
-          subnet_id: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :id, :string
+    field :name, :string
+    field :network_configuration_id, :string
+    field :region, :string
+    field :subnet_id, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :id, :name, :network_configuration_id, :region, :subnet_id]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      id: {:string, :generic},
-      name: {:string, :generic},
-      network_configuration_id: {:string, :generic},
-      region: {:string, :generic},
-      subnet_id: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:id, :name, :network_configuration_id, :region, :subnet_id, :__info__, :__joins__])
+    
   end
 end

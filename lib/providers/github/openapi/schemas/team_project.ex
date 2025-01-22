@@ -1,73 +1,32 @@
 defmodule GitHubOpenAPI.TeamProject do
-  @moduledoc """
-  Provides struct and type for a TeamProject
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          body: String.t() | nil,
-          columns_url: String.t(),
-          created_at: String.t(),
-          creator: GitHubOpenAPI.SimpleUser.t(),
-          html_url: String.t(),
-          id: integer,
-          name: String.t(),
-          node_id: String.t(),
-          number: integer,
-          organization_permission: String.t() | nil,
-          owner_url: String.t(),
-          permissions: GitHubOpenAPI.TeamProjectPermissions.t(),
-          private: boolean | nil,
-          state: String.t(),
-          updated_at: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :body, :string
+    field :columns_url, :string
+    field :created_at, :string
+    field :html_url, :string
+    field :id, :integer
+    field :name, :string
+    field :node_id, :string
+    field :number, :integer
+    field :organization_permission, :string
+    field :owner_url, :string
+    field :permissions, :map
+    field :private, :boolean
+    field :state, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :creator, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :body,
-    :columns_url,
-    :created_at,
-    :creator,
-    :html_url,
-    :id,
-    :name,
-    :node_id,
-    :number,
-    :organization_permission,
-    :owner_url,
-    :permissions,
-    :private,
-    :state,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      body: {:string, :generic},
-      columns_url: {:string, :generic},
-      created_at: {:string, :generic},
-      creator: {GitHubOpenAPI.SimpleUser, :t},
-      html_url: {:string, :generic},
-      id: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      number: :integer,
-      organization_permission: {:string, :generic},
-      owner_url: {:string, :generic},
-      permissions: {GitHubOpenAPI.TeamProjectPermissions, :t},
-      private: :boolean,
-      state: {:string, :generic},
-      updated_at: {:string, :generic},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:body, :columns_url, :created_at, :html_url, :id, :name, :node_id, :number, :organization_permission, :owner_url, :private, :state, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:creator, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

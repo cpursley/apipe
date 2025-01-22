@@ -1,67 +1,30 @@
 defmodule GitHubOpenAPI.ContentFile do
-  @moduledoc """
-  Provides struct and type for a ContentFile
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          _links: GitHubOpenAPI.ContentFileLinks.t(),
-          content: String.t(),
-          download_url: String.t() | nil,
-          encoding: String.t(),
-          git_url: String.t() | nil,
-          html_url: String.t() | nil,
-          name: String.t(),
-          path: String.t(),
-          sha: String.t(),
-          size: integer,
-          submodule_git_url: String.t() | nil,
-          target: String.t() | nil,
-          type: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :_links, :map
+    field :content, :string
+    field :download_url, :string
+    field :encoding, :string
+    field :git_url, :string
+    field :html_url, :string
+    field :name, :string
+    field :path, :string
+    field :sha, :string
+    field :size, :integer
+    field :submodule_git_url, :string
+    field :target, :string
+    field :type, Ecto.Enum, values: [:file]
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :_links,
-    :content,
-    :download_url,
-    :encoding,
-    :git_url,
-    :html_url,
-    :name,
-    :path,
-    :sha,
-    :size,
-    :submodule_git_url,
-    :target,
-    :type,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      _links: {GitHubOpenAPI.ContentFileLinks, :t},
-      content: {:string, :generic},
-      download_url: {:string, :uri},
-      encoding: {:string, :generic},
-      git_url: {:string, :uri},
-      html_url: {:string, :uri},
-      name: {:string, :generic},
-      path: {:string, :generic},
-      sha: {:string, :generic},
-      size: :integer,
-      submodule_git_url: {:string, :generic},
-      target: {:string, :generic},
-      type: {:const, "file"},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:content, :download_url, :encoding, :git_url, :html_url, :name, :path, :sha, :size, :submodule_git_url, :target, :type, :url, :__info__, :__joins__])
+    
   end
 end

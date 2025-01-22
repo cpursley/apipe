@@ -1,64 +1,32 @@
 defmodule GitHubOpenAPI.CommitComparison do
-  @moduledoc """
-  Provides struct and type for a CommitComparison
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          ahead_by: integer,
-          base_commit: GitHubOpenAPI.Commit.t(),
-          behind_by: integer,
-          commits: [GitHubOpenAPI.Commit.t()],
-          diff_url: String.t(),
-          files: [GitHubOpenAPI.DiffEntry.t()] | nil,
-          html_url: String.t(),
-          merge_base_commit: GitHubOpenAPI.Commit.t(),
-          patch_url: String.t(),
-          permalink_url: String.t(),
-          status: String.t(),
-          total_commits: integer,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :ahead_by, :integer
+    field :behind_by, :integer
+    field :diff_url, :string
+    field :html_url, :string
+    field :patch_url, :string
+    field :permalink_url, :string
+    field :status, Ecto.Enum, values: [:diverged, :ahead, :behind, :identical]
+    field :total_commits, :integer
+    field :url, :string
+    embeds_one :base_commit, GitHubOpenAPI.Commit
+    embeds_many :commits, GitHubOpenAPI.Commit
+    embeds_many :files, GitHubOpenAPI.DiffEntry
+    embeds_one :merge_base_commit, GitHubOpenAPI.Commit
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :ahead_by,
-    :base_commit,
-    :behind_by,
-    :commits,
-    :diff_url,
-    :files,
-    :html_url,
-    :merge_base_commit,
-    :patch_url,
-    :permalink_url,
-    :status,
-    :total_commits,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      ahead_by: :integer,
-      base_commit: {GitHubOpenAPI.Commit, :t},
-      behind_by: :integer,
-      commits: [{GitHubOpenAPI.Commit, :t}],
-      diff_url: {:string, :uri},
-      files: [{GitHubOpenAPI.DiffEntry, :t}],
-      html_url: {:string, :uri},
-      merge_base_commit: {GitHubOpenAPI.Commit, :t},
-      patch_url: {:string, :uri},
-      permalink_url: {:string, :uri},
-      status: {:enum, ["diverged", "ahead", "behind", "identical"]},
-      total_commits: :integer,
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:ahead_by, :behind_by, :diff_url, :html_url, :patch_url, :permalink_url, :status, :total_commits, :url, :__info__, :__joins__])
+        |> cast_embed(:base_commit, with: &GitHubOpenAPI.Commit.changeset/2)
+    |> cast_embed(:commits, with: &GitHubOpenAPI.Commit.changeset/2)
+    |> cast_embed(:files, with: &GitHubOpenAPI.DiffEntry.changeset/2)
+    |> cast_embed(:merge_base_commit, with: &GitHubOpenAPI.Commit.changeset/2)
   end
 end

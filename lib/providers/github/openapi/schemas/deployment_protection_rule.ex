@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.DeploymentProtectionRule do
-  @moduledoc """
-  Provides struct and type for a DeploymentProtectionRule
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          app: GitHubOpenAPI.CustomDeploymentRuleApp.t(),
-          enabled: boolean,
-          id: integer,
-          node_id: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :enabled, :boolean
+    field :id, :integer
+    field :node_id, :string
+    embeds_one :app, GitHubOpenAPI.CustomDeploymentRuleApp
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :app, :enabled, :id, :node_id]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      app: {GitHubOpenAPI.CustomDeploymentRuleApp, :t},
-      enabled: :boolean,
-      id: :integer,
-      node_id: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:enabled, :id, :node_id, :__info__, :__joins__])
+        |> cast_embed(:app, with: &GitHubOpenAPI.CustomDeploymentRuleApp.changeset/2)
   end
 end

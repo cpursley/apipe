@@ -1,55 +1,26 @@
 defmodule GitHubOpenAPI.CopilotUsageMetrics do
-  @moduledoc """
-  Provides struct and type for a CopilotUsageMetrics
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          breakdown: [GitHubOpenAPI.CopilotUsageMetricsBreakdown.t()] | nil,
-          day: Date.t(),
-          total_acceptances_count: integer | nil,
-          total_active_chat_users: integer | nil,
-          total_active_users: integer | nil,
-          total_chat_acceptances: integer | nil,
-          total_chat_turns: integer | nil,
-          total_lines_accepted: integer | nil,
-          total_lines_suggested: integer | nil,
-          total_suggestions_count: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :breakdown, {:array, :string}
+    field :day, :string
+    field :total_acceptances_count, :integer
+    field :total_active_chat_users, :integer
+    field :total_active_users, :integer
+    field :total_chat_acceptances, :integer
+    field :total_chat_turns, :integer
+    field :total_lines_accepted, :integer
+    field :total_lines_suggested, :integer
+    field :total_suggestions_count, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :breakdown,
-    :day,
-    :total_acceptances_count,
-    :total_active_chat_users,
-    :total_active_users,
-    :total_chat_acceptances,
-    :total_chat_turns,
-    :total_lines_accepted,
-    :total_lines_suggested,
-    :total_suggestions_count
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      breakdown: [{GitHubOpenAPI.CopilotUsageMetricsBreakdown, :t}],
-      day: {:string, :date},
-      total_acceptances_count: :integer,
-      total_active_chat_users: :integer,
-      total_active_users: :integer,
-      total_chat_acceptances: :integer,
-      total_chat_turns: :integer,
-      total_lines_accepted: :integer,
-      total_lines_suggested: :integer,
-      total_suggestions_count: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:breakdown, :day, :total_acceptances_count, :total_active_chat_users, :total_active_users, :total_chat_acceptances, :total_chat_turns, :total_lines_accepted, :total_lines_suggested, :total_suggestions_count, :__info__, :__joins__])
+    
   end
 end

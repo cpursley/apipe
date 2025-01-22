@@ -1,43 +1,22 @@
 defmodule GitHubOpenAPI.ProtectedBranchRequiredStatusCheck do
-  @moduledoc """
-  Provides struct and type for a ProtectedBranchRequiredStatusCheck
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          checks: [GitHubOpenAPI.ProtectedBranchRequiredStatusCheckChecks.t()],
-          contexts: [String.t()],
-          contexts_url: String.t() | nil,
-          enforcement_level: String.t() | nil,
-          strict: boolean | nil,
-          url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :checks, {:array, :string}
+    field :contexts, {:array, :string}
+    field :contexts_url, :string
+    field :enforcement_level, :string
+    field :strict, :boolean
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :checks,
-    :contexts,
-    :contexts_url,
-    :enforcement_level,
-    :strict,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      checks: [{GitHubOpenAPI.ProtectedBranchRequiredStatusCheckChecks, :t}],
-      contexts: [string: :generic],
-      contexts_url: {:string, :generic},
-      enforcement_level: {:string, :generic},
-      strict: :boolean,
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:checks, :contexts, :contexts_url, :enforcement_level, :strict, :url, :__info__, :__joins__])
+    
   end
 end

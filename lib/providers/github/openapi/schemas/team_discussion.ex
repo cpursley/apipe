@@ -1,79 +1,35 @@
 defmodule GitHubOpenAPI.TeamDiscussion do
-  @moduledoc """
-  Provides struct and type for a TeamDiscussion
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          author: GitHubOpenAPI.NullableSimpleUser.t(),
-          body: String.t(),
-          body_html: String.t(),
-          body_version: String.t(),
-          comments_count: integer,
-          comments_url: String.t(),
-          created_at: DateTime.t(),
-          html_url: String.t(),
-          last_edited_at: DateTime.t() | nil,
-          node_id: String.t(),
-          number: integer,
-          pinned: boolean,
-          private: boolean,
-          reactions: GitHubOpenAPI.ReactionRollup.t() | nil,
-          team_url: String.t(),
-          title: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :body, :string
+    field :body_html, :string
+    field :body_version, :string
+    field :comments_count, :integer
+    field :comments_url, :string
+    field :created_at, :string
+    field :html_url, :string
+    field :last_edited_at, :string
+    field :node_id, :string
+    field :number, :integer
+    field :pinned, :boolean
+    field :private, :boolean
+    field :team_url, :string
+    field :title, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :author, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :reactions, GitHubOpenAPI.ReactionRollup
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :author,
-    :body,
-    :body_html,
-    :body_version,
-    :comments_count,
-    :comments_url,
-    :created_at,
-    :html_url,
-    :last_edited_at,
-    :node_id,
-    :number,
-    :pinned,
-    :private,
-    :reactions,
-    :team_url,
-    :title,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      author: {GitHubOpenAPI.NullableSimpleUser, :t},
-      body: {:string, :generic},
-      body_html: {:string, :generic},
-      body_version: {:string, :generic},
-      comments_count: :integer,
-      comments_url: {:string, :uri},
-      created_at: {:string, :date_time},
-      html_url: {:string, :uri},
-      last_edited_at: {:string, :date_time},
-      node_id: {:string, :generic},
-      number: :integer,
-      pinned: :boolean,
-      private: :boolean,
-      reactions: {GitHubOpenAPI.ReactionRollup, :t},
-      team_url: {:string, :uri},
-      title: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:body, :body_html, :body_version, :comments_count, :comments_url, :created_at, :html_url, :last_edited_at, :node_id, :number, :pinned, :private, :team_url, :title, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:author, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:reactions, with: &GitHubOpenAPI.ReactionRollup.changeset/2)
   end
 end

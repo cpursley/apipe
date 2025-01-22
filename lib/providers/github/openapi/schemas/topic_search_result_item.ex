@@ -1,73 +1,32 @@
 defmodule GitHubOpenAPI.TopicSearchResultItem do
-  @moduledoc """
-  Provides struct and type for a TopicSearchResultItem
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          aliases: [GitHubOpenAPI.TopicSearchResultItemAliases.t()] | nil,
-          created_at: DateTime.t(),
-          created_by: String.t() | nil,
-          curated: boolean,
-          description: String.t() | nil,
-          display_name: String.t() | nil,
-          featured: boolean,
-          logo_url: String.t() | nil,
-          name: String.t(),
-          related: [GitHubOpenAPI.TopicSearchResultItemRelated.t()] | nil,
-          released: String.t() | nil,
-          repository_count: integer | nil,
-          score: number,
-          short_description: String.t() | nil,
-          text_matches: [GitHubOpenAPI.SearchResultTextMatches.t()] | nil,
-          updated_at: DateTime.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :aliases, {:array, :string}
+    field :created_at, :string
+    field :created_by, :string
+    field :curated, :boolean
+    field :description, :string
+    field :display_name, :string
+    field :featured, :boolean
+    field :logo_url, :string
+    field :name, :string
+    field :related, {:array, :string}
+    field :released, :string
+    field :repository_count, :integer
+    field :score, :float
+    field :short_description, :string
+    field :updated_at, :string
+    embeds_one :text_matches, GitHubOpenAPI.SearchResultTextMatches
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :aliases,
-    :created_at,
-    :created_by,
-    :curated,
-    :description,
-    :display_name,
-    :featured,
-    :logo_url,
-    :name,
-    :related,
-    :released,
-    :repository_count,
-    :score,
-    :short_description,
-    :text_matches,
-    :updated_at
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      aliases: [{GitHubOpenAPI.TopicSearchResultItemAliases, :t}],
-      created_at: {:string, :date_time},
-      created_by: {:string, :generic},
-      curated: :boolean,
-      description: {:string, :generic},
-      display_name: {:string, :generic},
-      featured: :boolean,
-      logo_url: {:string, :uri},
-      name: {:string, :generic},
-      related: [{GitHubOpenAPI.TopicSearchResultItemRelated, :t}],
-      released: {:string, :generic},
-      repository_count: :integer,
-      score: :number,
-      short_description: {:string, :generic},
-      text_matches: [{GitHubOpenAPI.SearchResultTextMatches, :t}],
-      updated_at: {:string, :date_time}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:aliases, :created_at, :created_by, :curated, :description, :display_name, :featured, :logo_url, :name, :related, :released, :repository_count, :score, :short_description, :updated_at, :__info__, :__joins__])
+        |> cast_embed(:text_matches, with: &GitHubOpenAPI.SearchResultTextMatches.changeset/2)
   end
 end

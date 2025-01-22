@@ -1,18 +1,18 @@
 defmodule GitHubOpenAPI.LinkWithType do
-  @moduledoc """
-  Provides struct and type for a LinkWithType
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, href: String.t(), type: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :href, :string
+    field :type, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :href, :type]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [href: {:string, :generic}, type: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:href, :type, :__info__, :__joins__])
+    
   end
 end

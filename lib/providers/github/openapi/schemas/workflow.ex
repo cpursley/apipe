@@ -1,60 +1,27 @@
 defmodule GitHubOpenAPI.Workflow do
-  @moduledoc """
-  Provides struct and type for a Workflow
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          badge_url: String.t(),
-          created_at: DateTime.t(),
-          deleted_at: DateTime.t() | nil,
-          html_url: String.t(),
-          id: integer,
-          name: String.t(),
-          node_id: String.t(),
-          path: String.t(),
-          state: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :badge_url, :string
+    field :created_at, :string
+    field :deleted_at, :string
+    field :html_url, :string
+    field :id, :integer
+    field :name, :string
+    field :node_id, :string
+    field :path, :string
+    field :state, Ecto.Enum, values: [:active, :deleted, :disabled_fork, :disabled_inactivity, :disabled_manually]
+    field :updated_at, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :badge_url,
-    :created_at,
-    :deleted_at,
-    :html_url,
-    :id,
-    :name,
-    :node_id,
-    :path,
-    :state,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      badge_url: {:string, :generic},
-      created_at: {:string, :date_time},
-      deleted_at: {:string, :date_time},
-      html_url: {:string, :generic},
-      id: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      path: {:string, :generic},
-      state:
-        {:enum,
-         ["active", "deleted", "disabled_fork", "disabled_inactivity", "disabled_manually"]},
-      updated_at: {:string, :date_time},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:badge_url, :created_at, :deleted_at, :html_url, :id, :name, :node_id, :path, :state, :updated_at, :url, :__info__, :__joins__])
+    
   end
 end

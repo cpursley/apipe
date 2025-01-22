@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.Autolink do
-  @moduledoc """
-  Provides struct and type for a Autolink
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          id: integer,
-          is_alphanumeric: boolean,
-          key_prefix: String.t(),
-          url_template: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :id, :integer
+    field :is_alphanumeric, :boolean
+    field :key_prefix, :string
+    field :url_template, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :id, :is_alphanumeric, :key_prefix, :url_template]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      id: :integer,
-      is_alphanumeric: :boolean,
-      key_prefix: {:string, :generic},
-      url_template: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:id, :is_alphanumeric, :key_prefix, :url_template, :__info__, :__joins__])
+    
   end
 end

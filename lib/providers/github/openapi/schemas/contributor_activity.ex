@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.ContributorActivity do
-  @moduledoc """
-  Provides struct and type for a ContributorActivity
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          author: GitHubOpenAPI.NullableSimpleUser.t(),
-          total: integer,
-          weeks: [GitHubOpenAPI.ContributorActivityWeeks.t()]
-        }
+  @primary_key false
+  embedded_schema do
+    field :total, :integer
+    field :weeks, {:array, :string}
+    embeds_one :author, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :author, :total, :weeks]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      author: {GitHubOpenAPI.NullableSimpleUser, :t},
-      total: :integer,
-      weeks: [{GitHubOpenAPI.ContributorActivityWeeks, :t}]
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:total, :weeks, :__info__, :__joins__])
+        |> cast_embed(:author, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

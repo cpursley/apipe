@@ -1,61 +1,29 @@
 defmodule GitHubOpenAPI.Page do
-  @moduledoc """
-  Provides struct and type for a Page
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          build_type: String.t() | nil,
-          cname: String.t() | nil,
-          custom_404: boolean,
-          html_url: String.t() | nil,
-          https_certificate: GitHubOpenAPI.PagesHttpsCertificate.t() | nil,
-          https_enforced: boolean | nil,
-          pending_domain_unverified_at: DateTime.t() | nil,
-          protected_domain_state: String.t() | nil,
-          public: boolean,
-          source: GitHubOpenAPI.PagesSourceHash.t() | nil,
-          status: String.t() | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :build_type, Ecto.Enum, values: [:legacy, :workflow]
+    field :cname, :string
+    field :custom_404, :boolean
+    field :html_url, :string
+    field :https_enforced, :boolean
+    field :pending_domain_unverified_at, :string
+    field :protected_domain_state, Ecto.Enum, values: [:pending, :verified, :unverified]
+    field :public, :boolean
+    field :status, Ecto.Enum, values: [:built, :building, :errored]
+    field :url, :string
+    embeds_one :https_certificate, GitHubOpenAPI.PagesHttpsCertificate
+    embeds_one :source, GitHubOpenAPI.PagesSourceHash
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :build_type,
-    :cname,
-    :custom_404,
-    :html_url,
-    :https_certificate,
-    :https_enforced,
-    :pending_domain_unverified_at,
-    :protected_domain_state,
-    :public,
-    :source,
-    :status,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      build_type: {:enum, ["legacy", "workflow"]},
-      cname: {:string, :generic},
-      custom_404: :boolean,
-      html_url: {:string, :uri},
-      https_certificate: {GitHubOpenAPI.PagesHttpsCertificate, :t},
-      https_enforced: :boolean,
-      pending_domain_unverified_at: {:string, :date_time},
-      protected_domain_state: {:enum, ["pending", "verified", "unverified"]},
-      public: :boolean,
-      source: {GitHubOpenAPI.PagesSourceHash, :t},
-      status: {:enum, ["built", "building", "errored"]},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:build_type, :cname, :custom_404, :html_url, :https_enforced, :pending_domain_unverified_at, :protected_domain_state, :public, :status, :url, :__info__, :__joins__])
+        |> cast_embed(:https_certificate, with: &GitHubOpenAPI.PagesHttpsCertificate.changeset/2)
+    |> cast_embed(:source, with: &GitHubOpenAPI.PagesSourceHash.changeset/2)
   end
 end

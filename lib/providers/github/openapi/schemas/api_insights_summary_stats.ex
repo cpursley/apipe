@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.ApiInsightsSummaryStats do
-  @moduledoc """
-  Provides struct and type for a ApiInsightsSummaryStats
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          rate_limited_request_count: integer | nil,
-          total_request_count: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :rate_limited_request_count, :integer
+    field :total_request_count, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :rate_limited_request_count, :total_request_count]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [rate_limited_request_count: :integer, total_request_count: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:rate_limited_request_count, :total_request_count, :__info__, :__joins__])
+    
   end
 end

@@ -1,58 +1,27 @@
 defmodule GitHubOpenAPI.OrgHook do
-  @moduledoc """
-  Provides struct and type for a OrgHook
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          active: boolean,
-          config: GitHubOpenAPI.OrgHookConfig.t(),
-          created_at: DateTime.t(),
-          deliveries_url: String.t() | nil,
-          events: [String.t()],
-          id: integer,
-          name: String.t(),
-          ping_url: String.t(),
-          type: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :active, :boolean
+    field :config, :map
+    field :created_at, :string
+    field :deliveries_url, :string
+    field :events, {:array, :string}
+    field :id, :integer
+    field :name, :string
+    field :ping_url, :string
+    field :type, :string
+    field :updated_at, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :active,
-    :config,
-    :created_at,
-    :deliveries_url,
-    :events,
-    :id,
-    :name,
-    :ping_url,
-    :type,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      active: :boolean,
-      config: {GitHubOpenAPI.OrgHookConfig, :t},
-      created_at: {:string, :date_time},
-      deliveries_url: {:string, :uri},
-      events: [string: :generic],
-      id: :integer,
-      name: {:string, :generic},
-      ping_url: {:string, :uri},
-      type: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:active, :created_at, :deliveries_url, :events, :id, :name, :ping_url, :type, :updated_at, :url, :__info__, :__joins__])
+    
   end
 end

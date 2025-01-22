@@ -1,24 +1,19 @@
 defmodule GitHubOpenAPI.ReferencedWorkflow do
-  @moduledoc """
-  Provides struct and type for a ReferencedWorkflow
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          path: String.t(),
-          ref: String.t() | nil,
-          sha: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :path, :string
+    field :ref, :string
+    field :sha, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :path, :ref, :sha]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [path: {:string, :generic}, ref: {:string, :generic}, sha: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:path, :ref, :sha, :__info__, :__joins__])
+    
   end
 end

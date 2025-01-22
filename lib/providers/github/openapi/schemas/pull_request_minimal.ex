@@ -1,32 +1,21 @@
 defmodule GitHubOpenAPI.PullRequestMinimal do
-  @moduledoc """
-  Provides struct and type for a PullRequestMinimal
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          base: GitHubOpenAPI.PullRequestMinimalBase.t(),
-          head: GitHubOpenAPI.PullRequestMinimalHead.t(),
-          id: integer,
-          number: integer,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :base, :map
+    field :head, :map
+    field :id, :integer
+    field :number, :integer
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :base, :head, :id, :number, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      base: {GitHubOpenAPI.PullRequestMinimalBase, :t},
-      head: {GitHubOpenAPI.PullRequestMinimalHead, :t},
-      id: :integer,
-      number: :integer,
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:id, :number, :url, :__info__, :__joins__])
+    
   end
 end

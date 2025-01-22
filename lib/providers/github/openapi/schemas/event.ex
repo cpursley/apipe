@@ -1,49 +1,25 @@
 defmodule GitHubOpenAPI.Event do
-  @moduledoc """
-  Provides struct and type for a Event
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor: GitHubOpenAPI.Actor.t(),
-          created_at: DateTime.t() | nil,
-          id: String.t(),
-          org: GitHubOpenAPI.Actor.t() | nil,
-          payload: GitHubOpenAPI.EventPayload.t(),
-          public: boolean,
-          repo: GitHubOpenAPI.EventRepo.t(),
-          type: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :id, :string
+    field :payload, :map
+    field :public, :boolean
+    field :repo, :map
+    field :type, :string
+    embeds_one :actor, GitHubOpenAPI.Actor
+    embeds_one :org, GitHubOpenAPI.Actor
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actor,
-    :created_at,
-    :id,
-    :org,
-    :payload,
-    :public,
-    :repo,
-    :type
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor: {GitHubOpenAPI.Actor, :t},
-      created_at: {:string, :date_time},
-      id: {:string, :generic},
-      org: {GitHubOpenAPI.Actor, :t},
-      payload: {GitHubOpenAPI.EventPayload, :t},
-      public: :boolean,
-      repo: {GitHubOpenAPI.EventRepo, :t},
-      type: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :id, :public, :type, :__info__, :__joins__])
+        |> cast_embed(:actor, with: &GitHubOpenAPI.Actor.changeset/2)
+    |> cast_embed(:org, with: &GitHubOpenAPI.Actor.changeset/2)
   end
 end

@@ -1,43 +1,22 @@
 defmodule GitHubOpenAPI.CopilotSeatBreakdown do
-  @moduledoc """
-  Provides struct and type for a CopilotSeatBreakdown
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          active_this_cycle: integer | nil,
-          added_this_cycle: integer | nil,
-          inactive_this_cycle: integer | nil,
-          pending_cancellation: integer | nil,
-          pending_invitation: integer | nil,
-          total: integer | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :active_this_cycle, :integer
+    field :added_this_cycle, :integer
+    field :inactive_this_cycle, :integer
+    field :pending_cancellation, :integer
+    field :pending_invitation, :integer
+    field :total, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :active_this_cycle,
-    :added_this_cycle,
-    :inactive_this_cycle,
-    :pending_cancellation,
-    :pending_invitation,
-    :total
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      active_this_cycle: :integer,
-      added_this_cycle: :integer,
-      inactive_this_cycle: :integer,
-      pending_cancellation: :integer,
-      pending_invitation: :integer,
-      total: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:active_this_cycle, :added_this_cycle, :inactive_this_cycle, :pending_cancellation, :pending_invitation, :total, :__info__, :__joins__])
+    
   end
 end

@@ -1,30 +1,23 @@
 defmodule GitHubOpenAPI.WebhookConfig do
-  @moduledoc """
-  Provides struct and type for a WebhookConfig
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          content_type: String.t() | nil,
-          insecure_ssl: number | String.t() | nil,
-          secret: String.t() | nil,
-          url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    embeds_one :content_type, GitHubOpenAPI.WebhookConfigContentType
+    embeds_one :insecure_ssl, GitHubOpenAPI.WebhookConfigInsecureSsl
+    embeds_one :secret, GitHubOpenAPI.WebhookConfigSecret
+    embeds_one :url, GitHubOpenAPI.WebhookConfigUrl
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :content_type, :insecure_ssl, :secret, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      content_type: {:string, :generic},
-      insecure_ssl: {:union, [:number, string: :generic]},
-      secret: {:string, :generic},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+        |> cast_embed(:content_type, with: &GitHubOpenAPI.WebhookConfigContentType.changeset/2)
+    |> cast_embed(:insecure_ssl, with: &GitHubOpenAPI.WebhookConfigInsecureSsl.changeset/2)
+    |> cast_embed(:secret, with: &GitHubOpenAPI.WebhookConfigSecret.changeset/2)
+    |> cast_embed(:url, with: &GitHubOpenAPI.WebhookConfigUrl.changeset/2)
   end
 end

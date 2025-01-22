@@ -28,6 +28,7 @@ defmodule Apipe.MixProject do
 
       # Providers
       {:oapi_generator, "~> 0.2.0", only: :dev, runtime: false},
+      {:ecto, "~> 3.12.5"},
 
       # Dev
       {:ex_doc, "~> 0.36.1", only: :dev},

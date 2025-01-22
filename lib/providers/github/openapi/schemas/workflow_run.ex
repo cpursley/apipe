@@ -1,133 +1,58 @@
 defmodule GitHubOpenAPI.WorkflowRun do
-  @moduledoc """
-  Provides struct and type for a WorkflowRun
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actor: GitHubOpenAPI.SimpleUser.t() | nil,
-          artifacts_url: String.t(),
-          cancel_url: String.t(),
-          check_suite_id: integer | nil,
-          check_suite_node_id: String.t() | nil,
-          check_suite_url: String.t(),
-          conclusion: String.t() | nil,
-          created_at: DateTime.t(),
-          display_title: String.t(),
-          event: String.t(),
-          head_branch: String.t() | nil,
-          head_commit: GitHubOpenAPI.NullableSimpleCommit.t(),
-          head_repository: GitHubOpenAPI.MinimalRepository.t(),
-          head_repository_id: integer | nil,
-          head_sha: String.t(),
-          html_url: String.t(),
-          id: integer,
-          jobs_url: String.t(),
-          logs_url: String.t(),
-          name: String.t() | nil,
-          node_id: String.t(),
-          path: String.t(),
-          previous_attempt_url: String.t() | nil,
-          pull_requests: [GitHubOpenAPI.PullRequestMinimal.t()] | nil,
-          referenced_workflows: [GitHubOpenAPI.ReferencedWorkflow.t()] | nil,
-          repository: GitHubOpenAPI.MinimalRepository.t(),
-          rerun_url: String.t(),
-          run_attempt: integer | nil,
-          run_number: integer,
-          run_started_at: DateTime.t() | nil,
-          status: String.t() | nil,
-          triggering_actor: GitHubOpenAPI.SimpleUser.t() | nil,
-          updated_at: DateTime.t(),
-          url: String.t(),
-          workflow_id: integer,
-          workflow_url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :display_title, :string
+    field :name, :string
+    field :check_suite_node_id, :string
+    field :workflow_id, :integer
+    field :logs_url, :string
+    field :head_branch, :string
+    field :run_attempt, :integer
+    field :path, :string
+    field :workflow_url, :string
+    field :artifacts_url, :string
+    field :conclusion, :string
+    field :check_suite_url, :string
+    field :event, :string
+    field :html_url, :string
+    field :created_at, :string
+    field :updated_at, :string
+    field :run_started_at, :string
+    field :jobs_url, :string
+    field :url, :string
+    field :rerun_url, :string
+    field :cancel_url, :string
+    field :check_suite_id, :integer
+    field :node_id, :string
+    field :head_sha, :string
+    field :status, :string
+    field :head_repository_id, :integer
+    field :id, :integer
+    field :previous_attempt_url, :string
+    field :run_number, :integer
+    embeds_many :pull_requests, GitHubOpenAPI.PullRequestMinimal
+    embeds_one :repository, GitHubOpenAPI.MinimalRepository
+    embeds_one :head_commit, GitHubOpenAPI.NullableSimpleCommit
+    embeds_many :referenced_workflows, GitHubOpenAPI.ReferencedWorkflow
+    embeds_one :triggering_actor, GitHubOpenAPI.SimpleUser
+    embeds_one :actor, GitHubOpenAPI.SimpleUser
+    embeds_one :head_repository, GitHubOpenAPI.MinimalRepository
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actor,
-    :artifacts_url,
-    :cancel_url,
-    :check_suite_id,
-    :check_suite_node_id,
-    :check_suite_url,
-    :conclusion,
-    :created_at,
-    :display_title,
-    :event,
-    :head_branch,
-    :head_commit,
-    :head_repository,
-    :head_repository_id,
-    :head_sha,
-    :html_url,
-    :id,
-    :jobs_url,
-    :logs_url,
-    :name,
-    :node_id,
-    :path,
-    :previous_attempt_url,
-    :pull_requests,
-    :referenced_workflows,
-    :repository,
-    :rerun_url,
-    :run_attempt,
-    :run_number,
-    :run_started_at,
-    :status,
-    :triggering_actor,
-    :updated_at,
-    :url,
-    :workflow_id,
-    :workflow_url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actor: {GitHubOpenAPI.SimpleUser, :t},
-      artifacts_url: {:string, :generic},
-      cancel_url: {:string, :generic},
-      check_suite_id: :integer,
-      check_suite_node_id: {:string, :generic},
-      check_suite_url: {:string, :generic},
-      conclusion: {:string, :generic},
-      created_at: {:string, :date_time},
-      display_title: {:string, :generic},
-      event: {:string, :generic},
-      head_branch: {:string, :generic},
-      head_commit: {GitHubOpenAPI.NullableSimpleCommit, :t},
-      head_repository: {GitHubOpenAPI.MinimalRepository, :t},
-      head_repository_id: :integer,
-      head_sha: {:string, :generic},
-      html_url: {:string, :generic},
-      id: :integer,
-      jobs_url: {:string, :generic},
-      logs_url: {:string, :generic},
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      path: {:string, :generic},
-      previous_attempt_url: {:string, :generic},
-      pull_requests: [{GitHubOpenAPI.PullRequestMinimal, :t}],
-      referenced_workflows: [{GitHubOpenAPI.ReferencedWorkflow, :t}],
-      repository: {GitHubOpenAPI.MinimalRepository, :t},
-      rerun_url: {:string, :generic},
-      run_attempt: :integer,
-      run_number: :integer,
-      run_started_at: {:string, :date_time},
-      status: {:string, :generic},
-      triggering_actor: {GitHubOpenAPI.SimpleUser, :t},
-      updated_at: {:string, :date_time},
-      url: {:string, :generic},
-      workflow_id: :integer,
-      workflow_url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:display_title, :name, :check_suite_node_id, :workflow_id, :logs_url, :head_branch, :run_attempt, :path, :workflow_url, :artifacts_url, :conclusion, :check_suite_url, :event, :html_url, :created_at, :updated_at, :run_started_at, :jobs_url, :url, :rerun_url, :cancel_url, :check_suite_id, :node_id, :head_sha, :status, :head_repository_id, :id, :previous_attempt_url, :run_number, :__info__, :__joins__])
+        |> cast_embed(:pull_requests, with: &GitHubOpenAPI.PullRequestMinimal.changeset/2)
+    |> cast_embed(:repository, with: &GitHubOpenAPI.MinimalRepository.changeset/2)
+    |> cast_embed(:head_commit, with: &GitHubOpenAPI.NullableSimpleCommit.changeset/2)
+    |> cast_embed(:referenced_workflows, with: &GitHubOpenAPI.ReferencedWorkflow.changeset/2)
+    |> cast_embed(:triggering_actor, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:actor, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:head_repository, with: &GitHubOpenAPI.MinimalRepository.changeset/2)
   end
 end

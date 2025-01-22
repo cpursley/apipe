@@ -1,60 +1,25 @@
 defmodule GitHubOpenAPI.GistComment do
-  @moduledoc """
-  Provides struct and type for a GistComment
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          author_association: String.t(),
-          body: String.t(),
-          created_at: DateTime.t(),
-          id: integer,
-          node_id: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t(),
-          user: GitHubOpenAPI.NullableSimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :body, :string
+    field :created_at, :string
+    field :id, :integer
+    field :node_id, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :author_association, GitHubOpenAPI.AuthorAssociation
+    embeds_one :user, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :author_association,
-    :body,
-    :created_at,
-    :id,
-    :node_id,
-    :updated_at,
-    :url,
-    :user
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      author_association:
-        {:enum,
-         [
-           "COLLABORATOR",
-           "CONTRIBUTOR",
-           "FIRST_TIMER",
-           "FIRST_TIME_CONTRIBUTOR",
-           "MANNEQUIN",
-           "MEMBER",
-           "NONE",
-           "OWNER"
-         ]},
-      body: {:string, :generic},
-      created_at: {:string, :date_time},
-      id: :integer,
-      node_id: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri},
-      user: {GitHubOpenAPI.NullableSimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:body, :created_at, :id, :node_id, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:author_association, with: &GitHubOpenAPI.AuthorAssociation.changeset/2)
+    |> cast_embed(:user, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

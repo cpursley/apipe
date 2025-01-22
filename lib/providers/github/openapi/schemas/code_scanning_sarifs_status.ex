@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.CodeScanningSarifsStatus do
-  @moduledoc """
-  Provides struct and type for a CodeScanningSarifsStatus
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          analyses_url: String.t() | nil,
-          errors: [String.t()] | nil,
-          processing_status: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :analyses_url, :string
+    field :errors, {:array, :string}
+    field :processing_status, Ecto.Enum, values: [:pending, :complete, :failed]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :analyses_url, :errors, :processing_status]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      analyses_url: {:string, :uri},
-      errors: [string: :generic],
-      processing_status: {:enum, ["pending", "complete", "failed"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:analyses_url, :errors, :processing_status, :__info__, :__joins__])
+    
   end
 end

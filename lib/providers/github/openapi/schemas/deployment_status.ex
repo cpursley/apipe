@@ -1,71 +1,32 @@
 defmodule GitHubOpenAPI.DeploymentStatus do
-  @moduledoc """
-  Provides struct and type for a DeploymentStatus
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          creator: GitHubOpenAPI.NullableSimpleUser.t(),
-          deployment_url: String.t(),
-          description: String.t(),
-          environment: String.t() | nil,
-          environment_url: String.t() | nil,
-          id: integer,
-          log_url: String.t() | nil,
-          node_id: String.t(),
-          performed_via_github_app: GitHubOpenAPI.NullableIntegration.t() | nil,
-          repository_url: String.t(),
-          state: String.t(),
-          target_url: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :deployment_url, :string
+    field :description, :string
+    field :environment, :string
+    field :environment_url, :string
+    field :id, :integer
+    field :log_url, :string
+    field :node_id, :string
+    field :repository_url, :string
+    field :state, Ecto.Enum, values: [:error, :failure, :inactive, :pending, :success, :queued, :in_progress]
+    field :target_url, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :creator, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :performed_via_github_app, GitHubOpenAPI.NullableIntegration
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :creator,
-    :deployment_url,
-    :description,
-    :environment,
-    :environment_url,
-    :id,
-    :log_url,
-    :node_id,
-    :performed_via_github_app,
-    :repository_url,
-    :state,
-    :target_url,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      creator: {GitHubOpenAPI.NullableSimpleUser, :t},
-      deployment_url: {:string, :uri},
-      description: {:string, :generic},
-      environment: {:string, :generic},
-      environment_url: {:string, :uri},
-      id: :integer,
-      log_url: {:string, :uri},
-      node_id: {:string, :generic},
-      performed_via_github_app: {GitHubOpenAPI.NullableIntegration, :t},
-      repository_url: {:string, :uri},
-      state:
-        {:enum, ["error", "failure", "inactive", "pending", "success", "queued", "in_progress"]},
-      target_url: {:string, :uri},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :deployment_url, :description, :environment, :environment_url, :id, :log_url, :node_id, :repository_url, :state, :target_url, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:creator, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:performed_via_github_app, with: &GitHubOpenAPI.NullableIntegration.changeset/2)
   end
 end

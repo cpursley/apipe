@@ -1,18 +1,18 @@
 defmodule GitHubOpenAPI.SocialAccount do
-  @moduledoc """
-  Provides struct and type for a SocialAccount
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, provider: String.t(), url: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :provider, :string
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :provider, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [provider: {:string, :generic}, url: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:provider, :url, :__info__, :__joins__])
+    
   end
 end

@@ -1,49 +1,26 @@
 defmodule GitHubOpenAPI.ClassroomAcceptedAssignment do
-  @moduledoc """
-  Provides struct and type for a ClassroomAcceptedAssignment
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          assignment: GitHubOpenAPI.SimpleClassroomAssignment.t(),
-          commit_count: integer,
-          grade: String.t(),
-          id: integer,
-          passing: boolean,
-          repository: GitHubOpenAPI.SimpleClassroomRepository.t(),
-          students: [GitHubOpenAPI.SimpleClassroomUser.t()],
-          submitted: boolean
-        }
+  @primary_key false
+  embedded_schema do
+    field :commit_count, :integer
+    field :grade, :string
+    field :id, :integer
+    field :passing, :boolean
+    field :submitted, :boolean
+    embeds_one :assignment, GitHubOpenAPI.SimpleClassroomAssignment
+    embeds_one :repository, GitHubOpenAPI.SimpleClassroomRepository
+    embeds_many :students, GitHubOpenAPI.SimpleClassroomUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :assignment,
-    :commit_count,
-    :grade,
-    :id,
-    :passing,
-    :repository,
-    :students,
-    :submitted
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      assignment: {GitHubOpenAPI.SimpleClassroomAssignment, :t},
-      commit_count: :integer,
-      grade: {:string, :generic},
-      id: :integer,
-      passing: :boolean,
-      repository: {GitHubOpenAPI.SimpleClassroomRepository, :t},
-      students: [{GitHubOpenAPI.SimpleClassroomUser, :t}],
-      submitted: :boolean
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:commit_count, :grade, :id, :passing, :submitted, :__info__, :__joins__])
+        |> cast_embed(:assignment, with: &GitHubOpenAPI.SimpleClassroomAssignment.changeset/2)
+    |> cast_embed(:repository, with: &GitHubOpenAPI.SimpleClassroomRepository.changeset/2)
+    |> cast_embed(:students, with: &GitHubOpenAPI.SimpleClassroomUser.changeset/2)
   end
 end

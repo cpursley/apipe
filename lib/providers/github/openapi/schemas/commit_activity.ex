@@ -1,24 +1,19 @@
 defmodule GitHubOpenAPI.CommitActivity do
-  @moduledoc """
-  Provides struct and type for a CommitActivity
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          days: [integer],
-          total: integer,
-          week: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :days, {:array, :integer}
+    field :total, :integer
+    field :week, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :days, :total, :week]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [days: [:integer], total: :integer, week: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:days, :total, :week, :__info__, :__joins__])
+    
   end
 end

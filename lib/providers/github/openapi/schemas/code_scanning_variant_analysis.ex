@@ -1,68 +1,31 @@
 defmodule GitHubOpenAPI.CodeScanningVariantAnalysis do
-  @moduledoc """
-  Provides struct and type for a CodeScanningVariantAnalysis
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          actions_workflow_run_id: integer | nil,
-          actor: GitHubOpenAPI.SimpleUser.t(),
-          completed_at: DateTime.t() | nil,
-          controller_repo: GitHubOpenAPI.SimpleRepository.t(),
-          created_at: DateTime.t() | nil,
-          failure_reason: String.t() | nil,
-          id: integer,
-          query_language: String.t(),
-          query_pack_url: String.t(),
-          scanned_repositories:
-            [GitHubOpenAPI.CodeScanningVariantAnalysisScannedRepositories.t()] | nil,
-          skipped_repositories:
-            GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepositories.t() | nil,
-          status: String.t(),
-          updated_at: DateTime.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :actions_workflow_run_id, :integer
+    field :completed_at, :string
+    field :created_at, :string
+    field :failure_reason, Ecto.Enum, values: [:no_repos_queried, :actions_workflow_run_failed, :internal_error]
+    field :id, :integer
+    field :query_pack_url, :string
+    field :scanned_repositories, {:array, :string}
+    field :skipped_repositories, :map
+    field :status, Ecto.Enum, values: [:in_progress, :succeeded, :failed, :cancelled]
+    field :updated_at, :string
+    embeds_one :actor, GitHubOpenAPI.SimpleUser
+    embeds_one :controller_repo, GitHubOpenAPI.SimpleRepository
+    embeds_one :query_language, GitHubOpenAPI.CodeScanningVariantAnalysisLanguage
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :actions_workflow_run_id,
-    :actor,
-    :completed_at,
-    :controller_repo,
-    :created_at,
-    :failure_reason,
-    :id,
-    :query_language,
-    :query_pack_url,
-    :scanned_repositories,
-    :skipped_repositories,
-    :status,
-    :updated_at
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      actions_workflow_run_id: :integer,
-      actor: {GitHubOpenAPI.SimpleUser, :t},
-      completed_at: {:string, :date_time},
-      controller_repo: {GitHubOpenAPI.SimpleRepository, :t},
-      created_at: {:string, :date_time},
-      failure_reason:
-        {:enum, ["no_repos_queried", "actions_workflow_run_failed", "internal_error"]},
-      id: :integer,
-      query_language:
-        {:enum, ["cpp", "csharp", "go", "java", "javascript", "python", "ruby", "swift"]},
-      query_pack_url: {:string, :generic},
-      scanned_repositories: [{GitHubOpenAPI.CodeScanningVariantAnalysisScannedRepositories, :t}],
-      skipped_repositories: {GitHubOpenAPI.CodeScanningVariantAnalysisSkippedRepositories, :t},
-      status: {:enum, ["in_progress", "succeeded", "failed", "cancelled"]},
-      updated_at: {:string, :date_time}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:actions_workflow_run_id, :completed_at, :created_at, :failure_reason, :id, :query_pack_url, :scanned_repositories, :status, :updated_at, :__info__, :__joins__])
+        |> cast_embed(:actor, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:controller_repo, with: &GitHubOpenAPI.SimpleRepository.changeset/2)
+    |> cast_embed(:query_language, with: &GitHubOpenAPI.CodeScanningVariantAnalysisLanguage.changeset/2)
   end
 end

@@ -1,18 +1,18 @@
 defmodule GitHubOpenAPI.KeySimple do
-  @moduledoc """
-  Provides struct and type for a KeySimple
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, id: integer, key: String.t()}
+  @primary_key false
+  embedded_schema do
+    field :id, :integer
+    field :key, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :id, :key]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [id: :integer, key: {:string, :generic}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:id, :key, :__info__, :__joins__])
+    
   end
 end

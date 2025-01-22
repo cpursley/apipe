@@ -1,58 +1,29 @@
 defmodule GitHubOpenAPI.ActionsHostedRunner do
-  @moduledoc """
-  Provides struct and type for a ActionsHostedRunner
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          id: integer,
-          image_details: GitHubOpenAPI.NullableActionsHostedRunnerPoolImage.t(),
-          last_active_on: DateTime.t() | nil,
-          machine_size_details: GitHubOpenAPI.ActionsHostedRunnerMachineSpec.t(),
-          maximum_runners: integer | nil,
-          name: String.t(),
-          platform: String.t(),
-          public_ip_enabled: boolean,
-          public_ips: [GitHubOpenAPI.PublicIp.t()] | nil,
-          runner_group_id: integer | nil,
-          status: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :id, :integer
+    field :last_active_on, :string
+    field :maximum_runners, :integer
+    field :name, :string
+    field :platform, :string
+    field :public_ip_enabled, :boolean
+    field :runner_group_id, :integer
+    field :status, Ecto.Enum, values: [:"Ready", :"Provisioning", :"Shutdown", :"Deleting", :"Stuck"]
+    embeds_one :image_details, GitHubOpenAPI.NullableActionsHostedRunnerPoolImage
+    embeds_one :machine_size_details, GitHubOpenAPI.ActionsHostedRunnerMachineSpec
+    embeds_many :public_ips, GitHubOpenAPI.PublicIp
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :id,
-    :image_details,
-    :last_active_on,
-    :machine_size_details,
-    :maximum_runners,
-    :name,
-    :platform,
-    :public_ip_enabled,
-    :public_ips,
-    :runner_group_id,
-    :status
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      id: :integer,
-      image_details: {GitHubOpenAPI.NullableActionsHostedRunnerPoolImage, :t},
-      last_active_on: {:string, :date_time},
-      machine_size_details: {GitHubOpenAPI.ActionsHostedRunnerMachineSpec, :t},
-      maximum_runners: :integer,
-      name: {:string, :generic},
-      platform: {:string, :generic},
-      public_ip_enabled: :boolean,
-      public_ips: [{GitHubOpenAPI.PublicIp, :t}],
-      runner_group_id: :integer,
-      status: {:enum, ["Ready", "Provisioning", "Shutdown", "Deleting", "Stuck"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:id, :last_active_on, :maximum_runners, :name, :platform, :public_ip_enabled, :runner_group_id, :status, :__info__, :__joins__])
+        |> cast_embed(:image_details, with: &GitHubOpenAPI.NullableActionsHostedRunnerPoolImage.changeset/2)
+    |> cast_embed(:machine_size_details, with: &GitHubOpenAPI.ActionsHostedRunnerMachineSpec.changeset/2)
+    |> cast_embed(:public_ips, with: &GitHubOpenAPI.PublicIp.changeset/2)
   end
 end

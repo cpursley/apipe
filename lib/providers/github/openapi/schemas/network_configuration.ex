@@ -1,40 +1,21 @@
 defmodule GitHubOpenAPI.NetworkConfiguration do
-  @moduledoc """
-  Provides struct and type for a NetworkConfiguration
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          compute_service: String.t() | nil,
-          created_on: DateTime.t() | nil,
-          id: String.t(),
-          name: String.t(),
-          network_settings_ids: [String.t()] | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :compute_service, Ecto.Enum, values: [:none, :actions, :codespaces]
+    field :created_on, :string
+    field :id, :string
+    field :name, :string
+    field :network_settings_ids, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :compute_service,
-    :created_on,
-    :id,
-    :name,
-    :network_settings_ids
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      compute_service: {:enum, ["none", "actions", "codespaces"]},
-      created_on: {:string, :date_time},
-      id: {:string, :generic},
-      name: {:string, :generic},
-      network_settings_ids: [string: :generic]
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:compute_service, :created_on, :id, :name, :network_settings_ids, :__info__, :__joins__])
+    
   end
 end

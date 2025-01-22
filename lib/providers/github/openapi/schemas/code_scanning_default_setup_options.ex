@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.CodeScanningDefaultSetupOptions do
-  @moduledoc """
-  Provides struct and type for a CodeScanningDefaultSetupOptions
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          runner_label: String.t() | nil,
-          runner_type: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :runner_label, :string
+    field :runner_type, Ecto.Enum, values: [:standard, :labeled, :not_set]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :runner_label, :runner_type]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [runner_label: {:string, :generic}, runner_type: {:enum, ["standard", "labeled", "not_set"]}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:runner_label, :runner_type, :__info__, :__joins__])
+    
   end
 end

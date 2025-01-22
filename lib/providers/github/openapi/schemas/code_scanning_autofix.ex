@@ -1,28 +1,21 @@
 defmodule GitHubOpenAPI.CodeScanningAutofix do
-  @moduledoc """
-  Provides struct and type for a CodeScanningAutofix
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          description: String.t(),
-          started_at: DateTime.t(),
-          status: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    embeds_one :description, GitHubOpenAPI.CodeScanningAutofixDescription
+    embeds_one :started_at, GitHubOpenAPI.CodeScanningAutofixStartedAt
+    embeds_one :status, GitHubOpenAPI.CodeScanningAutofixStatus
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :description, :started_at, :status]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      description: {:string, :generic},
-      started_at: {:string, :date_time},
-      status: {:enum, ["pending", "error", "success", "outdated"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+        |> cast_embed(:description, with: &GitHubOpenAPI.CodeScanningAutofixDescription.changeset/2)
+    |> cast_embed(:started_at, with: &GitHubOpenAPI.CodeScanningAutofixStartedAt.changeset/2)
+    |> cast_embed(:status, with: &GitHubOpenAPI.CodeScanningAutofixStatus.changeset/2)
   end
 end

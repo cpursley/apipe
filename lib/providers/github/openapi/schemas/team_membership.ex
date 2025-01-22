@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.TeamMembership do
-  @moduledoc """
-  Provides struct and type for a TeamMembership
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          role: String.t(),
-          state: String.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :role, Ecto.Enum, values: [:member, :maintainer]
+    field :state, Ecto.Enum, values: [:active, :pending]
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :role, :state, :url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      role: {:enum, ["member", "maintainer"]},
-      state: {:enum, ["active", "pending"]},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:role, :state, :url, :__info__, :__joins__])
+    
   end
 end

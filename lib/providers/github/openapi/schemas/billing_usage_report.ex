@@ -1,22 +1,17 @@
 defmodule GitHubOpenAPI.BillingUsageReport do
-  @moduledoc """
-  Provides struct and type for a BillingUsageReport
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          usageItems: [GitHubOpenAPI.BillingUsageReportUsageItems.t()] | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :usage_items, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :usageItems]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [usageItems: [{GitHubOpenAPI.BillingUsageReportUsageItems, :t}]]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:usage_items, :__info__, :__joins__])
+    
   end
 end

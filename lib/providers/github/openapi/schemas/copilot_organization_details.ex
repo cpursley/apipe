@@ -1,47 +1,23 @@
 defmodule GitHubOpenAPI.CopilotOrganizationDetails do
-  @moduledoc """
-  Provides struct and type for a CopilotOrganizationDetails
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          cli: String.t() | nil,
-          ide_chat: String.t() | nil,
-          plan_type: String.t() | nil,
-          platform_chat: String.t() | nil,
-          public_code_suggestions: String.t(),
-          seat_breakdown: GitHubOpenAPI.CopilotSeatBreakdown.t(),
-          seat_management_setting: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :cli, Ecto.Enum, values: [:enabled, :disabled, :unconfigured]
+    field :ide_chat, Ecto.Enum, values: [:enabled, :disabled, :unconfigured]
+    field :plan_type, Ecto.Enum, values: [:business, :enterprise, :unknown]
+    field :platform_chat, Ecto.Enum, values: [:enabled, :disabled, :unconfigured]
+    field :public_code_suggestions, Ecto.Enum, values: [:allow, :block, :unconfigured, :unknown]
+    field :seat_management_setting, Ecto.Enum, values: [:assign_all, :assign_selected, :disabled, :unconfigured]
+    embeds_one :seat_breakdown, GitHubOpenAPI.CopilotSeatBreakdown
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :cli,
-    :ide_chat,
-    :plan_type,
-    :platform_chat,
-    :public_code_suggestions,
-    :seat_breakdown,
-    :seat_management_setting
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      cli: {:enum, ["enabled", "disabled", "unconfigured"]},
-      ide_chat: {:enum, ["enabled", "disabled", "unconfigured"]},
-      plan_type: {:enum, ["business", "enterprise", "unknown"]},
-      platform_chat: {:enum, ["enabled", "disabled", "unconfigured"]},
-      public_code_suggestions: {:enum, ["allow", "block", "unconfigured", "unknown"]},
-      seat_breakdown: {GitHubOpenAPI.CopilotSeatBreakdown, :t},
-      seat_management_setting:
-        {:enum, ["assign_all", "assign_selected", "disabled", "unconfigured"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:cli, :ide_chat, :plan_type, :platform_chat, :public_code_suggestions, :seat_management_setting, :__info__, :__joins__])
+        |> cast_embed(:seat_breakdown, with: &GitHubOpenAPI.CopilotSeatBreakdown.changeset/2)
   end
 end

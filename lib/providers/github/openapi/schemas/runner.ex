@@ -1,36 +1,23 @@
 defmodule GitHubOpenAPI.Runner do
-  @moduledoc """
-  Provides struct and type for a Runner
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          busy: boolean,
-          id: integer,
-          labels: [GitHubOpenAPI.RunnerLabel.t()],
-          name: String.t(),
-          os: String.t(),
-          runner_group_id: integer | nil,
-          status: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :busy, :boolean
+    field :id, :integer
+    field :name, :string
+    field :os, :string
+    field :runner_group_id, :integer
+    field :status, :string
+    embeds_many :labels, GitHubOpenAPI.RunnerLabel
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :busy, :id, :labels, :name, :os, :runner_group_id, :status]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      busy: :boolean,
-      id: :integer,
-      labels: [{GitHubOpenAPI.RunnerLabel, :t}],
-      name: {:string, :generic},
-      os: {:string, :generic},
-      runner_group_id: :integer,
-      status: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:busy, :id, :name, :os, :runner_group_id, :status, :__info__, :__joins__])
+        |> cast_embed(:labels, with: &GitHubOpenAPI.RunnerLabel.changeset/2)
   end
 end

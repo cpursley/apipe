@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.EnvironmentApprovals do
-  @moduledoc """
-  Provides struct and type for a EnvironmentApprovals
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          comment: String.t(),
-          environments: [GitHubOpenAPI.EnvironmentApprovalsEnvironments.t()],
-          state: String.t(),
-          user: GitHubOpenAPI.SimpleUser.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :comment, :string
+    field :environments, {:array, :string}
+    field :state, Ecto.Enum, values: [:approved, :rejected, :pending]
+    embeds_one :user, GitHubOpenAPI.SimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :comment, :environments, :state, :user]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      comment: {:string, :generic},
-      environments: [{GitHubOpenAPI.EnvironmentApprovalsEnvironments, :t}],
-      state: {:enum, ["approved", "rejected", "pending"]},
-      user: {GitHubOpenAPI.SimpleUser, :t}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:comment, :environments, :state, :__info__, :__joins__])
+        |> cast_embed(:user, with: &GitHubOpenAPI.SimpleUser.changeset/2)
   end
 end

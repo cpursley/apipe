@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.RepositoryRulesetConditionsRepositoryPropertySpec do
-  @moduledoc """
-  Provides struct and type for a RepositoryRulesetConditionsRepositoryPropertySpec
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          name: String.t(),
-          property_values: [String.t()],
-          source: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :name, :string
+    field :property_values, {:array, :string}
+    field :source, Ecto.Enum, values: [:custom, :system]
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :name, :property_values, :source]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      name: {:string, :generic},
-      property_values: [string: :generic],
-      source: {:enum, ["custom", "system"]}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:name, :property_values, :source, :__info__, :__joins__])
+    
   end
 end

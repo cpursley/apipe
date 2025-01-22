@@ -1,23 +1,18 @@
 defmodule GitHubOpenAPI.CodeScanningAnalysisDeletion do
-  @moduledoc """
-  Provides struct and type for a CodeScanningAnalysisDeletion
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          confirm_delete_url: String.t() | nil,
-          next_analysis_url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :confirm_delete_url, :string
+    field :next_analysis_url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :confirm_delete_url, :next_analysis_url]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [confirm_delete_url: {:string, :uri}, next_analysis_url: {:string, :uri}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:confirm_delete_url, :next_analysis_url, :__info__, :__joins__])
+    
   end
 end

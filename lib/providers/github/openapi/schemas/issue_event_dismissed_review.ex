@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.IssueEventDismissedReview do
-  @moduledoc """
-  Provides struct and type for a IssueEventDismissedReview
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          dismissal_commit_id: String.t() | nil,
-          dismissal_message: String.t() | nil,
-          review_id: integer,
-          state: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :dismissal_commit_id, :string
+    field :dismissal_message, :string
+    field :review_id, :integer
+    field :state, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :dismissal_commit_id, :dismissal_message, :review_id, :state]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      dismissal_commit_id: {:string, :generic},
-      dismissal_message: {:string, :generic},
-      review_id: :integer,
-      state: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:dismissal_commit_id, :dismissal_message, :review_id, :state, :__info__, :__joins__])
+    
   end
 end

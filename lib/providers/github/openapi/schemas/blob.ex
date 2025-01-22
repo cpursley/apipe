@@ -1,46 +1,23 @@
 defmodule GitHubOpenAPI.Blob do
-  @moduledoc """
-  Provides struct and type for a Blob
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          content: String.t(),
-          encoding: String.t(),
-          highlighted_content: String.t() | nil,
-          node_id: String.t(),
-          sha: String.t(),
-          size: integer | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :content, :string
+    field :encoding, :string
+    field :highlighted_content, :string
+    field :node_id, :string
+    field :sha, :string
+    field :size, :integer
+    field :url, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :content,
-    :encoding,
-    :highlighted_content,
-    :node_id,
-    :sha,
-    :size,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      content: {:string, :generic},
-      encoding: {:string, :generic},
-      highlighted_content: {:string, :generic},
-      node_id: {:string, :generic},
-      sha: {:string, :generic},
-      size: :integer,
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:content, :encoding, :highlighted_content, :node_id, :sha, :size, :url, :__info__, :__joins__])
+    
   end
 end

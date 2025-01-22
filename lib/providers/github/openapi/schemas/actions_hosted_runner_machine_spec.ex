@@ -1,25 +1,20 @@
 defmodule GitHubOpenAPI.ActionsHostedRunnerMachineSpec do
-  @moduledoc """
-  Provides struct and type for a ActionsHostedRunnerMachineSpec
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          cpu_cores: integer,
-          id: String.t(),
-          memory_gb: integer,
-          storage_gb: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :cpu_cores, :integer
+    field :id, :string
+    field :memory_gb, :integer
+    field :storage_gb, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :cpu_cores, :id, :memory_gb, :storage_gb]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [cpu_cores: :integer, id: {:string, :generic}, memory_gb: :integer, storage_gb: :integer]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:cpu_cores, :id, :memory_gb, :storage_gb, :__info__, :__joins__])
+    
   end
 end

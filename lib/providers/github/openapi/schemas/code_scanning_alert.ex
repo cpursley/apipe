@@ -1,70 +1,45 @@
 defmodule GitHubOpenAPI.CodeScanningAlert do
-  @moduledoc """
-  Provides struct and type for a CodeScanningAlert
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          dismissed_at: DateTime.t(),
-          dismissed_by: GitHubOpenAPI.NullableSimpleUser.t(),
-          dismissed_comment: String.t() | nil,
-          dismissed_reason: String.t(),
-          fixed_at: DateTime.t() | nil,
-          html_url: String.t(),
-          instances_url: String.t(),
-          most_recent_instance: GitHubOpenAPI.CodeScanningAlertInstance.t(),
-          number: integer,
-          rule: GitHubOpenAPI.CodeScanningAlertRule.t(),
-          state: String.t(),
-          tool: GitHubOpenAPI.CodeScanningAnalysisTool.t(),
-          updated_at: DateTime.t() | nil,
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    embeds_one :created_at, GitHubOpenAPI.AlertCreatedAt
+    embeds_one :dismissed_at, GitHubOpenAPI.AlertDismissedAt
+    embeds_one :dismissed_by, GitHubOpenAPI.NullableSimpleUser
+    embeds_one :dismissed_comment, GitHubOpenAPI.CodeScanningAlertDismissedComment
+    embeds_one :dismissed_reason, GitHubOpenAPI.CodeScanningAlertDismissedReason
+    embeds_one :fixed_at, GitHubOpenAPI.AlertFixedAt
+    embeds_one :html_url, GitHubOpenAPI.AlertHtmlUrl
+    embeds_one :instances_url, GitHubOpenAPI.AlertInstancesUrl
+    embeds_one :most_recent_instance, GitHubOpenAPI.CodeScanningAlertInstance
+    embeds_one :number, GitHubOpenAPI.AlertNumber
+    embeds_one :rule, GitHubOpenAPI.CodeScanningAlertRule
+    embeds_one :state, GitHubOpenAPI.CodeScanningAlertState
+    embeds_one :tool, GitHubOpenAPI.CodeScanningAnalysisTool
+    embeds_one :updated_at, GitHubOpenAPI.AlertUpdatedAt
+    embeds_one :url, GitHubOpenAPI.AlertUrl
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :dismissed_at,
-    :dismissed_by,
-    :dismissed_comment,
-    :dismissed_reason,
-    :fixed_at,
-    :html_url,
-    :instances_url,
-    :most_recent_instance,
-    :number,
-    :rule,
-    :state,
-    :tool,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      dismissed_at: {:string, :date_time},
-      dismissed_by: {GitHubOpenAPI.NullableSimpleUser, :t},
-      dismissed_comment: {:string, :generic},
-      dismissed_reason: {:enum, ["false positive", "won't fix", "used in tests"]},
-      fixed_at: {:string, :date_time},
-      html_url: {:string, :uri},
-      instances_url: {:string, :uri},
-      most_recent_instance: {GitHubOpenAPI.CodeScanningAlertInstance, :t},
-      number: :integer,
-      rule: {GitHubOpenAPI.CodeScanningAlertRule, :t},
-      state: {:enum, ["open", "dismissed", "fixed"]},
-      tool: {GitHubOpenAPI.CodeScanningAnalysisTool, :t},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+        |> cast_embed(:created_at, with: &GitHubOpenAPI.AlertCreatedAt.changeset/2)
+    |> cast_embed(:dismissed_at, with: &GitHubOpenAPI.AlertDismissedAt.changeset/2)
+    |> cast_embed(:dismissed_by, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
+    |> cast_embed(:dismissed_comment, with: &GitHubOpenAPI.CodeScanningAlertDismissedComment.changeset/2)
+    |> cast_embed(:dismissed_reason, with: &GitHubOpenAPI.CodeScanningAlertDismissedReason.changeset/2)
+    |> cast_embed(:fixed_at, with: &GitHubOpenAPI.AlertFixedAt.changeset/2)
+    |> cast_embed(:html_url, with: &GitHubOpenAPI.AlertHtmlUrl.changeset/2)
+    |> cast_embed(:instances_url, with: &GitHubOpenAPI.AlertInstancesUrl.changeset/2)
+    |> cast_embed(:most_recent_instance, with: &GitHubOpenAPI.CodeScanningAlertInstance.changeset/2)
+    |> cast_embed(:number, with: &GitHubOpenAPI.AlertNumber.changeset/2)
+    |> cast_embed(:rule, with: &GitHubOpenAPI.CodeScanningAlertRule.changeset/2)
+    |> cast_embed(:state, with: &GitHubOpenAPI.CodeScanningAlertState.changeset/2)
+    |> cast_embed(:tool, with: &GitHubOpenAPI.CodeScanningAnalysisTool.changeset/2)
+    |> cast_embed(:updated_at, with: &GitHubOpenAPI.AlertUpdatedAt.changeset/2)
+    |> cast_embed(:url, with: &GitHubOpenAPI.AlertUrl.changeset/2)
   end
 end

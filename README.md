@@ -34,7 +34,7 @@ end
 import Apipe
 alias Apipe.Providers.GitHub
 
-# Create a new GitHub client (token and cast_response are optional)
+# Create a new GitHub client (auth token and cast_response are optional)
 github = Apipe.new(GitHub)
 
 github
@@ -180,10 +180,10 @@ config :oapi_generator,
 
 ```bash
 # Local file
-mix apipe.gen.openapi.routes path/to/spec.yaml provider_name [--module-name NAME]
+mix apipe.gen.openapi.provider path/to/spec.yaml provider_name [--module-name NAME]
 
 # Remote file
- mix apipe.gen.openapi.routes --url https://example.com/openapi.yaml provider_name [--module-name NAME]
+ mix apipe.gen.openapi.provider --url https://example.com/openapi.yaml provider_name [--module-name NAME]
 ```
 
 This generates:
@@ -203,7 +203,7 @@ To create a new provider:
 mix oapi.gen path/to/openapi-spec.yaml
 
 # Generate routes
-mix apipe.gen.openapi.routes path/to/openapi-spec.yaml provider_name
+mix apipe.gen.openapi.provider path/to/openapi-spec.yaml provider_name
 ```
 
 4. Implement the provider module:

@@ -1,22 +1,17 @@
 defmodule GitHubOpenAPI.ActionsHostedRunnerLimits do
-  @moduledoc """
-  Provides struct and type for a ActionsHostedRunnerLimits
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          public_ips: GitHubOpenAPI.StaticPublicIPLimitsForGitHubHostedHostedRunners.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :public_ips, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :public_ips]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [public_ips: {GitHubOpenAPI.StaticPublicIPLimitsForGitHubHostedHostedRunners, :t}]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:__info__, :__joins__])
+    
   end
 end

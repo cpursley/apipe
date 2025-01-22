@@ -1,199 +1,74 @@
 defmodule GitHubOpenAPI.OrganizationFull do
-  @moduledoc """
-  Provides struct and type for a OrganizationFull
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          advanced_security_enabled_for_new_repositories: boolean | nil,
-          archived_at: DateTime.t() | nil,
-          avatar_url: String.t(),
-          billing_email: String.t() | nil,
-          blog: String.t() | nil,
-          collaborators: integer | nil,
-          company: String.t() | nil,
-          created_at: DateTime.t(),
-          default_repository_permission: String.t() | nil,
-          dependabot_alerts_enabled_for_new_repositories: boolean | nil,
-          dependabot_security_updates_enabled_for_new_repositories: boolean | nil,
-          dependency_graph_enabled_for_new_repositories: boolean | nil,
-          deploy_keys_enabled_for_repositories: boolean | nil,
-          description: String.t() | nil,
-          disk_usage: integer | nil,
-          email: String.t() | nil,
-          events_url: String.t(),
-          followers: integer,
-          following: integer,
-          has_organization_projects: boolean,
-          has_repository_projects: boolean,
-          hooks_url: String.t(),
-          html_url: String.t(),
-          id: integer,
-          is_verified: boolean | nil,
-          issues_url: String.t(),
-          location: String.t() | nil,
-          login: String.t(),
-          members_allowed_repository_creation_type: String.t() | nil,
-          members_can_create_internal_repositories: boolean | nil,
-          members_can_create_pages: boolean | nil,
-          members_can_create_private_pages: boolean | nil,
-          members_can_create_private_repositories: boolean | nil,
-          members_can_create_public_pages: boolean | nil,
-          members_can_create_public_repositories: boolean | nil,
-          members_can_create_repositories: boolean | nil,
-          members_can_fork_private_repositories: boolean | nil,
-          members_url: String.t(),
-          name: String.t() | nil,
-          node_id: String.t(),
-          owned_private_repos: integer | nil,
-          plan: GitHubOpenAPI.OrganizationFullPlan.t() | nil,
-          private_gists: integer | nil,
-          public_gists: integer,
-          public_members_url: String.t(),
-          public_repos: integer,
-          repos_url: String.t(),
-          secret_scanning_enabled_for_new_repositories: boolean | nil,
-          secret_scanning_push_protection_custom_link: String.t() | nil,
-          secret_scanning_push_protection_custom_link_enabled: boolean | nil,
-          secret_scanning_push_protection_enabled_for_new_repositories: boolean | nil,
-          total_private_repos: integer | nil,
-          twitter_username: String.t() | nil,
-          two_factor_requirement_enabled: boolean | nil,
-          type: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t(),
-          web_commit_signoff_required: boolean | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :has_organization_projects, :boolean
+    field :name, :string
+    field :is_verified, :boolean
+    field :private_gists, :integer
+    field :secret_scanning_enabled_for_new_repositories, :boolean
+    field :login, :string
+    field :billing_email, :string
+    field :description, :string
+    field :email, :string
+    field :company, :string
+    field :members_can_create_public_repositories, :boolean
+    field :members_can_create_private_pages, :boolean
+    field :owned_private_repos, :integer
+    field :secret_scanning_push_protection_enabled_for_new_repositories, :boolean
+    field :issues_url, :string
+    field :total_private_repos, :integer
+    field :members_can_create_public_pages, :boolean
+    field :members_url, :string
+    field :public_repos, :integer
+    field :members_can_fork_private_repositories, :boolean
+    field :location, :string
+    field :public_gists, :integer
+    field :web_commit_signoff_required, :boolean
+    field :dependency_graph_enabled_for_new_repositories, :boolean
+    field :members_allowed_repository_creation_type, :string
+    field :secret_scanning_push_protection_custom_link, :string
+    field :html_url, :string
+    field :created_at, :string
+    field :updated_at, :string
+    field :collaborators, :integer
+    field :events_url, :string
+    field :members_can_create_repositories, :boolean
+    field :advanced_security_enabled_for_new_repositories, :boolean
+    field :disk_usage, :integer
+    field :avatar_url, :string
+    field :archived_at, :string
+    field :url, :string
+    field :members_can_create_pages, :boolean
+    field :type, :string
+    field :members_can_create_private_repositories, :boolean
+    field :node_id, :string
+    field :secret_scanning_push_protection_custom_link_enabled, :boolean
+    field :twitter_username, :string
+    field :repos_url, :string
+    field :dependabot_alerts_enabled_for_new_repositories, :boolean
+    field :has_repository_projects, :boolean
+    field :following, :integer
+    field :blog, :string
+    field :default_repository_permission, :string
+    field :id, :integer
+    field :followers, :integer
+    field :public_members_url, :string
+    field :deploy_keys_enabled_for_repositories, :boolean
+    field :hooks_url, :string
+    field :dependabot_security_updates_enabled_for_new_repositories, :boolean
+    field :members_can_create_internal_repositories, :boolean
+    field :two_factor_requirement_enabled, :boolean
+    field :plan, :map
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :advanced_security_enabled_for_new_repositories,
-    :archived_at,
-    :avatar_url,
-    :billing_email,
-    :blog,
-    :collaborators,
-    :company,
-    :created_at,
-    :default_repository_permission,
-    :dependabot_alerts_enabled_for_new_repositories,
-    :dependabot_security_updates_enabled_for_new_repositories,
-    :dependency_graph_enabled_for_new_repositories,
-    :deploy_keys_enabled_for_repositories,
-    :description,
-    :disk_usage,
-    :email,
-    :events_url,
-    :followers,
-    :following,
-    :has_organization_projects,
-    :has_repository_projects,
-    :hooks_url,
-    :html_url,
-    :id,
-    :is_verified,
-    :issues_url,
-    :location,
-    :login,
-    :members_allowed_repository_creation_type,
-    :members_can_create_internal_repositories,
-    :members_can_create_pages,
-    :members_can_create_private_pages,
-    :members_can_create_private_repositories,
-    :members_can_create_public_pages,
-    :members_can_create_public_repositories,
-    :members_can_create_repositories,
-    :members_can_fork_private_repositories,
-    :members_url,
-    :name,
-    :node_id,
-    :owned_private_repos,
-    :plan,
-    :private_gists,
-    :public_gists,
-    :public_members_url,
-    :public_repos,
-    :repos_url,
-    :secret_scanning_enabled_for_new_repositories,
-    :secret_scanning_push_protection_custom_link,
-    :secret_scanning_push_protection_custom_link_enabled,
-    :secret_scanning_push_protection_enabled_for_new_repositories,
-    :total_private_repos,
-    :twitter_username,
-    :two_factor_requirement_enabled,
-    :type,
-    :updated_at,
-    :url,
-    :web_commit_signoff_required
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      advanced_security_enabled_for_new_repositories: :boolean,
-      archived_at: {:string, :date_time},
-      avatar_url: {:string, :generic},
-      billing_email: {:string, :email},
-      blog: {:string, :uri},
-      collaborators: :integer,
-      company: {:string, :generic},
-      created_at: {:string, :date_time},
-      default_repository_permission: {:string, :generic},
-      dependabot_alerts_enabled_for_new_repositories: :boolean,
-      dependabot_security_updates_enabled_for_new_repositories: :boolean,
-      dependency_graph_enabled_for_new_repositories: :boolean,
-      deploy_keys_enabled_for_repositories: :boolean,
-      description: {:string, :generic},
-      disk_usage: :integer,
-      email: {:string, :email},
-      events_url: {:string, :uri},
-      followers: :integer,
-      following: :integer,
-      has_organization_projects: :boolean,
-      has_repository_projects: :boolean,
-      hooks_url: {:string, :generic},
-      html_url: {:string, :uri},
-      id: :integer,
-      is_verified: :boolean,
-      issues_url: {:string, :generic},
-      location: {:string, :generic},
-      login: {:string, :generic},
-      members_allowed_repository_creation_type: {:string, :generic},
-      members_can_create_internal_repositories: :boolean,
-      members_can_create_pages: :boolean,
-      members_can_create_private_pages: :boolean,
-      members_can_create_private_repositories: :boolean,
-      members_can_create_public_pages: :boolean,
-      members_can_create_public_repositories: :boolean,
-      members_can_create_repositories: :boolean,
-      members_can_fork_private_repositories: :boolean,
-      members_url: {:string, :generic},
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      owned_private_repos: :integer,
-      plan: {GitHubOpenAPI.OrganizationFullPlan, :t},
-      private_gists: :integer,
-      public_gists: :integer,
-      public_members_url: {:string, :generic},
-      public_repos: :integer,
-      repos_url: {:string, :uri},
-      secret_scanning_enabled_for_new_repositories: :boolean,
-      secret_scanning_push_protection_custom_link: {:string, :generic},
-      secret_scanning_push_protection_custom_link_enabled: :boolean,
-      secret_scanning_push_protection_enabled_for_new_repositories: :boolean,
-      total_private_repos: :integer,
-      twitter_username: {:string, :generic},
-      two_factor_requirement_enabled: :boolean,
-      type: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri},
-      web_commit_signoff_required: :boolean
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:has_organization_projects, :name, :is_verified, :private_gists, :secret_scanning_enabled_for_new_repositories, :login, :billing_email, :description, :email, :company, :members_can_create_public_repositories, :members_can_create_private_pages, :owned_private_repos, :secret_scanning_push_protection_enabled_for_new_repositories, :issues_url, :total_private_repos, :members_can_create_public_pages, :members_url, :public_repos, :members_can_fork_private_repositories, :location, :public_gists, :web_commit_signoff_required, :dependency_graph_enabled_for_new_repositories, :members_allowed_repository_creation_type, :secret_scanning_push_protection_custom_link, :html_url, :created_at, :updated_at, :collaborators, :events_url, :members_can_create_repositories, :advanced_security_enabled_for_new_repositories, :disk_usage, :avatar_url, :archived_at, :url, :members_can_create_pages, :type, :members_can_create_private_repositories, :node_id, :secret_scanning_push_protection_custom_link_enabled, :twitter_username, :repos_url, :dependabot_alerts_enabled_for_new_repositories, :has_repository_projects, :following, :blog, :default_repository_permission, :id, :followers, :public_members_url, :deploy_keys_enabled_for_repositories, :hooks_url, :dependabot_security_updates_enabled_for_new_repositories, :members_can_create_internal_repositories, :two_factor_requirement_enabled, :__info__, :__joins__])
+    
   end
 end

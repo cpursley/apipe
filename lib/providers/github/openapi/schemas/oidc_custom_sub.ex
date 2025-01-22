@@ -1,18 +1,17 @@
 defmodule GitHubOpenAPI.OidcCustomSub do
-  @moduledoc """
-  Provides struct and type for a OidcCustomSub
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{__info__: map, __joins__: map, include_claim_keys: [String.t()]}
+  @primary_key false
+  embedded_schema do
+    field :include_claim_keys, {:array, :string}
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :include_claim_keys]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [include_claim_keys: [string: :generic]]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:include_claim_keys, :__info__, :__joins__])
+    
   end
 end

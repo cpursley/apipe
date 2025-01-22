@@ -1,43 +1,22 @@
 defmodule GitHubOpenAPI.SimpleClassroomRepository do
-  @moduledoc """
-  Provides struct and type for a SimpleClassroomRepository
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          default_branch: String.t(),
-          full_name: String.t(),
-          html_url: String.t(),
-          id: integer,
-          node_id: String.t(),
-          private: boolean
-        }
+  @primary_key false
+  embedded_schema do
+    field :default_branch, :string
+    field :full_name, :string
+    field :html_url, :string
+    field :id, :integer
+    field :node_id, :string
+    field :private, :boolean
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :default_branch,
-    :full_name,
-    :html_url,
-    :id,
-    :node_id,
-    :private
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      default_branch: {:string, :generic},
-      full_name: {:string, :generic},
-      html_url: {:string, :uri},
-      id: :integer,
-      node_id: {:string, :generic},
-      private: :boolean
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:default_branch, :full_name, :html_url, :id, :node_id, :private, :__info__, :__joins__])
+    
   end
 end

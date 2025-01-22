@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.PorterLargeFile do
-  @moduledoc """
-  Provides struct and type for a PorterLargeFile
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          oid: String.t(),
-          path: String.t(),
-          ref_name: String.t(),
-          size: integer
-        }
+  @primary_key false
+  embedded_schema do
+    field :oid, :string
+    field :path, :string
+    field :ref_name, :string
+    field :size, :integer
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :oid, :path, :ref_name, :size]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      oid: {:string, :generic},
-      path: {:string, :generic},
-      ref_name: {:string, :generic},
-      size: :integer
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:oid, :path, :ref_name, :size, :__info__, :__joins__])
+    
   end
 end

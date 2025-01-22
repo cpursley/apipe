@@ -1,55 +1,26 @@
 defmodule GitHubOpenAPI.CheckAnnotation do
-  @moduledoc """
-  Provides struct and type for a CheckAnnotation
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          annotation_level: String.t() | nil,
-          blob_href: String.t(),
-          end_column: integer | nil,
-          end_line: integer,
-          message: String.t() | nil,
-          path: String.t(),
-          raw_details: String.t() | nil,
-          start_column: integer | nil,
-          start_line: integer,
-          title: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :annotation_level, :string
+    field :blob_href, :string
+    field :end_column, :integer
+    field :end_line, :integer
+    field :message, :string
+    field :path, :string
+    field :raw_details, :string
+    field :start_column, :integer
+    field :start_line, :integer
+    field :title, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :annotation_level,
-    :blob_href,
-    :end_column,
-    :end_line,
-    :message,
-    :path,
-    :raw_details,
-    :start_column,
-    :start_line,
-    :title
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      annotation_level: {:string, :generic},
-      blob_href: {:string, :generic},
-      end_column: :integer,
-      end_line: :integer,
-      message: {:string, :generic},
-      path: {:string, :generic},
-      raw_details: {:string, :generic},
-      start_column: :integer,
-      start_line: :integer,
-      title: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:annotation_level, :blob_href, :end_column, :end_line, :message, :path, :raw_details, :start_column, :start_line, :title, :__info__, :__joins__])
+    
   end
 end

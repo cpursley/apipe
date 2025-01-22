@@ -1,52 +1,25 @@
 defmodule GitHubOpenAPI.Environment do
-  @moduledoc """
-  Provides struct and type for a Environment
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          deployment_branch_policy: GitHubOpenAPI.DeploymentBranchPolicySettings.t() | nil,
-          html_url: String.t(),
-          id: integer,
-          name: String.t(),
-          node_id: String.t(),
-          protection_rules: [GitHubOpenAPI.EnvironmentProtectionRules.t()] | nil,
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :html_url, :string
+    field :id, :integer
+    field :name, :string
+    field :node_id, :string
+    field :protection_rules, {:array, :string}
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :deployment_branch_policy, GitHubOpenAPI.DeploymentBranchPolicySettings
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :created_at,
-    :deployment_branch_policy,
-    :html_url,
-    :id,
-    :name,
-    :node_id,
-    :protection_rules,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      deployment_branch_policy: {GitHubOpenAPI.DeploymentBranchPolicySettings, :t},
-      html_url: {:string, :generic},
-      id: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      protection_rules: [{GitHubOpenAPI.EnvironmentProtectionRules, :t}],
-      updated_at: {:string, :date_time},
-      url: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :html_url, :id, :name, :node_id, :protection_rules, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:deployment_branch_policy, with: &GitHubOpenAPI.DeploymentBranchPolicySettings.changeset/2)
   end
 end

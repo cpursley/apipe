@@ -1,28 +1,19 @@
 defmodule GitHubOpenAPI.SelectedActions do
-  @moduledoc """
-  Provides struct and type for a SelectedActions
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          github_owned_allowed: boolean | nil,
-          patterns_allowed: [String.t()] | nil,
-          verified_allowed: boolean | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :github_owned_allowed, :boolean
+    field :patterns_allowed, {:array, :string}
+    field :verified_allowed, :boolean
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :github_owned_allowed, :patterns_allowed, :verified_allowed]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      github_owned_allowed: :boolean,
-      patterns_allowed: [string: :generic],
-      verified_allowed: :boolean
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:github_owned_allowed, :patterns_allowed, :verified_allowed, :__info__, :__joins__])
+    
   end
 end

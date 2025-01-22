@@ -1,64 +1,30 @@
 defmodule GitHubOpenAPI.Hook do
-  @moduledoc """
-  Provides struct and type for a Hook
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          active: boolean,
-          config: GitHubOpenAPI.WebhookConfig.t(),
-          created_at: DateTime.t(),
-          deliveries_url: String.t() | nil,
-          events: [String.t()],
-          id: integer,
-          last_response: GitHubOpenAPI.HookResponse.t(),
-          name: String.t(),
-          ping_url: String.t(),
-          test_url: String.t(),
-          type: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :active, :boolean
+    field :created_at, :string
+    field :deliveries_url, :string
+    field :events, {:array, :string}
+    field :id, :integer
+    field :name, :string
+    field :ping_url, :string
+    field :test_url, :string
+    field :type, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :config, GitHubOpenAPI.WebhookConfig
+    embeds_one :last_response, GitHubOpenAPI.HookResponse
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :active,
-    :config,
-    :created_at,
-    :deliveries_url,
-    :events,
-    :id,
-    :last_response,
-    :name,
-    :ping_url,
-    :test_url,
-    :type,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      active: :boolean,
-      config: {GitHubOpenAPI.WebhookConfig, :t},
-      created_at: {:string, :date_time},
-      deliveries_url: {:string, :uri},
-      events: [string: :generic],
-      id: :integer,
-      last_response: {GitHubOpenAPI.HookResponse, :t},
-      name: {:string, :generic},
-      ping_url: {:string, :uri},
-      test_url: {:string, :uri},
-      type: {:string, :generic},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:active, :created_at, :deliveries_url, :events, :id, :name, :ping_url, :test_url, :type, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:config, with: &GitHubOpenAPI.WebhookConfig.changeset/2)
+    |> cast_embed(:last_response, with: &GitHubOpenAPI.HookResponse.changeset/2)
   end
 end

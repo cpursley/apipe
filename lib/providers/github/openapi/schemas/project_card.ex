@@ -1,64 +1,29 @@
 defmodule GitHubOpenAPI.ProjectCard do
-  @moduledoc """
-  Provides struct and type for a ProjectCard
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          archived: boolean | nil,
-          column_name: String.t() | nil,
-          column_url: String.t(),
-          content_url: String.t() | nil,
-          created_at: DateTime.t(),
-          creator: GitHubOpenAPI.NullableSimpleUser.t(),
-          id: integer,
-          node_id: String.t(),
-          note: String.t() | nil,
-          project_id: String.t() | nil,
-          project_url: String.t(),
-          updated_at: DateTime.t(),
-          url: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :archived, :boolean
+    field :column_name, :string
+    field :column_url, :string
+    field :content_url, :string
+    field :created_at, :string
+    field :id, :integer
+    field :node_id, :string
+    field :note, :string
+    field :project_id, :string
+    field :project_url, :string
+    field :updated_at, :string
+    field :url, :string
+    embeds_one :creator, GitHubOpenAPI.NullableSimpleUser
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :archived,
-    :column_name,
-    :column_url,
-    :content_url,
-    :created_at,
-    :creator,
-    :id,
-    :node_id,
-    :note,
-    :project_id,
-    :project_url,
-    :updated_at,
-    :url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      archived: :boolean,
-      column_name: {:string, :generic},
-      column_url: {:string, :uri},
-      content_url: {:string, :uri},
-      created_at: {:string, :date_time},
-      creator: {GitHubOpenAPI.NullableSimpleUser, :t},
-      id: :integer,
-      node_id: {:string, :generic},
-      note: {:string, :generic},
-      project_id: {:string, :generic},
-      project_url: {:string, :uri},
-      updated_at: {:string, :date_time},
-      url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:archived, :column_name, :column_url, :content_url, :created_at, :id, :node_id, :note, :project_id, :project_url, :updated_at, :url, :__info__, :__joins__])
+        |> cast_embed(:creator, with: &GitHubOpenAPI.NullableSimpleUser.changeset/2)
   end
 end

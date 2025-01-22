@@ -1,30 +1,20 @@
 defmodule GitHubOpenAPI.SshSigningKey do
-  @moduledoc """
-  Provides struct and type for a SshSigningKey
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          created_at: DateTime.t(),
-          id: integer,
-          key: String.t(),
-          title: String.t()
-        }
+  @primary_key false
+  embedded_schema do
+    field :created_at, :string
+    field :id, :integer
+    field :key, :string
+    field :title, :string
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [:__info__, :__joins__, :created_at, :id, :key, :title]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      created_at: {:string, :date_time},
-      id: :integer,
-      key: {:string, :generic},
-      title: {:string, :generic}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:created_at, :id, :key, :title, :__info__, :__joins__])
+    
   end
 end

@@ -1,94 +1,41 @@
 defmodule GitHubOpenAPI.Release do
-  @moduledoc """
-  Provides struct and type for a Release
-  """
-  use Apipe.Providers.OpenAPI.Encoder
+  use Ecto.Schema
+  import Ecto.Changeset
 
-  @type t :: %__MODULE__{
-          __info__: map,
-          __joins__: map,
-          assets: [GitHubOpenAPI.ReleaseAsset.t()],
-          assets_url: String.t(),
-          author: GitHubOpenAPI.SimpleUser.t(),
-          body: String.t() | nil,
-          body_html: String.t() | nil,
-          body_text: String.t() | nil,
-          created_at: DateTime.t(),
-          discussion_url: String.t() | nil,
-          draft: boolean,
-          html_url: String.t(),
-          id: integer,
-          mentions_count: integer | nil,
-          name: String.t() | nil,
-          node_id: String.t(),
-          prerelease: boolean,
-          published_at: DateTime.t() | nil,
-          reactions: GitHubOpenAPI.ReactionRollup.t() | nil,
-          tag_name: String.t(),
-          tarball_url: String.t() | nil,
-          target_commitish: String.t(),
-          upload_url: String.t(),
-          url: String.t(),
-          zipball_url: String.t() | nil
-        }
+  @primary_key false
+  embedded_schema do
+    field :assets_url, :string
+    field :body, :string
+    field :body_html, :string
+    field :body_text, :string
+    field :created_at, :string
+    field :discussion_url, :string
+    field :draft, :boolean
+    field :html_url, :string
+    field :id, :integer
+    field :mentions_count, :integer
+    field :name, :string
+    field :node_id, :string
+    field :prerelease, :boolean
+    field :published_at, :string
+    field :tag_name, :string
+    field :tarball_url, :string
+    field :target_commitish, :string
+    field :upload_url, :string
+    field :url, :string
+    field :zipball_url, :string
+    embeds_many :assets, GitHubOpenAPI.ReleaseAsset
+    embeds_one :author, GitHubOpenAPI.SimpleUser
+    embeds_one :reactions, GitHubOpenAPI.ReactionRollup
+    field :__info__, :map
+    field :__joins__, {:array, :map}
+  end
 
-  defstruct [
-    :__info__,
-    :__joins__,
-    :assets,
-    :assets_url,
-    :author,
-    :body,
-    :body_html,
-    :body_text,
-    :created_at,
-    :discussion_url,
-    :draft,
-    :html_url,
-    :id,
-    :mentions_count,
-    :name,
-    :node_id,
-    :prerelease,
-    :published_at,
-    :reactions,
-    :tag_name,
-    :tarball_url,
-    :target_commitish,
-    :upload_url,
-    :url,
-    :zipball_url
-  ]
-
-  @doc false
-  @spec __fields__(atom) :: keyword
-  def __fields__(type \\ :t)
-
-  def __fields__(:t) do
-    [
-      assets: [{GitHubOpenAPI.ReleaseAsset, :t}],
-      assets_url: {:string, :uri},
-      author: {GitHubOpenAPI.SimpleUser, :t},
-      body: {:string, :generic},
-      body_html: {:string, :generic},
-      body_text: {:string, :generic},
-      created_at: {:string, :date_time},
-      discussion_url: {:string, :uri},
-      draft: :boolean,
-      html_url: {:string, :uri},
-      id: :integer,
-      mentions_count: :integer,
-      name: {:string, :generic},
-      node_id: {:string, :generic},
-      prerelease: :boolean,
-      published_at: {:string, :date_time},
-      reactions: {GitHubOpenAPI.ReactionRollup, :t},
-      tag_name: {:string, :generic},
-      tarball_url: {:string, :uri},
-      target_commitish: {:string, :generic},
-      upload_url: {:string, :generic},
-      url: {:string, :uri},
-      zipball_url: {:string, :uri}
-    ]
+  def changeset(schema, attrs) do
+    schema
+    |> cast(attrs, [:assets_url, :body, :body_html, :body_text, :created_at, :discussion_url, :draft, :html_url, :id, :mentions_count, :name, :node_id, :prerelease, :published_at, :tag_name, :tarball_url, :target_commitish, :upload_url, :url, :zipball_url, :__info__, :__joins__])
+        |> cast_embed(:assets, with: &GitHubOpenAPI.ReleaseAsset.changeset/2)
+    |> cast_embed(:author, with: &GitHubOpenAPI.SimpleUser.changeset/2)
+    |> cast_embed(:reactions, with: &GitHubOpenAPI.ReactionRollup.changeset/2)
   end
 end
