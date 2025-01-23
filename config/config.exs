@@ -8,7 +8,7 @@ if config_env() == :dev do
         base_module: GitHubOpenAPI,
         extra_fields: [
           __info__: :map,
-          __joins__: :map
+          __joins__: {:array, :map}
         ],
         location: "lib/providers/github/openapi",
         operation_subdirectory: "operations/",

@@ -24,17 +24,75 @@ defmodule Apipe.Providers.OpenAPI.EctoGenerator do
   def run(spec_file, provider) do
     Logger.info("Generating Ecto schemas for #{provider} from #{spec_file}")
 
-    with {:ok, spec} <- YamlElixir.read_from_file(spec_file),
-         schemas <- get_in(spec, ["components", "schemas"]) do
-      output_dir = get_output_dir(provider)
-      File.mkdir_p!(output_dir)
+    with {:ok, spec} <- YamlElixir.read_from_file(spec_file) do
+      Logger.debug(
+        "Successfully parsed YAML file. Spec: #{inspect(spec, pretty: true, limit: 5)}"
+      )
 
-      schemas
-      |> Enum.each(fn {name, schema} ->
-        content = generate_schema(sanitize_name(name), schema, schemas, provider)
-        file_path = Path.join(output_dir, "#{Macro.underscore(sanitize_name(name))}.ex")
-        File.write!(file_path, content)
-      end)
+      # First try to get schemas from components
+      schemas = get_in(spec, ["components", "schemas"])
+
+      # If no schemas in components, try to extract from paths
+      schemas =
+        if is_nil(schemas) do
+          Logger.debug("No schemas found in components, extracting from paths")
+          extract_schemas_from_paths(spec)
+        else
+          schemas
+        end
+
+      case schemas do
+        schemas when is_map(schemas) and map_size(schemas) > 0 ->
+          Logger.debug("Found schemas: #{inspect(Map.keys(schemas))}")
+          output_dir = get_output_dir(provider)
+          File.mkdir_p!(output_dir)
+
+          schemas
+          |> Enum.each(fn {name, schema} ->
+            Logger.debug("Generating schema for #{name}")
+            content = generate_schema(sanitize_name(name), schema, schemas, provider)
+            file_path = Path.join(output_dir, "#{Macro.underscore(sanitize_name(name))}.ex")
+            File.write!(file_path, content)
+            Logger.debug("Generated #{file_path}")
+          end)
+
+        %{} ->
+          Logger.error("No schemas found in spec")
+
+          Mix.raise(
+            "No schemas found in OpenAPI spec (checked both components.schemas and paths)"
+          )
+
+        nil ->
+          Logger.error("No schemas found in spec")
+
+          Mix.raise(
+            "No schemas found in OpenAPI spec (checked both components.schemas and paths)"
+          )
+
+        other ->
+          Logger.error("Invalid schema format: #{inspect(other, pretty: true)}")
+
+          Mix.raise(
+            "Invalid schema format in OpenAPI spec. Expected a map, got: #{inspect(other)}"
+          )
+      end
+    else
+      {:ok, nil} ->
+        Logger.error("Empty YAML file")
+        Mix.raise("OpenAPI spec is empty or invalid")
+
+      {:error, %YamlElixir.FileNotFoundError{} = error} ->
+        Logger.error("File not found: #{error.message}")
+        Mix.raise("OpenAPI spec file not found: #{error.message}")
+
+      {:error, %YamlElixir.ParsingError{} = error} ->
+        Logger.error("YAML parsing error: #{error.message}")
+        Mix.raise("Failed to parse OpenAPI spec: #{error.message}")
+
+      {:error, reason} ->
+        Logger.error("Unknown error reading spec: #{inspect(reason)}")
+        Mix.raise("Failed to read OpenAPI spec: #{inspect(reason)}")
     end
   end
 
@@ -350,11 +408,11 @@ defmodule Apipe.Providers.OpenAPI.EctoGenerator do
     |> Enum.join("_")
   end
 
-  defp needs_quotes?(nil), do: false
-
   defp needs_quotes?(value) when is_binary(value) do
     String.match?(value, ~r/[^a-z0-9_]|^[0-9]|[A-Z]/)
   end
+
+  defp needs_quotes?(_), do: false
 
   defp to_atom_string(nil), do: ":nil"
 
@@ -365,4 +423,56 @@ defmodule Apipe.Providers.OpenAPI.EctoGenerator do
       ":" <> value
     end
   end
+
+  # Extract schemas from path responses
+  defp extract_schemas_from_paths(%{"paths" => paths}) do
+    paths
+    |> Enum.flat_map(fn {_path, methods} ->
+      methods
+      |> Enum.flat_map(fn {_method, operation} ->
+        case get_in(operation, ["responses"]) do
+          nil -> []
+          responses -> extract_schemas_from_responses(responses)
+        end
+      end)
+    end)
+    |> Enum.uniq_by(fn {name, _schema} -> name end)
+    |> Map.new()
+  end
+
+  defp extract_schemas_from_paths(_), do: %{}
+
+  defp extract_schemas_from_responses(responses) do
+    responses
+    |> Enum.flat_map(fn {_code, response} ->
+      case get_in(response, ["content", "application/json", "schema"]) do
+        nil -> []
+        schema -> extract_schema_definitions(schema)
+      end
+    end)
+  end
+
+  defp extract_schema_definitions(%{"$ref" => ref} = schema) do
+    name = ref |> String.replace("#/components/schemas/", "")
+    [{name, schema}]
+  end
+
+  defp extract_schema_definitions(%{"type" => "array", "items" => items}) do
+    extract_schema_definitions(items)
+  end
+
+  defp extract_schema_definitions(%{"type" => "object", "properties" => properties} = schema) do
+    # Include the parent schema
+    schema_name = schema["title"] || "UnnamedSchema"
+    parent_schema = [{schema_name, schema}]
+
+    # Extract nested schemas from properties
+    nested_schemas =
+      properties
+      |> Enum.flat_map(fn {_prop, prop_schema} -> extract_schema_definitions(prop_schema) end)
+
+    parent_schema ++ nested_schemas
+  end
+
+  defp extract_schema_definitions(_), do: []
 end
